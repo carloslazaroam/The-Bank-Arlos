@@ -4,6 +4,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const { getUsers, getUsersByName, createUser } = require('./controllers/users.js');
 const { getCuentas,getCuentaByIban, createCuenta } = require('./controllers/cuentas.js');
+const { getTipoCuentas,getTipoCuentaName, createTipoCuenta } = require('./controllers/tipocuenta.js');
 
 
 const app = express();
@@ -16,12 +17,16 @@ const upload = multer({ dest: 'public/' });
 mongoose.connect('mongodb://localhost:27017/bank', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.get('/users', getUsers);
-app.get('/cuentas', getCuentas);
-
 app.get('/users/:name', getUsersByName);
+app.post('/users/post', createUser);
+
+app.get('/cuentas', getCuentas);
 app.get('cuentas/iban', getCuentaByIban);
-app.post('/users/post', upload.single('img'), createUser);
 app.post('/cuentas/post', createCuenta);
+
+app.get('/tipocuentas', getTipoCuentas);
+app.get('/tipocuentas/nombre', getTipoCuentaName);
+app.post('/tipocuentas/post', createTipoCuenta);
 
 
 // Resto del código para las rutas put y delete...

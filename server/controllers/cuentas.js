@@ -16,7 +16,8 @@ async function createCuenta(req, res) {
         const cuenta = new Cuenta({
             fechacreacion: req.body.fechacreacion,
             activa: req.body.activa,
-            iban: req.body.iban
+            iban: req.body.iban,
+            id_usuario: req.body.id_usuario
         });
         await cuenta.save();
         res.send(cuenta);

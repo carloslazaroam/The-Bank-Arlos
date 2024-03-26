@@ -13,7 +13,7 @@ async function getUsers(req, res) {
 
 async function getUsersByName(req, res) {
     try {
-        const users = await User.find({ name: req.params.name });
+        const users = await User.find({ nombre: req.params.nombre });
         res.send(users);
     } catch (err) {
         console.error("Error al obtener los usuarios:", err);
@@ -24,11 +24,12 @@ async function getUsersByName(req, res) {
 async function createUser(req, res) {
     try {
         const user = new User({
-            name: req.body.name,
-            username: req.body.username,
-            email: req.body.email,
-            edad: req.body.edad,
-            img: req.body.img
+            nombre: req.body.nombre,
+            apellido1: req.body.apellido1,
+            apellido2: req.body.apellido2,
+            direccion: req.body.direccion,
+            pais: req.body.pais,
+            
         });
         await user.save();
         res.send(user);
