@@ -29,7 +29,7 @@ async function createCuenta(req, res) {
 
 async function getCuentaByIban(req, res) {
     try {
-        const cuenta = await User.find({ iban: req.params.iban });
+        const cuenta = await Cuenta.find({ iban: req.params.iban });
         res.send(cuenta);
     } catch (err) {
         console.error("Error al obtener las cuentas:", err);
@@ -37,5 +37,28 @@ async function getCuentaByIban(req, res) {
     }
 }
 
+async function deleteCuenta(req, res) {
+    try {
+        const cuentaIBAN = req.params.iban;
+        await Cuenta.deleteMany({ iban: cuentaIBAN });
+        res.send("Cuenta eliminada exitosa.");
+    } catch (err) {
+        console.error("Error al eliminar la cuenta:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+async function updateCuenta(req, res) {
+    try {
+        const cuentaIBAN = req.params.iban;
+        const updatedCuenta = await Cuenta.findOneAndUpdate({ iban: cuentaIBAN }, req.body, { new: true });
+        res.send(updatedCuenta);
+    } catch (err) {
+        console.error("Error al actualizar la cuenta:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
 // Exportar las funciones para su uso en app.js
-module.exports = { getCuentas,getCuentaByIban, createCuenta };
+module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta };

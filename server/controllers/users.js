@@ -39,5 +39,29 @@ async function createUser(req, res) {
     }
 }
 
+async function updateUser(req, res) {
+    try {
+        const userName = req.params.nombre;
+        const updatedUser = await User.findOneAndUpdate({ nombre: userName }, req.body, { new: true });
+        res.send(updatedUser);
+    } catch (err) {
+        console.error("Error al actualizar el usuario:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
+async function deleteUser(req, res) {
+    try {
+        const userName = req.params.nombre;
+        await User.deleteMany({ nombre: userName });
+        res.send("Usuarios eliminados exitosamente");
+    } catch (err) {
+        console.error("Error al eliminar los usuarios:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
 // Exportar las funciones para su uso en app.js
-module.exports = { getUsers, getUsersByName, createUser };
+module.exports = { getUsers, getUsersByName, createUser,updateUser,deleteUser};
