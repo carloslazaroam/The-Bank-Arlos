@@ -17,7 +17,8 @@ async function createCuenta(req, res) {
             fechacreacion: req.body.fechacreacion,
             activa: req.body.activa,
             iban: req.body.iban,
-            id_usuario: req.body.id_usuario
+            id_usuario: req.body.id_usuario,
+            id_cuenta: req.body.id_cuenta
         });
         await cuenta.save();
         res.send(cuenta);
@@ -62,3 +63,4 @@ async function updateCuenta(req, res) {
 
 // Exportar las funciones para su uso en app.js
 module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta };
+

@@ -8,6 +8,11 @@ const cuentaSchema = new mongoose.Schema({
     id_usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+
+    id_cuenta: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TipoCuenta'
     }
 });
 

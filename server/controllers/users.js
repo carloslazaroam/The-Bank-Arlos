@@ -65,3 +65,4 @@ async function deleteUser(req, res) {
 
 // Exportar las funciones para su uso en app.js
 module.exports = { getUsers, getUsersByName, createUser,updateUser,deleteUser};
+

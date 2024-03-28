@@ -40,4 +40,32 @@ async function createTipoCuenta(req,res) {
     }
 }
 
-module.exports = { getTipoCuentas, getTipoCuentaName, createTipoCuenta };
+
+async function updateTipoCuenta(req,res) {
+    try{
+        const nombre = req.params.nombre;
+        const updatedTipoCuenta = await TipoCuenta.findOneAndUpdate({nombre: nombre}, req.body, { new:true });
+        res.send(updatedTipoCuenta);
+    } catch (err) {
+        console.log("Error al actualizar el tipo de cuenta");
+        res.status(500).send("Error interno del servidor")
+    }
+
+}
+
+async function deleteTipoCuenta(req,res) {
+
+    try {
+        const nombre = req.params.nombre;
+        await TipoCuenta.deleteMany({ nombre: nombre});
+        res.send("Tipo de cuenta eliminado")
+    } catch (err) {
+        console.log("Error al eliminar el tipo de cuenta", err);
+        res.status(500).send("Error interno del servidor")
+
+    }
+
+}
+
+module.exports = { getTipoCuentas, getTipoCuentaName, createTipoCuenta ,updateTipoCuenta, deleteTipoCuenta};
+
