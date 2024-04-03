@@ -11,6 +11,16 @@ async function getCuentas(req, res) {
     }
 }
 
+async function getCuentaByIban(req,res) {
+    try {
+        const ibans = Cuenta.find({iban:req.params.iban})
+        res.send(ibans)
+    } catch (err) {
+        console.log("Error al obtener el iban")
+        res.status(500).send("Error interno del servidor")
+    }
+}
+
 async function createCuenta(req, res) {
     try {
         const cuenta = new Cuenta({

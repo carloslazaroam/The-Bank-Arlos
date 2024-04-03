@@ -1,13 +1,34 @@
-// User.js
 const mongoose = require('mongoose');
 
+
+const counterUserSchema = new mongoose.Schema({
+    _id: { type: String, required: true },
+    sequence_value: { type: Number, default: 0 }
+});
+const CounterUser = mongoose.model('CounterUser', counterUserSchema);
+
 const userSchema = new mongoose.Schema({
+    id: { type: Number, unique: true },
     nombre: String,
     apellido1: String,
     apellido2: String,
     direccion: String,
-    pais: String
+    pais: String,
+    img: String // Agrega el campo para la imagen de perfil
 });
+
+userSchema.pre('save', async function (next) {
+    if (!this.id) {
+        this.id = await getNextSequenceValue('user_id');
+    }
+    next();
+});
+
+async function getNextSequenceValue(sequenceName) {
+    const sequenceDocument = await CounterUser.findByIdAndUpdate(sequenceName, { $inc: { sequence_value: 1 } }, { new: true, upsert: true });
+    return sequenceDocument.sequence_value;
+}
+
 
 const User = mongoose.model('User', userSchema);
 

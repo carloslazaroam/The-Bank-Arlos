@@ -15,6 +15,7 @@ async function getTipoCuentaName(req,res) {
 
     try {
         const tipoCuentaName = await TipoCuenta.find({ nombre: req.params.nombre });
+        res.send(tipoCuentaName)
     } catch (err) {
         console.log("Error al obtener el nombre en específico");
         res.status(500).send("Error interno del servidor");

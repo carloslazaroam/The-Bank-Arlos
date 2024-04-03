@@ -10,6 +10,16 @@ async function getTipoOperacion(req,res) {
     }
 }
 
+async function getTipoOperacionById(req,res) {
+    try{
+        const tipoOperaciones = await TipoOperacion.find({id: req.params.id});
+        res.send(tipoOperaciones)
+    } catch (err) {
+        console.log("Error al obtener el tipo de Operacion")
+        res.send(500).status("Error interno del servidor");
+    }
+}
+
 async function createTipoOperacion(req,res) {
     try {
         const operacion = new TipoOperacion({
@@ -26,8 +36,8 @@ async function createTipoOperacion(req,res) {
 
 async function updateTipoOperacion(req,res) {
     try {
-        const nombre = req.params.nombre;
-        const updatedOperacion = await TipoOperacion.findOneAndUpdate({ nombre: nombre }, req.body, { new: true });
+        const id = req.params.id;
+        const updatedOperacion = await TipoOperacion.findOneAndUpdate({ id: id }, req.body, { new: true });
         res.send(updatedOperacion);
     } catch (err) {
         console.log("Error al actualizar el tipo de operación");
@@ -37,8 +47,8 @@ async function updateTipoOperacion(req,res) {
 
 async function deleteTipoOperacion(req,res){
     try{
-        const nombre = req.params.nombre;
-        await TipoOperacion.deleteMany({ nombre: nombre });
+        const id = req.params.id;
+        await TipoOperacion.deleteMany({ id: id });
         res.send("Tipo de operacion eliminada correctamente");
     } catch (err) {
         console.log("No se pudo eliminar la operación")
@@ -46,4 +56,4 @@ async function deleteTipoOperacion(req,res){
     }
 }
 
-module.exports = {getTipoOperacion,createTipoOperacion, updateTipoOperacion, deleteTipoOperacion}
+module.exports = {getTipoOperacion,createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById}

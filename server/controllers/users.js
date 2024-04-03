@@ -11,9 +11,9 @@ async function getUsers(req, res) {
     }
 }
 
-async function getUsersByName(req, res) {
+async function getUserById(req, res) {
     try {
-        const users = await User.find({ nombre: req.params.nombre });
+        const users = await User.find({ id: req.params.id });
         res.send(users);
     } catch (err) {
         console.error("Error al obtener los usuarios:", err);
@@ -29,7 +29,7 @@ async function createUser(req, res) {
             apellido2: req.body.apellido2,
             direccion: req.body.direccion,
             pais: req.body.pais,
-            
+            img: req.file ? req.file.path : null // Guarda la ruta de la imagen si existe
         });
         await user.save();
         res.send(user);
@@ -41,8 +41,8 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const userName = req.params.nombre;
-        const updatedUser = await User.findOneAndUpdate({ nombre: userName }, req.body, { new: true });
+        const userName = req.params.id;
+        const updatedUser = await User.findOneAndUpdate({ id: userName }, req.body, { new: true });
         res.send(updatedUser);
     } catch (err) {
         console.error("Error al actualizar el usuario:", err);
@@ -51,10 +51,12 @@ async function updateUser(req, res) {
 }
 
 
+
+
 async function deleteUser(req, res) {
     try {
-        const userName = req.params.nombre;
-        await User.deleteMany({ nombre: userName });
+        const userName = req.params.id;
+        await User.deleteMany({ id: userName });
         res.send("Usuarios eliminados exitosamente");
     } catch (err) {
         console.error("Error al eliminar los usuarios:", err);
@@ -64,5 +66,7 @@ async function deleteUser(req, res) {
 
 
 // Exportar las funciones para su uso en app.js
-module.exports = { getUsers, getUsersByName, createUser,updateUser,deleteUser};
+module.exports = { getUsers, getUserById, createUser,updateUser,deleteUser};
+
+
 

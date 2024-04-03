@@ -11,10 +11,22 @@ async function getOperacion(req,res) {
     }
 };
 
+async function getOperacionById(req,res) {
+    try{
+        const id = await Operacion.find({id: req.params.id});
+        res.send(id)
+    } catch (err) {
+        console.log("No se ha obtenido la operación")
+        res.status(500).send("Error interno del servidor.")
+    }
+}
+
+
 async function createOperacion(req, res) {
     try {
         const operacion = new Operacion({
             cantidad: req.body.cantidad,
+            nombre: req.body.nombre,
             id_cuenta: req.body.id_cuenta,
             id_tipoOperacion: req.body.id_tipoOperacion,
             
@@ -29,8 +41,31 @@ async function createOperacion(req, res) {
     }
 }
 
+async function updateOperacion(req,res){
+    try{
+        const id = req.params.id;
+        const updatedNombre = await Operacion.findOneAndUpdate({ id: id }, req.body, { new: true });
+        res.send(updatedNombre);
 
-module.exports = { getOperacion, createOperacion }
+    }catch (err) {
+        console.log("Error al actualizar operaciones", err);
+        res.status(500).send("Error interno del servidor")
+    }
+}
+
+async function deleteOperacion(req, res) {
+    try {
+        const operacionNombre = req.params.id;
+        await Operacion.deleteMany({ id: operacionNombre });
+        res.send("Operacion eliminada con exito");
+    } catch (err) {
+        console.error("Error al eliminar las operaciones:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion}
 
 /*async function updateOperacion(req, res) {
     try {
