@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../User-Admin/scripts.js"></script>
+  <link href="../User-Admin/styles.css" rel="stylesheet">
+</head>
+<body><div class="bg-image"></div>
+    <h2 class="custom-heading">Gestión de Usuarios</h2>
+<div style="text-align: center;">
+    <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+
+
+</div>
+  <!-- Agrega un modal de edición al HTML -->
+<!-- Agregar el modal de edición al HTML, pero inicialmente oculto --> 
+<div id="modal" class="modal" style="display: none;">
+  <div class="modal-content">
+      <span class="close" onclick="cancelarEdicion()">&times;</span>
+      <h2>Editar User</h2>
+      <form>
+          <label for="editNombre">Nombre:</label><br>
+          <input type="text" id="editNombre" name="editNombre"><br>
+          <label for="editApellido1">Apellido 1:</label><br>
+          <input type="text" id="editApellido1" name="editApellido1"><br>
+          <label for="editApellido2">Apellido2:</label><br>
+          <input type="text" id="editApellido2" name="editApellido2"><br>
+          <label for="editDireccion">Direccion:</label><br>
+          <input type="text" id="editDireccion" name="editDireccion"><br>
+          
+          
+          <button type="button" onclick="guardarEdicion()">Guardar</button>
+      </form>
+  </div>
+</div>
+
+ 
+<div id="confirmModal" class="modal" style="display: none;">
+	<div class="modal-content">
+	  <h2>Confirmar Eliminación</h2>
+	  <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+	  <button id="confirmButton">Confirmar</button>
+	  <button onclick="cancelarEliminacion()">Cancelar</button>
+
+	</div>
+  </div>
+
+  
+<div id="crearModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="cancelarCreacion()">&times;</span>
+        <h2>Crear Nuevo Usuario</h2>
+        <form id="crearFormulario" enctype="multipart/form-data">
+            <label for="createNombre">Nombre:</label><br>
+            <input type="text" id="createNombre" name="createNombre"><br>
+            <label for="createApellido1">Apellido 1:</label><br>
+            <input type="text" id="createApellido1" name="createApellido1"><br>
+            <label for="createApellido2">Apellido2:</label><br>
+            <input type="text" id="createApellido2" name="createApellido2"><br>
+            <label for="createDireccion">Dirección:</label><br>
+            <input type="text" id="createDireccion" name="createDireccion"><br>
+            <label for="createPais">Pais:</label><br>
+            <input type="text" id="createPais" name="createPais"><br>
+           
+<br><br>
+            <button type="button" onclick="guardarNuevoUser()">Guardar</button>
+        </form>
+    </div>
+</div>
+
+  
+
+
+
+ 
+
+
+  <table class="flat-table flat-table-1">
+    
+      <th>Nombre</th>
+      <th>Apellido 1</th>
+      <th>Apellido 2</th>
+      <th>Direccion</th>
+      <th>Pais</th>
+      <th>Edición</th>
+      
+    
+    <tbody class="wrapper" id="wrapper">
+     
+      
+    </tbody>
+   
+  </table>
+<div style="text-align: center;">
+  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;">Crear</button>
+
+</div>
+<!-- Agregar elementos para la paginación -->
+
+
+
+
+
+</body>
+</html>
+
+<style>
+
+
+</style>

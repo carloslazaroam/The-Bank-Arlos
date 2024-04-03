@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     apellido2: String,
     direccion: String,
     pais: String,
-    img: String // Agrega el campo para la imagen de perfil
+    
 });
 
 userSchema.pre('save', async function (next) {

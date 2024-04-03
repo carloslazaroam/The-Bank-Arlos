@@ -27,10 +27,10 @@ const upload = multer({ storage: storage });
 mongoose.connect('mongodb://localhost:27017/bank', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.get('/users', getUsers);
-app.get('/users/:id', getUserById);
+app.get('/users/:nombre', getUserById);
 app.post('/users/post', createUser);
-app.put('/users/:id', updateUser); 
-app.delete('/users/:id', deleteUser);
+app.put('/users/:nombre', updateUser); 
+app.delete('/users/:nombre', deleteUser);
 
 app.get('/tipousers', getTipoUsers);
 app.post('/tipousers/post', createTipoUser);

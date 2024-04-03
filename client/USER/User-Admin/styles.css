@@ -1,0 +1,163 @@
+table {
+    margin-bottom: 20px;
+    border-collapse:collapse;
+    font-family: 'HP Simplified', Calibri, Arial, sans-serif;
+    border-radius: 40px;
+    margin: 0 auto;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    box-shadow: rgba(72, 46, 240, 0.4) 0px 5px, rgba(72, 46, 240, 0.3) 0px 10px, rgba(72, 46, 240, 0.2) 0px 15px, rgba(72, 46, 240, 0.1) 0px 20px, rgba(72, 46, 240 0.05) 0px 25px;
+}
+.flat-table th, .flat-table td {
+    box-shadow: inset 0 -1px rgba(0,0,0,0.25), 
+        inset 0 1px rgba(0,0,0,0.25);
+}
+.flat-table th {
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    padding: 1em;
+    color: rgba(0,0,0,0.45);
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+    font-size: 1.5em;
+}
+.flat-table td {
+    color: #f7f7f7;
+    padding: 0.7em 1em 0.7em 1.15em;
+    text-shadow: 0 0 1px rgba(255,255,255,0.1);
+    font-size: 1.4em;
+}
+
+.flat-table-1 {
+    background: #336ca6;
+}
+.flat-table-1 tr:hover {
+    background: rgba(0,0,0,0.19);
+}
+.flat-table-2 tr:hover {
+    background: rgba(0,0,0,0.1);
+}
+.flat-table-2 {
+    background: #f06060;
+}
+.flat-table-3 {
+    background: #52be7f;
+}
+.flat-table-3 tr:hover {
+    background: rgba(0,0,0,0.1);
+}
+img {
+border-radius: 50%;
+}
+
+button {
+border-radius: 50%;
+
+}
+
+thead {
+border-radius: 40px;
+}
+
+
+/* Estilos para el modal */
+.modal {
+display: none;
+position: fixed;
+z-index: 9999;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 20% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+border-radius: 10px;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para el título del modal */
+.modal-content h2 {
+font-weight: bold;
+}
+
+/* Estilos para los botones */
+button {
+border-radius: 10px;
+padding: 10px 20px;
+background-color: #336ca6;
+color: #fff;
+border: none;
+cursor: pointer;
+transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+background-color: #295582;
+}
+
+/* Animación para mostrar el modal */
+@keyframes fadeIn {
+from {
+    opacity: 0;
+}
+to {
+    opacity: 1;
+}
+}
+
+/* Animación para centrar el modal */
+@keyframes slideIn {
+from {
+    transform: translateY(-50%);
+}
+to {
+    transform: translateY(0);
+}
+}
+
+/* Aplicar animaciones al modal */
+.modal-content {
+animation: slideIn 0.5s ease-in-out;
+}
+
+.modal-content button {
+animation: fadeIn 0.5s ease-in-out;
+}
+
+.bg-image {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url('./fondo.jpg'); /* Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen */
+background-size: cover;
+background-position: center;
+filter: blur(8px); /* Aplica el efecto de difuminado */
+-webkit-filter: blur(8px); /* Para navegadores webkit */
+z-index: -1; /* Asegura que la imagen esté detrás de otros elementos */
+}
+
+
+
+
+
+
+.blur {
+filter: blur(50px); /* Cambia el valor para ajustar el nivel de difuminado */
+}
+
+.custom-heading {
+font-family: 'HP Simplified', Calibri, Arial, sans-serif;
+font-size: 100px;
+text-align: center;
+color: navy; /* Color azul marino */
+text-shadow: 2px 2px 4px white; /* Trama blanca */
+}
+
