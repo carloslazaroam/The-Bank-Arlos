@@ -13,7 +13,7 @@ const tipoUserSchema = new mongoose.Schema({
 
 tipoUserSchema.pre('save', async function (next) {
     if (!this.id) {
-        this.id = await getNextSequenceValue('tipouser_id');
+        this.id = await getNextSequenceValue('id_tipousuario');
     }
     next();
 });

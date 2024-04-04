@@ -8,7 +8,7 @@
   <link href="../User-Admin/styles.css" rel="stylesheet">
 </head>
 <body><div class="bg-image"></div>
-    <h2 class="custom-heading">Gestión de Usuarios</h2>
+    <h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Usuarios</h2>
 <div style="text-align: center;">
     <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
@@ -17,7 +17,7 @@
 </div>
   <!-- Agrega un modal de edición al HTML -->
 <!-- Agregar el modal de edición al HTML, pero inicialmente oculto --> 
-<div id="modal" class="modal" style="display: none;">
+<div id="modal" class="modal" style="display: none; font-family: Imaki;">
   <div class="modal-content">
       <span class="close" onclick="cancelarEdicion()">&times;</span>
       <h2>Editar User</h2>
@@ -32,27 +32,27 @@
           <input type="text" id="editDireccion" name="editDireccion"><br>
           
           
-          <button type="button" onclick="guardarEdicion()">Guardar</button>
+          <button type="button" onclick="guardarEdicion()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
       </form>
   </div>
 </div>
 
  
-<div id="confirmModal" class="modal" style="display: none;">
+<div id="confirmModal" class="modal" style="display: none; font-family: Imaki;">
 	<div class="modal-content">
 	  <h2>Confirmar Eliminación</h2>
 	  <p>¿Estás seguro de que deseas eliminar este usuario?</p>
-	  <button id="confirmButton">Confirmar</button>
-	  <button onclick="cancelarEliminacion()">Cancelar</button>
+	  <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
+	  <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
 
 	</div>
   </div>
 
   
-<div id="crearModal" class="modal" style="display: none;">
+<div id="crearModal" class="modal" style="display: none; font-family: Imaki;">
     <div class="modal-content">
         <span class="close" onclick="cancelarCreacion()">&times;</span>
-        <h2>Crear Nuevo Usuario</h2>
+        <h2 style="font-family: Imaki;">Crear Nuevo Usuario</h2>
         <form id="crearFormulario" enctype="multipart/form-data">
             <label for="createNombre">Nombre:</label><br>
             <input type="text" id="createNombre" name="createNombre"><br>
@@ -66,7 +66,7 @@
             <input type="text" id="createPais" name="createPais"><br>
            
 <br><br>
-            <button type="button" onclick="guardarNuevoUser()">Guardar</button>
+            <button type="button" onclick="guardarNuevoUser()" style="background-color: rgb(75, 77, 77);">Guardar</button>
         </form>
     </div>
 </div>
@@ -79,7 +79,8 @@
 
 
   <table class="flat-table flat-table-1">
-    
+
+      <th>ID</th>
       <th>Nombre</th>
       <th>Apellido 1</th>
       <th>Apellido 2</th>
@@ -95,7 +96,7 @@
    
   </table>
 <div style="text-align: center;">
-  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;">Crear</button>
+  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;" id="botonCrear">Crear</button>
 
 </div>
 <!-- Agregar elementos para la paginación -->

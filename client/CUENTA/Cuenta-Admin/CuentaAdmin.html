@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../Cuenta-Admin/scripts.js"></script>
+  <link href="../Cuenta-Admin/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="bg-image"></div>
+<h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Cuentas</h2>
+<div style="text-align: center;">
+    <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+</div>
+
+<div id="modal" class="modal" style="display: none; font-family: Imaki;">
+  <div class="modal-content">
+      <span class="close" onclick="cancelarEdicion()">&times;</span>
+      <h2>Editar Cuenta</h2>
+      <form>
+
+          <label for="editActiva">Marca esta opción para activar o desactivar la cuenta:</label><br>
+<input type="checkbox" id="editActiva" name="editActiva"><br>
+
+
+          <label for="editIban">IBAN:</label><br>
+          <input type="text" id="editIban" name="editIban"><br>
+
+          <label for="editUsuario">Seleccionar Usuario:</label><br>
+          <select id="editUsuario" name="editUsuario"></select><br>
+          
+          <button type="button" onclick="guardarEdicion()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
+      </form>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal" style="display: none; font-family: Imaki;">
+    <div class="modal-content">
+        <h2>Confirmar Eliminación</h2>
+        <p>¿Estás seguro de que deseas eliminar esta cuenta?</p>
+        <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
+        <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
+    </div>
+</div>
+
+<div id="crearModal" class="modal" style="display: none; font-family: Imaki;">
+    <div class="modal-content">
+        <span class="close" onclick="cancelarCreacion()">&times;</span>
+        <h2 style="font-family: Imaki;">Crear Nueva cuenta</h2>
+        <form id="crearFormulario" enctype="multipart/form-data">
+            <label for="createActiva">Marca esta opción para activar la cuenta:</label><br>
+<input type="checkbox" id="createActiva" name="createActiva"><br>
+
+            <label for="createIBAN">IBAN de la cuenta:</label><br>
+            <input type="text" id="createIBAN" name="createIBAN"><br>
+
+            <label for="userIdSelect">Usuario:</label>
+<select id="userIdSelect" name="userIdSelect"></select>
+<label for="createUsuario">Seleccionar Usuario:</label><br>
+<select id="createUsuario" name="createUsuario"></select><br>
+
+
+            <button type="button" onclick="guardarNuevaCuenta()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
+        </form>
+    </div>
+</div>
+
+<table class="flat-table flat-table-1">
+    <th>ID</th>
+    <th>Fecha de creación</th>
+    <th>Estado de la cuenta</th>
+    <th>IBAN</th>
+    <th>Edición</th>
+    <tbody class="wrapper" id="wrapper"></tbody>
+</table>
+<div style="text-align: center;">
+    <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;" id="botonCrear">Crear</button>
+</div>
+
+</body>
+</html>

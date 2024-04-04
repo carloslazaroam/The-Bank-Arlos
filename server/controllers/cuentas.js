@@ -1,5 +1,6 @@
 // cuentasController.js
 const { Cuenta } = require('../models/modelCuenta');
+const { User } = require('../models/modelUser');
 
 async function getCuentas(req, res) {
     try {
@@ -23,12 +24,13 @@ async function getCuentaByIban(req,res) {
 
 async function createCuenta(req, res) {
     try {
+       
         const cuenta = new Cuenta({
-            fechacreacion: req.body.fechacreacion,
+            
             activa: req.body.activa,
             iban: req.body.iban,
             id_usuario: req.body.id_usuario,
-            id_cuenta: req.body.id_cuenta
+            id_tipocuenta: req.body.id_tipocuenta
         });
         await cuenta.save();
         res.send(cuenta);

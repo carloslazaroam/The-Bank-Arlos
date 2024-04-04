@@ -29,15 +29,17 @@ async function createUser(req, res) {
             apellido2: req.body.apellido2,
             direccion: req.body.direccion,
             pais: req.body.pais,
-             // Guarda la ruta de la imagen si existe
+            contra: req.body.contra,
+            id_tipousuario: req.body.id_tipousuario // Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
         });
         await user.save();
         res.send(user);
     } catch (err) {
-        console.error("Error al obtener los usuarios:", err);
+        console.error("Error al crear el usuario:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
+
 
 async function updateUser(req, res) {
     try {

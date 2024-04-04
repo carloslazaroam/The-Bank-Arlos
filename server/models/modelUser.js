@@ -7,13 +7,19 @@ const counterUserSchema = new mongoose.Schema({
 });
 const CounterUser = mongoose.model('CounterUser', counterUserSchema);
 
+
 const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     nombre: String,
     apellido1: String,
     apellido2: String,
     direccion: String,
+    contra: String,
     pais: String,
+    id_tipousuario: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'tipoUsuario'
+    },
     
 });
 

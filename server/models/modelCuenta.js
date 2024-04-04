@@ -8,23 +8,17 @@ const CounterCuenta = mongoose.model('CounterCuenta', counterCuentaSchema);
 
 const cuentaSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
-    fechacreacion: Date,
+    fechacreacion: { type: Date, default: Date.now }, // Cambiado para generar automáticamente la fecha de creación
     activa: Boolean,
-    iban:  {type: String, unique: true},
+    iban: { type: String, unique: true },
     id_usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    id_cuenta: {
+    id_tipocuenta: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TipoCuenta'
     }
-});
-cuentaSchema.pre('save', async function (next) {
-    if (!this.id) {
-        this.id = await getNextSequenceValue('cuenta_id');
-    }
-    next();
 });
 
 async function getNextSequenceValue(sequenceName) {
@@ -32,8 +26,13 @@ async function getNextSequenceValue(sequenceName) {
     return sequenceDocument.sequence_value;
 }
 
+cuentaSchema.pre('save', async function (next) {
+    if (!this.id) {
+        this.id = await getNextSequenceValue('cuenta_id');
+    }
+    next();
+});
+
 const Cuenta = mongoose.model('Cuenta', cuentaSchema);
-
-
 
 module.exports = { Cuenta };
