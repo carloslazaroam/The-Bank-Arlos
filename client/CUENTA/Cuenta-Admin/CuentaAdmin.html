@@ -30,6 +30,11 @@
 
           <label for="editUsuario">Seleccionar Usuario:</label><br>
           <select id="editUsuario" name="editUsuario"></select><br>
+
+          <label for="editTipocuenta">Tipo de Cuenta:</label><br>
+          <select id="editTipocuenta" name="editTipocuenta"></select><br>
+
+
           
           <button type="button" onclick="guardarEdicion()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
       </form>
@@ -56,10 +61,11 @@
             <label for="createIBAN">IBAN de la cuenta:</label><br>
             <input type="text" id="createIBAN" name="createIBAN"><br>
 
-            <label for="userIdSelect">Usuario:</label>
-<select id="userIdSelect" name="userIdSelect"></select>
 <label for="createUsuario">Seleccionar Usuario:</label><br>
 <select id="createUsuario" name="createUsuario"></select><br>
+<label for="createTipocuenta">Seleccion Tipo de cuenta: </label><br>
+<select id="createTipocuenta" name="createTipocuenta"></select><br>
+
 
 
             <button type="button" onclick="guardarNuevaCuenta()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
@@ -70,6 +76,7 @@
 <table class="flat-table flat-table-1">
     <th>ID</th>
     <th>Fecha de creación</th>
+    <th>Propietario</th>
     <th>Estado de la cuenta</th>
     <th>IBAN</th>
     <th>Edición</th>
@@ -81,3 +88,4 @@
 
 </body>
 </html>
+
