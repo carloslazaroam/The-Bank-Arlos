@@ -29,6 +29,8 @@ async function createCuenta(req, res) {
             
             activa: req.body.activa,
             iban: req.body.iban,
+            validado: req.body.validado,
+            saldo: req.body.saldo,
             id_usuario: req.body.id_usuario,
             id_tipocuenta: req.body.id_tipocuenta
         });

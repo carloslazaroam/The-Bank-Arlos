@@ -11,9 +11,15 @@
 <div class="bg-image"></div>
 <h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Cuentas</h2>
 <div style="text-align: center;">
-    <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    
+        
+        <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 270px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    
 </div>
+<div style="text-align: center;">
+    <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-bottom: 15px;" id="botonCrear">Haz click aqui para crear una cuenta</button>
+</div>
+
 
 <div id="modal" class="modal" style="display: none; font-family: Imaki;">
   <div class="modal-content">
@@ -28,11 +34,19 @@
           <label for="editIban">IBAN:</label><br>
           <input type="text" id="editIban" name="editIban"><br>
 
+          <label for="editValidado">Validar cuenta:</label><br>
+          <input type="checkbox" id="editValidado" name="editValidado"><br>
+
+          <label for="editSaldo">Establecer saldo:</label><br>
+          <input id="editSaldo" name="editSaldo"><br>
+
           <label for="editUsuario">Seleccionar Usuario:</label><br>
           <select id="editUsuario" name="editUsuario"></select><br>
 
           <label for="editTipocuenta">Tipo de Cuenta:</label><br>
           <select id="editTipocuenta" name="editTipocuenta"></select><br>
+
+         
 
 
           
@@ -75,16 +89,15 @@
 
 <table class="flat-table flat-table-1">
     <th>ID</th>
+    <th>IBAN</th>
     <th>Fecha de creación</th>
     <th>Propietario</th>
     <th>Estado de la cuenta</th>
-    <th>IBAN</th>
+    <th>Validada</th> 
+    <th>Saldo</th> 
     <th>Edición</th>
     <tbody class="wrapper" id="wrapper"></tbody>
 </table>
-<div style="text-align: center;">
-    <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;" id="botonCrear">Crear</button>
-</div>
 
 </body>
 </html>

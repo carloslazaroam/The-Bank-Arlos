@@ -10,6 +10,7 @@ const CounterUser = mongoose.model('CounterUser', counterUserSchema);
 
 const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
+    dni: {type: String, unique: true},
     nombre: String,
     apellido1: String,
     apellido2: String,
@@ -19,7 +20,7 @@ const userSchema = new mongoose.Schema({
     id_tipousuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tipoUsuario'
-    },
+    }
     
 });
 

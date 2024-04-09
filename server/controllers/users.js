@@ -25,12 +25,13 @@ async function createUser(req, res) {
     try {
         const user = new User({
             nombre: req.body.nombre,
+            dni: req.body.dni,
             apellido1: req.body.apellido1,
             apellido2: req.body.apellido2,
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
-            id_tipousuario: req.body.id_tipousuario // Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
+            id_tipousuario: req.body.id_tipousuario// Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
         });
         await user.save();
         res.send(user);

@@ -10,6 +10,8 @@ const cuentaSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     fechacreacion: { type: Date, default: Date.now }, // Cambiado para generar automáticamente la fecha de creación
     activa: Boolean,
+    saldo: Number,
+    validado: Boolean,
     iban: { type: String, unique: true },
     id_usuario: {
         type: mongoose.Schema.Types.ObjectId,

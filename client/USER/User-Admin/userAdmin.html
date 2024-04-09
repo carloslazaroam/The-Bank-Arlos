@@ -7,11 +7,19 @@
   <script src="../User-Admin/scripts.js"></script>
   <link href="../User-Admin/styles.css" rel="stylesheet">
 </head>
-<body><div class="bg-image"></div>
+<body>
+  
+
+  <div class="bg-image"></div>
     <h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Usuarios</h2>
 <div style="text-align: center;">
     <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+
+<div style="text-align: center;">
+  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-bottom: 15px;" id="botonCrear">Haz click aqui para crear un usuario</button>
+</div>
+
 
 
 </div>
@@ -24,12 +32,18 @@
       <form>
           <label for="editNombre">Nombre:</label><br>
           <input type="text" id="editNombre" name="editNombre"><br>
+
+          <label for="editContra">Contraseña:</label><br>
+          <input type="text" id="editContra" name="editContra"><br>
+          
           <label for="editApellido1">Apellido 1:</label><br>
           <input type="text" id="editApellido1" name="editApellido1"><br>
           <label for="editApellido2">Apellido2:</label><br>
           <input type="text" id="editApellido2" name="editApellido2"><br>
           <label for="editDireccion">Direccion:</label><br>
           <input type="text" id="editDireccion" name="editDireccion"><br>
+          <label for="editPais">Pais:</label><br>
+          <input type="text" id="editPais" name="editPais"><br>
           
           
           <button type="button" onclick="guardarEdicion()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
@@ -38,7 +52,7 @@
 </div>
 
  
-<div id="confirmModal" class="modal" style="display: none; font-family: Imaki;">
+<div id="confirmModal" class="modal-eliminacion" style="display: none; font-family: Imaki;">
 	<div class="modal-content">
 	  <h2>Confirmar Eliminación</h2>
 	  <p>¿Estás seguro de que deseas eliminar este usuario?</p>
@@ -56,6 +70,10 @@
         <form id="crearFormulario" enctype="multipart/form-data">
             <label for="createNombre">Nombre:</label><br>
             <input type="text" id="createNombre" name="createNombre"><br>
+            <label for="createDni">DNI:</label><br>
+            <input type="text" id="createDni" name="createDni"><br>
+            <label for="createContra">Contraseña:</label><br>
+            <input type="password" id="createContra" name="createContra"><br>
             <label for="createApellido1">Apellido 1:</label><br>
             <input type="text" id="createApellido1" name="createApellido1"><br>
             <label for="createApellido2">Apellido2:</label><br>
@@ -81,6 +99,7 @@
   <table class="flat-table flat-table-1">
 
       <th>ID</th>
+      <th>DNI</th>
       <th>Nombre</th>
       <th>Apellido 1</th>
       <th>Apellido 2</th>
@@ -95,10 +114,7 @@
     </tbody>
    
   </table>
-<div style="text-align: center;">
-  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-top: 10px;" id="botonCrear">Crear</button>
 
-</div>
 <!-- Agregar elementos para la paginación -->
 
 
