@@ -1,10 +1,10 @@
-const { tipoUsuario } = require('../models/modelTipoUser');
+const { TipoUsuario } = require('../models/modelTipoUser');
 
 
 
 async function getTipoUsers(req,res) {
     try {
-        const tipousers = await tipoUsuario.find({});
+        const tipousers = await TipoUsuario.find({});
         res.send(tipousers);
     } catch (err) {
         console.log("Error al obtener los tipos de usuario");
@@ -15,7 +15,7 @@ async function getTipoUsers(req,res) {
 
 async function createTipoUser(req, res) {
     try {
-        const user = new tipoUsuario({
+        const user = new TipoUsuario({
             nombre: req.body.nombre
             
             

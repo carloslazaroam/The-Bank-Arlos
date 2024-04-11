@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <script src="../User-Admin/scripts.js"></script>
-  <link href="../User-Admin/styles.css" rel="stylesheet">
+  <script src="../Operacion-Admin/scripts.js"></script>
+  <link href="../Operacion-Admin/styles.css" rel="stylesheet">
 </head>
 <body>
   
  
   <div class="bg-image"></div>
-    <h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Usuarios</h2>
+    <h2 class="custom-heading" style="color: rgb(31, 28, 28)">Gestión de Operaciones</h2>
 <div style="text-align: center;">
     <input type="text" id="searchInput" onkeyup="buscarPorNombre()" placeholder="Buscar por nombre..." style="padding: 10px; font-size: 18px; width: 300px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
 
 <div style="text-align: center;">
-  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-bottom: 15px;" id="botonCrear">Haz click aqui para crear un usuario</button>
+  <button onclick="mostrarFormulario()" style="margin: 0 auto; margin-bottom: 15px;" id="botonCrear">Haz click aqui para crear una operacion</button>
 </div>
 
 
@@ -28,25 +28,19 @@
 <div id="modal" class="modal" style="display: none; font-family: Imaki;">
   <div class="modal-content">
       <span class="close" onclick="cancelarEdicion()">&times;</span>
-      <h2>Editar User</h2>
+      <h2>Editar Operacion</h2>
       <form>
           <label for="editNombre">Nombre:</label><br>
           <input type="text" id="editNombre" name="editNombre"><br>
 
-          <label for="editContra">Contraseña:</label><br>
-          <input type="text" id="editContra" name="editContra"><br>
+          <label for="editCantidad">Cantidad:</label><br>
+          <input type="text" id="editCantidad" name="editCantidad"><br>
           
-          <label for="editApellido1">Apellido 1:</label><br>
-          <input type="text" id="editApellido1" name="editApellido1"><br>
-          <label for="editApellido2">Apellido2:</label><br>
-          <input type="text" id="editApellido2" name="editApellido2"><br>
-          <label for="editDireccion">Dirección:</label><br>
-          <input type="text" id="editDireccion" name="editDireccion"><br>
-          <label for="editPais">Pais:</label><br>
-          <input type="text" id="editPais" name="editPais"><br>
-          <label for="editUsertype">Tipo de Usuario:</label><br>
-          <select id="editUsertype" name="editUsertype"></select><br>
+          <label for="editCuenta">Tipo de Cuenta:</label><br>
+          <select id="editCuenta" name="editCuenta"></select><br>
           
+          <label for="editOperacion">Tipo de Operación</label>
+          <select id="editOperacion" name="editOperacion"></select>
           
           <button type="button" onclick="guardarEdicion()" style="background-color: rgb(75, 77, 77); margin-top: 20px;">Guardar</button>
       </form>
@@ -57,7 +51,7 @@
 <div id="confirmModal" class="modal-eliminacion" style="display: none; font-family: Imaki;">
 	<div class="modal-content">
 	  <h2>Confirmar Eliminación</h2>
-	  <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+	  <p>¿Estás seguro de que deseas eliminar esta operación?</p>
 	  <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
 	  <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
 
@@ -68,24 +62,16 @@
 <div id="crearModal" class="modal" style="display: none; font-family: Imaki;">
     <div class="modal-content">
         <span class="close" onclick="cancelarCreacion()">&times;</span>
-        <h2 style="font-family: Imaki;">Crear Nuevo Usuario</h2>
+        <h2 style="font-family: Imaki;">Crear Nueva Operación</h2>
         <form id="crearFormulario" enctype="multipart/form-data">
             <label for="createNombre">Nombre:</label><br>
             <input type="text" id="createNombre" name="createNombre"><br>
-            <label for="createDni">DNI:</label><br>
-            <input type="text" id="createDni" name="createDni"><br>
-            <label for="createContra">Contraseña:</label><br>
-            <input type="password" id="createContra" name="createContra"><br>
-            <label for="createApellido1">Apellido 1:</label><br>
-            <input type="text" id="createApellido1" name="createApellido1"><br>
-            <label for="createApellido2">Apellido2:</label><br>
-            <input type="text" id="createApellido2" name="createApellido2"><br>
-            <label for="createDireccion">Dirección:</label><br>
-            <input type="text" id="createDireccion" name="createDireccion"><br>
-            <label for="createPais">Pais:</label><br>
-            <input type="text" id="createPais" name="createPais"><br>
-            <label for="createUsertype">Tipo de Usuario:</label><br>
-            <select id="createUsertype" name="createUsertype"></select><br>
+            <label for="createCantidad">Cantidad:</label><br>
+            <input type="text" id="createCantidad" name="createCantidad"><br>
+            <label for="createCuenta">Cuenta a asociar operación:</label><br>
+            <select id="createCuenta" name="createCuenta"></select><br>
+            <label for="createOperacion">Tipo de operación que se va a realizar:</label><br>
+            <select id="createOperación" name="createOperación"></select><br>
            
 <br><br>
             <button type="button" onclick="guardarNuevoUser()" style="background-color: rgb(75, 77, 77);">Guardar</button>
@@ -103,14 +89,11 @@
   <table class="flat-table flat-table-1">
 
       <th>ID</th>
-      <th>DNI</th>
       <th>Nombre</th>
-      <th>Apellido 1</th>
-      <th>Apellido 2</th>
-      <th>Dirección</th>
-      <th>Pais</th>
-      <th>TipoUsuario</th>
-      <th>Edición</th>
+      <th>Cantidad</th>
+      <th>Cuenta</th>
+      <th>Tipo de Operación</th>
+      
       
     
     <tbody class="wrapper" id="wrapper">

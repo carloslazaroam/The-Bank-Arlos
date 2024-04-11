@@ -24,6 +24,6 @@ async function getNextSequenceValue(sequenceName) {
 }
 
 
-const tipoUsuario = mongoose.model('tipoUsuario', tipoUserSchema);
+const TipoUsuario = mongoose.model('TipoUsuario', tipoUserSchema);
 
-module.exports = { tipoUsuario }
+module.exports = { TipoUsuario }

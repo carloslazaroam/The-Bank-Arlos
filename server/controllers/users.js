@@ -31,7 +31,7 @@ async function createUser(req, res) {
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
-            id_tipousuario: req.body.id_tipousuario// Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
+            usertype: req.body.usertype// Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
         });
         await user.save();
         res.send(user);

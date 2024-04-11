@@ -17,9 +17,9 @@ const userSchema = new mongoose.Schema({
     direccion: String,
     contra: String,
     pais: String,
-    id_tipousuario: {
+    usertype: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'tipoUsuario'
+        ref: 'TipoUsuario'
     }
     
 });

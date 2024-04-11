@@ -1,35 +1,33 @@
 const recurso = "http://127.0.0.1:3001";
 
 const llamar = () => {
-    fetch(recurso + '/users')
+    fetch(recurso + '/operaciones')
         .then(res => res.json())
         .then(json => inicio(json))
-        .catch(err => console.error('Error al obtener usuarios:', err));
+        .catch(err => console.error('Error al obtener operaciones:', err));
 }
 
 llamar();
 
-function inicio(users) {
+function inicio(operaciones) {
     const wrapper = document.getElementById('wrapper');
-    console.log(users);
+    console.log(operaciones);
     wrapper.innerHTML = "";
-    users.forEach(user => {
+    users.forEach(operacion => {
         wrapper.innerHTML += `
         
             <tr>
-            <td style="font-family: Imaki;margin: 0 auto">${user.id}</td>
-                <td>${user.dni}</td>
-                <td>${user.nombre}</td>
-                <td>${user.apellido1}</td>
-                <td>${user.apellido2}</td>
-                <td>${user.direccion}</td>
-                <td>${user.pais}</td>
-                <td>${user.usertype}</td>
+            <td style="font-family: Imaki;margin: 0 auto">${operacion.id}</td>
+                <td>${operacion.nombre}</td>
+                <td>${operacion.cantidad}</td>
+                <td>${operacion.id_cuenta}</td>
+                <td>${operacion.id_tipoOperacion}</td>
+                
                 <td>
-                    <button id="botonEliminar" onclick="confirmarEliminacion('${user.nombre}')">
+                    <button id="botonEliminar" onclick="confirmarEliminacion('${operacion.nombre}')">
                     <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                     </button>
-                    <button id="botonEditar"onclick="editarUser('${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}')">
+                    <button id="botonEditar"onclick="editarOperacion('${operacion.nombre}','${operacion.cantidad}', '${operacion.id_cuenta}', '${operacion.id_tipoOperacion}')">
                     <?xml version="1.0" encoding="UTF-8"?>
                     <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                         <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -42,7 +40,7 @@ function inicio(users) {
 
 
 // Función para abrir el modal de confirmación de eliminación
-function confirmarEliminacion(nombre) {
+function confirmarEliminacion(id) {
     // Mostrar el modal de confirmación
     const confirmModal = document.getElementById('confirmModal');
     confirmModal.style.display = 'block';
@@ -50,7 +48,7 @@ function confirmarEliminacion(nombre) {
     // Configurar el botón de confirmar para enviar la solicitud DELETE
     const confirmButton = document.getElementById('confirmButton');
     confirmButton.onclick = function() {
-        eliminarUser(nombre);
+        eliminarUser(id);
         confirmModal.style.display = 'none'; // Ocultar el modal después de confirmar
     };
 }
@@ -58,31 +56,28 @@ function confirmarEliminacion(nombre) {
 
 
 
-// Agrega una variable global para almacenar el título del user que se está editando
-let userEditando = null;
+// Agrega una variable global para almacenar el título del operacion que se está editando
+let operacionEditando = null;
 
-// Función para abrir el modal de edición con los datos del user seleccionado
-// Función para abrir el modal de edición con los datos del user seleccionado
+// Función para abrir el modal de edición con los datos del operacion seleccionado
+// Función para abrir el modal de edición con los datos del operacion seleccionado
 // Función para abrir el modal de edición con los datos del usuario seleccionado
-function editarUser(nombre,contra, apellido1, apellido2, direccion, pais,usertype) {
+function editarUser(nombre,cantidad, id_cuenta, id_tipoOperacion) {
     // Almacenar los datos del usuario que se está editando
-    userEditando = { nombre, apellido1, apellido2, direccion, pais,usertype };
+    operacionEditando = { nombre,cantidad,id_cuenta,id_tipoOperacion };
     
     // Llenar el formulario de edición con los datos del usuario
     document.getElementById('editNombre').value = nombre;
-    document.getElementById('editContra').value = contra;
-    document.getElementById('editApellido1').value = apellido1;
-    document.getElementById('editApellido2').value = apellido2;
-    document.getElementById('editDireccion').value = direccion;
-    document.getElementById('editPais').value = pais; // Corregido de 'editPais' a 'editDireccion'
-
-    fetch(recurso + '/tipousers')
+    document.getElementById('editCantidad').value = cantidad;
+    
+    
+    fetch(recurso + '/tipoOperacion')
         .then(res => res.json())
-        .then(usertypes => {
-            console.log("Tipos de usuario obtenidos:", usertypes); // Verificar los usuarios obtenidos
+        .then(operaciones => {
+            console.log("Tipos de usuario obtenidos:", operaciones); // Verificar los usuarios obtenidos
             const select = document.getElementById('editUsertype');
             select.innerHTML = ""; // Limpiar las opciones existentes
-            usertypes.forEach(usertype => {
+            operaciones.forEach(usertype => {
                 const option = document.createElement('option');
                 option.value = usertype._id;
                 option.textContent = usertype.nombre;
@@ -112,7 +107,7 @@ function guardarEdicion() {
     const newUsertype = document.getElementById('editUsertype').value; 
    
     // Enviar la solicitud de actualización al servidor
-    fetch(recurso + '/users/' + userEditando.nombre, {
+    fetch(recurso + '/users/' + operacionEditando.nombre, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -143,8 +138,8 @@ function guardarEdicion() {
 
 // Función para cerrar el modal de edición
 function cancelarEdicion() {
-    // Limpiar los datos del user en edición
-    userEditando = null;
+    // Limpiar los datos del operacion en edición
+    operacionEditando = null;
     
     // Ocultar el modal con animación de opacidad
     const modal = document.getElementById('modal');
@@ -167,11 +162,11 @@ function mostrarFormulario() {
 
     fetch(recurso + '/tipousers')
         .then(res => res.json())
-        .then(usertypes => {
-            console.log("Tipos de usuario obtenidos:", usertypes); // Verificar los usuarios obtenidos
+        .then(operaciones => {
+            console.log("Tipos de usuario obtenidos:", operaciones); // Verificar los usuarios obtenidos
             const select = document.getElementById('createUsertype');
             select.innerHTML = ""; // Limpiar las opciones existentes
-            usertypes.forEach(usertype => {
+            operaciones.forEach(usertype => {
                 const option = document.createElement('option');
                 option.value = usertype._id;
                 option.textContent = usertype.nombre;
@@ -190,7 +185,7 @@ function cancelarCreacion() {
     crearModal.style.display = 'none';
 }
 
-// Función para enviar la solicitud de creación de un nuevo user al servidor
+// Función para enviar la solicitud de creación de un nuevo operacion al servidor
 
 function guardarNuevoUser() {
     const nombre = document.getElementById('createNombre').value;
@@ -224,16 +219,16 @@ function guardarNuevoUser() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al añadir el user: ' + response.status + ' ' + response.statusText);
+            throw new Error('Error al añadir el operacion: ' + response.status + ' ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
-        console.log('Nuevo user añadido:', data);
-        // Actualizar la interfaz con el nuevo user
+        console.log('Nuevo operacion añadido:', data);
+        // Actualizar la interfaz con el nuevo operacion
         llamar();
         
-        // Limpiar el formulario después de añadir el user
+        // Limpiar el formulario después de añadir el operacion
         document.getElementById('createNombre').value = '';
         document.getElementById('createDni').value = '';
         document.getElementById('createContra').value = '';
@@ -293,3 +288,4 @@ function buscarPorNombre() {
         }
     }
 }
+
