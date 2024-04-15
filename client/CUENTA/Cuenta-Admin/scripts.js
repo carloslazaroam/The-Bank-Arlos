@@ -26,8 +26,9 @@ function inicio(cuentas) {
                         <td>${formatDate(cuenta.fechacreacion)}</td>
                         <td>${cuenta.id_usuario}</td>
                         <td>${cuenta.activa}</td>
-                        <td>${cuenta.validado}</td>
-                        <td>${cuenta.saldo}</td>
+                       
+                        <td>${cuenta.saldo}€</td>
+                        <td>${cuenta.validado ? '<span class="label label-success"><span class="glyphicon glyphicon-ok-sign">&nbsp;</span>Validada' : '<span class="label label-info"><span class="glyphicon glyphicon-time">&nbsp;</span>Pendiente'}</td>
                         
                         
                         <td>
@@ -212,12 +213,16 @@ function eliminarCuenta(iban) {
 function guardarNuevaCuenta() {
     const activa = document.getElementById('createActiva').checked;
     const iban = document.getElementById('createIBAN').value;
+    const validado = document.getElementById('createValidacion').checked;
+    const saldo = document.getElementById('createSaldo').value;
     const idUsuario = document.getElementById('createUsuario').value;
     const idTipocuenta = document.getElementById('createTipocuenta').value; // Obtener el id del usuario seleccionado
 
     const cuentaData = {
         activa: activa,
         iban: iban,
+        validado: validado,
+        saldo: saldo,
         id_usuario: idUsuario,
         id_tipocuenta: idTipocuenta // Incluir el id del usuario en los datos de la cuenta
     };
@@ -242,6 +247,8 @@ function guardarNuevaCuenta() {
         // Limpiar los campos después de guardar la nueva cuenta
         document.getElementById('createActiva').checked = false;
         document.getElementById('createIBAN').value = '';
+        document.getElementById('createValidacion').checked = false;
+        document.getElementById('createSaldo').value = '';
         document.getElementById('createUsuario').value = '';
         document.getElementById('createTipocuenta').value = '';
 

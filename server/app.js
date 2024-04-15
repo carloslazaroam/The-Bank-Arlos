@@ -6,7 +6,7 @@ const { getUsers, getUserById, createUser ,updateUser, deleteUser} = require('./
 const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionByName, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionById } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 
 
