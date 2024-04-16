@@ -1,108 +1,51 @@
-table {
-    margin-bottom: 20px;
-    border-collapse:collapse;
-    font-family: 'HP Simplified', Calibri, Arial, sans-serif;
-    
-    font-size: 12px;
-    margin: 0 auto;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    box-shadow: rgba(72, 46, 240, 0.4) 0px 5px, rgba(72, 46, 240, 0.3) 0px 10px, rgba(72, 46, 240, 0.2) 0px 15px, rgba(72, 46, 240, 0.1) 0px 20px, rgba(72, 46, 240 0.05) 0px 25px;
-}
-.flat-table th, .flat-table td {
-    box-shadow: inset 0 -1px rgba(0,0,0,0.25), 
-        inset 0 1px rgba(0,0,0,0.25);
-}
-.flat-table th {
-    
-    padding: 1em;
-    color: rgb(49, 46, 46);
-    text-shadow: 0 0 1px rgba(0,0,0,0.1);
-    font-size: 1.5em;
-   
-    
-}
-.flat-table td {
-    color: #3a3333;
-    padding: 0.7em 1em 0.7em 1.15em;
-    text-shadow: 0 0 1px rgba(255,255,255,0.1);
-    font-size: 1.4em;
-}
-
-.flat-table-1 {
-    background: #ffffff;
-}
-.flat-table-1 tr:hover {
-    background: rgba(0,0,0,0.19);
-}
-.flat-table-2 tr:hover {
-    background: rgba(0,0,0,0.1);
-}
-.flat-table-2 {
-    background: #f06060;
-}
-.flat-table-3 {
-    background: #52be7f;
-}
-.flat-table-3 tr:hover {
-    background: rgba(0,0,0,0.1);
-}
-img {
-border-radius: 50%;
-}
-
-button {
-border-radius: 50%;
-
-
-}
-
-thead {
-border-radius: 40px;
-}
 
 
 /* Estilos para el modal */
+/* Estilos para el modal */
 .modal {
-display: none;
-position: fixed;
-z-index: 9999;
-left: 0;
-top: 0;
-width: 50%;
-height: 100%;
-overflow: hidden;
-background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-background-color: #fefefe;
-margin: 20% auto;
-padding: 20px;
-border: 1px solid #888;
-width: 80%;
-border-radius: 10px;
-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos para el título del modal */
-.modal-content h2 {
-font-weight: bold;
-}
-
+    display: none;
+    position: fixed;
+    z-index: 9000;
+    left: 0;
+    
+    top: 2;
+    width: 100%; /* Cambiado de 50% a 100% */
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center; 
+    font-family: 'HP Simplified';/* Color de fondo para oscurecer la página */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 50px;
+    max-height: 400px; /* Altura máxima del contenido */
+    overflow-y: auto;
+   
+  }
+  
+  /* Estilos para el título del modal */
+  .modal-content h2 {
+    font-weight: bold;
+  }
+  
+  /* Estilos para el modal activo */
+  .modal.active {
+    display: block;
+  }
+  
 /* Estilos para los botones */
-button {
-border-radius: 10px;
-padding: 10px 20px;
-background-color: #336ca6;
-color: #fff;
-border: none;
-cursor: pointer;
-transition: background-color 0.3s, color 0.3s;
-}
 
-button:hover {
-background-color: #295582;
-}
+
+
 
 /* Animación para mostrar el modal */
 @keyframes fadeIn {
@@ -133,63 +76,48 @@ animation: slideIn 0.5s ease-in-out;
 animation: fadeIn 0.5s ease-in-out;
 }
 
-.bg-image {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
- /* Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen */
-background-size: cover;
-background-color: #bcbdbe;
-background-position: center;
-filter: blur(8px); /* Aplica el efecto de difuminado */
--webkit-filter: blur(8px); /* Para navegadores webkit */
-z-index: -1; /* Asegura que la imagen esté detrás de otros elementos */
-}
-
-
-
-
-
-
-.blur {
-filter: blur(50px); /* Cambia el valor para ajustar el nivel de difuminado */
-}
-
-.custom-heading {
-font-family: 'HP Simplified', Calibri, Arial, sans-serif;
-font-size: 100px;
-text-align: center;
-color: navy; /* Color azul marino */
-text-shadow: 2px 2px 4px white; /* Trama blanca */
-}
-
-#botonEliminar {
-    background-color: red;
-    border-radius: 80%;
-}
-
-#botonEditar {
-    background-color: greenyellow;
-    border-radius: 80%;
-}
-
-@font-face {
-    font-family: Serpentine;
-    src: url(./Serpentine\ Regular.ttf);
-  }
-
-  @font-face {
-    font-family: Imaki;
-    src: url(./Imaki\ Italic.otf);
-  }
-
   #botonCrear{
     background-color: #000000;
   }
 
   
+
+  body {
+    padding-top: 80px;
+  }
+  
+  #sidebar {
+    position: fixed;
+    top: 50px;
+    left: 220px;
+    width: 220px;
+    margin-left: -220px;
+    border: none;
+    border-radius: 0;
+    overflow-y: auto;
+    background-color: #222;
+    bottom: 0;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+  }
+  
+  .side-bar > li > a {
+    color: #eee;
+    width: 220px;
+  }
+  
+  .side-bar li a:hover,
+  .side-bar li a:focus {
+    background-color: #333;
+  }
+  
+  .tmargin {
+    margin-top: 15px;
+  }
+
+  button {
+    color: wheat;
+  }
 
 
 

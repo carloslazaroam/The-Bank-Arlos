@@ -59,8 +59,6 @@ function confirmarEliminacion(nombre) {
 // Agrega una variable global para almacenar el título del user que se está editando
 let tipocuentaEditando = null;
 
-// Función para abrir el modal de edición con los datos del user seleccionado
-// Función para abrir el modal de edición con los datos del user seleccionado
 // Función para abrir el modal de edición con los datos del usuario seleccionado
 function editarTipocuenta(nombre,porcentajebeneficio,maxnegativo) {
     // Almacenar los datos del usuario que se está editando

@@ -56,7 +56,7 @@ app.delete('/tipoperacion/:id', deleteTipoOperacion)
 app.get('/operacion', getOperacion);
 app.get('/operacion/:id', getOperacionById)
 app.post('/operacion/post', createOperacion);
-app.put('/operacion/:id', updateOperacion);
+app.put('/operacion/:nombre', updateOperacion);
 app.delete('/operacion/:id', deleteOperacion)
 
 // Resto del código para las rutas put y delete...

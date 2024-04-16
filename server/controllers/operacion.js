@@ -43,8 +43,8 @@ async function createOperacion(req, res) {
 
 async function updateOperacion(req,res){
     try{
-        const id = req.params.id;
-        const updatedNombre = await Operacion.findOneAndUpdate({ id: id }, req.body, { new: true });
+        const nombre = req.params.nombre;
+        const updatedNombre = await Operacion.findOneAndUpdate({ nombre: nombre }, req.body, { new: true });
         res.send(updatedNombre);
 
     }catch (err) {
