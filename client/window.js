@@ -9,7 +9,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('home.html');
+    win.loadFile('./LOGIN/login.html');
 
     // Open the DevTools.
     // win.webContents.openDevTools();

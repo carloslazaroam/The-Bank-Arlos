@@ -47,101 +47,76 @@
               <li class="side-bar"><a href="../../USER/User-Admin/userAdmin.html"><span class="glyphicon glyphicon-flag">&nbsp;</span>Usuario</a></li>
               <li class="side-bar"><a href="../Cuenta-Admin/CuentaAdmin.html"><span class="glyphicon glyphicon-star">&nbsp;</span>Cuenta</a></li>
               <li class="side-bar"><a href="../../TIPOCUENTA/TipoCuenta-Admin/TipoCuentaAdmin.html"><span class="glyphicon glyphicon-star">&nbsp;</span>Tipocuenta</a></li>
-              <li class="side-bar"><a href="#"><span class="glyphicon glyphicon-certificate">&nbsp;</span>Operaciones</a></li>
-              <li class="side-bar"><a href="../../TIPO-OPERACION/tipoOperacionAdmin/tipoOperacionAdmin.html"><span class="glyphicon glyphicon-certificate">&nbsp;</span>Tipo de operación</a></li>
+              <li class="side-bar"><a href="../../OPERACION/Operacion-Admin/OperacionAdmin.html"><span class="glyphicon glyphicon-certificate">&nbsp;</span>Operaciones</a></li>
+              <li class="side-bar"><a href="#"><span class="glyphicon glyphicon-certificate">&nbsp;</span>Tipo de operación</a></li>
       
+              
             </ul>
           </div>
         </div>
     
 
-    <!-- Agregar el modal de edición al HTML, pero inicialmente oculto --> 
-<div id="modal" class="modal">
-  <div class="modal-content">
-      <span class="close" onclick="cancelarEdicion()">&times;</span>
-      <h2>Editar Operacion</h2>
-      <form>
-        <hr>
-          <p for="editNombre">Nombre:</p>
-          <input type="text" id="editNombre" name="editNombre"><br>
-          <hr>
-          <p for="editCantidad">Cantidad:</p>
-          <input type="text" id="editCantidad" name="editCantidad"><br>
-
-          <hr>
-          <p for="editCuenta">Seleccionar Cuenta:</p><br>
-          <select id="editCuenta" name="editCuenta"></select><br>
-          <hr>
-          <p for="editOperacion">Seleccionar Tipo de Operacion:</p><br>
-          <select id="editOperacion" name="editOperacion"></select><br>
-          
-          
-          <button type="button" onclick="guardarEdicion()">Guardar</button>
-      </form>
-  </div>
-</div>
-
- 
-<div id="confirmModal" class="modal">
-	<div class="modal-content">
-	  <h2>Confirmar Eliminación</h2>
-	  <p>¿Estás seguro de que deseas eliminar esta operación?</p>
-	  <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
-	  <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
-
-	</div>
-  </div>
-
+    
+        
         
     
 
 
 
-<div id="crearModal" class="modal">
+<div id="modal" class="modal">
   <div class="modal-content">
-      <span class="close" onclick="cancelarCreacion()">&times;</span>
-      <h2>Crear Nueva Operación</h2>
-      <form id="crearFormulario" enctype="multipart/form-data">
-          <hr>
-          <p for="createNombre">Nombre:</p>
-          <input type="text" id="createNombre" name="createNombre"><br>
-          <hr>
-          <p for="createCantidad">Cantidad:</p>
-          <input type="text" id="createCantidad" name="createCantidad"><br>
-          <hr>
-          <p for="createCuenta">Seleccionar Cuenta:</p>
-        <select id="createCuenta" name="createCuenta"></select><br>
-        <hr>
-        <p for="createOperacion">Seleccionar tipo de operación:</p>
-        <select id="createOperacion" name="createOperacion"></select><br>
-        
-          
-         
-<br><br>
-          <button type="button" onclick="guardarNuevaOperacion()">Guardar</button>
+      <span class="close" onclick="cancelarEdicion()">&times;</span>
+      <h2>Editar Tipo de Operación</h2>
+      <form>
+       <hr> 
+          <p for="editNombre">Editar nombre:</p>
+<input type="text" id="editNombre" name="editNombre"><br>
+<hr>      
+          <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
       </form>
   </div>
 </div>
 
 
 
+<div id="confirmModal" class="modal" >
+    <div class="modal-content">
+        <h2>Confirmar Eliminación</h2>
+        <hr> 
+        <p>¿Estás seguro de que deseas eliminar esta tipo de operación?</p>
+        <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
+        <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
+    </div>
+</div>
+
+<div id="crearModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cancelarCreacion()">&times;</span>
+        <h2>Crear un tipo de operación bancaria</h2>
+        <hr> 
+        <form id="crearFormulario" enctype="multipart/form-data">
+
+            <p for="createNombre">Nombre del tipo de operación:</p>
+            <input type="text" id="createNombre" name="createNombre" required><br>
+
+            <button type="button" onclick="guardarNuevoTipoOperacion()" style="margin-top: 20px;">Guardar</button>
+        </form>
+    </div>
+</div>
 
 <div class="container-fluid">
         
     <div class="col-md-9 animated bounce">
-      <h1 class="page-header">Gestión de operaciones</h1>
+      <h1 class="page-header">Gestión de tipos de operaciones</h1>
       <ul class="breadcrumb">
         <li><span class="glyphicon glyphicon-home">&nbsp;</span>Home</li>
-        <li><a href="#"  onclick="mostrarFormulario()">Pulse aqui para crear una operación</a></li>
+        <li><a href="#"  onclick="mostrarFormulario()">Pulse aqui para crear un tipo de operación</a></li>
       </ul>
       <table class="table table-hover">
         <thead>
           <th>ID</th>
-      <th>Nombre</th>
-      <th>Cantidad</th>
-      <th>Cuenta</th>
-      <th>Tipo de Operación</th>
-      
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Edición</th>
   
         </thead>
         <tbody class="wrapper" id="wrapper">

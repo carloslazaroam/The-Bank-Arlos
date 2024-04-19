@@ -7,8 +7,8 @@ const counterTipoOperacionSchema = new mongoose.Schema({
 const CounterTipoOperacion = mongoose.model('CounterTipoOperacion', counterTipoOperacionSchema);
 
 const TipoOperacionSchema = new mongoose.Schema({
-
-    id: Number,
+    
+    id: { type: Number, unique: true },
     nombre: String
 });
 
