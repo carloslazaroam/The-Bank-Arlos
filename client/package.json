@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "window.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
@@ -14,6 +15,8 @@
     "electron": "^29.1.6"
   },
   "dependencies": {
-    "ejs": "^3.1.9"
+    "axios": "^1.6.8",
+    "ejs": "^3.1.9",
+    "electron-fetch": "^1.9.1"
   }
 }

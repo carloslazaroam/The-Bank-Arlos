@@ -1,4 +1,6 @@
 // Write your JavaScript code here
+
+
 const banner = document.getElementById("banner")
 const loginContainer = document.getElementById("login-container")
 const signupContainer = document.getElementById("signup-container")
@@ -15,3 +17,4 @@ loginToggle.addEventListener('click', () => {
     signupContainer.style.transform = "scale(0)"
     loginContainer.style.transform = "scale(1)"
 })
+
