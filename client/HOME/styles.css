@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css?family=Public+Sans&display=swap');
+*{
+  box-sizing:border-box;
+  margin:0;
+}
+body{
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  
+  
+}
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:0 130px;
+  height:80px;
+}
+.nav ul{
+  display:flex;
+}
+.nav ul a{
+  margin:0 20px;
+  font-size:20px;
+}
+a{
+  text-decoration:none;
+}
+.nav a:hover{
+  color:black;
+  border-bottom:2px solid hsl(136, 65%, 51%);
+}
+.nav a{
+  color:hsl(227, 12%, 61%);
+}
+p{
+  color:hsl(227, 12%, 61%);
+}
+li{
+  list-style:none;
+}
+.btn-top{
+  padding:13px 15px;
+  border-radius:50px;
+  border:none;
+  background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+  color:hsl(0, 0%, 100%);
+  cursor:pointer;
+  
+}
+.btn:hover{
+  opacity:0.8;
+}
+.for-mobile,.menu,.close-menu{
+  display:none;
+}
+
+@media(max-width:1024px) {
+  .nav ul,button {
+    display:none;
+  }
+  .for-mobile,.menu{
+  display:block;   
+}
+  .nav {
+    margin:0 15px;  
+  } 
+  .ul-wrapper{
+    box-shadow:0 3px 5px 3px rgba(0,0,0,0.5);
+    margin:30px 40px;
+    text-align:center;
+    height:260px;
+    border-radius:10px;
+    background:linear-gradient(60deg,#bdc3c7,#2c3e50);   
+  }
+  .for-mobile ul{
+    text-align:center;
+    line-height:45px;
+    letter-spacing:1px;
+    font-size:22px;
+    margin-right:25px;
+    padding-top:15px;
+    transition:transform 2s ease;
+  }
+  .for-mobile ul a{
+   color:white;
+    
+  }
+  .for-mobile ul a:hover{
+    color:black;
+    border-bottom:2px solid hsl(136, 65%, 51%);
+  }
+  .close-menu,.menu{
+    font-size:25px;
+    
+  }
+  #close-menu,#menu:hover{
+    border:none;
+  }
+}
+
+.introduction-container {
+  display:flex;
+  background-color:hsl(0, 0%, 98%);
+}
+.img-introduction{
+  background:url("https://raw.githubusercontent.com/Obizim/Easybank-landing-page/ce1514859305e8a9892d91c597c7968d1a73a98d/images/bg-intro-desktop.svg");
+  background-size:cover;
+}
+.text{
+  margin:200px 120px 0;
+  width:90%;
+}
+h1{ 
+  font-size:55px;
+  color:hsl(233, 26%, 24%);
+}
+p{
+  margin:20px 0;
+  width:90%;
+  font-size:20px;
+  line-height:28px;
+}
+.btn-introduction{
+  margin-top:20px;
+  font-size:20px;
+  padding:auto 40px;
+}
+.why-us{
+  margin-top:-150px;
+  background-color:hsl(0,0%,95%);
+  height:600px;
+}
+.text2{
+  margin-left:120px;
+  
+}
+h2{
+  font-size:40px;
+   padding-top:2em;
+}
+.text2 p {
+   width:45%;
+  
+}
+.cards-container{
+  display:flex;
+  margin-left:115px;
+  
+}
+.cards{
+  display:grid;
+  text-align:left;
+}
+.cards p {
+  width:90%;
+}
+.cards img{
+  margin:40px 0;  
+}
+.cards span{
+  font-size:23px;
+}
+.articles-container{
+  background-color:#fafafa;
+  height:800px;
+}
+.cards-flex{
+  display:flex;
+  margin:20px 60px;
+}
+
+h3{
+  position:relative;
+  top:60px; 
+  font-size:35px;
+  letter-spacing:1px;
+  left:75px;
+  width:30%;
+}
+.abc{
+  padding-right:2.5rem;
+}
+.card-content{
+  border-radius:5px;
+  width:320px;
+  height:530px;
+  margin:110px 15px 0 15px;
+  background-color:white;
+  box-shadow:0 2px 3px rgba(0,0,0,0.2);
+  cursor:pointer;
+}
+.card-content img {
+  width:320px;
+  border-radius:5px;
+}
+.card-content p{
+  width:100%;
+}
+.text-card{
+  margin:10px 20px;
+}
+h4 {
+  width:80%;
+  letter-spacing:1px;
+  margin:20px 0;
+  font-size:20px;
+  color:hsl(233, 26%, 24%);
+}
+.img-card{
+  height:240px;
+}
+footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background-color:hsl(233, 26%, 24%);
+  margin-top:-10px;
+}
+.footer-content{
+  display:flex;
+  margin-left:80px;
+}
+.icons {
+  font-size:30px; 
+  margin-top:50px;
+  
+}
+.icons i {
+  margin:0 5px;
+  color:white;
+}
+footer p{
+  color:white;
+}
+.nav-bot{
+  display:flex;
+  
+}
+.nav-bot ul a {
+  line-height:35px;
+  color:white;
+  margin:0 80px;
+}
+footer a:hover{
+  color:hsl(136, 65%, 51%);
+}
+footer i:hover{
+  color:hsl(136, 65%, 51%);
+}
+h5{
+  font-size:30px;
+  color:white;
+}
+.btn-bot{
+ margin-top:30px;
+  padding:20px 60px;
+  font-size:18px;
+}
+@media(max-width:968px){
+  .introduction-container,.cards-container,.cards-flex{
+   flex-direction:column;
+    
+  }
+  h1{
+    font-size:40px;
+   
+  }
+  .img-introduction img{
+    width:98vw;
+    margin:0;
+  }
+  .text{
+    margin:40px auto;
+    text-align:center;
+  }
+  .text p {
+    text-align:center;
+    margin:15px auto;
+    width:100%;
+  }
+  .why-us{
+    margin:0 auto;
+    height:auto;
+    padding-bottom:45px;
+  }
+  .text2{
+    margin:0 20px;
+    position:relative;
+    top:20px;
+    text-align:center;
+  }
+  .text2 p {
+    margin:15px auto;
+    text-align:center;
+    width:100%;
+  }
+  .cards-container{
+    margin:10px auto;
+    width:100%;
+   
+  }
+  h2{
+    padding-top:16px;
+    font-size:30px;
+    margin-bottom:20px;
+  }
+  .card-content{
+    height:590px;
+  }
+  .cards img{
+   margin:20px auto;
+  }
+  .cards p,span {
+    text-align:center;
+    margin:10px auto;
+  }
+ 
+  .articles-container{
+    height:auto;
+    margin:-20px auto 30px auto;
+  }
+  .cards-flex{
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+  }
+  .articles-cards-container{
+    margin:0 auto;
+  }
+  h3{
+   width:70%;
+  }
+  footer{
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    
+    width:100%;
+    margin:0 auto;
+  }
+  .nav-bot{
+    display:block;
+    text-align:center;
+  }
+  .footer-content{
+    text-align:center;
+    margin:auto;
+    display:grid;
+    width:100%;
+    
+  }
+  h5{
+    padding-top:1.5rem;
+    position:relative;
+    left:0;
+  }
+  .nav-bot ul a{
+    margin-right:115px;
+    text-align:center;
+  }
+  .btncopy{
+    text-align:center;
+    margin-left:45px;
+  }
+  .btn-bot{
+   display:flex;
+   margin-left:10px;
+   font-size:20px; 
+    align-items:center;
+    
+  }
+  .abc{
+    padding:0;
+  }
+ 
+}

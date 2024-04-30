@@ -6,14 +6,16 @@
     padding: 0;
     box-sizing: border-box;
 }
+@import url('https://fonts.googleapis.com/css?family=Public+Sans&display=swap');
 
 body {
-    font-family: "HP Simplified", sans-serif;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 400;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f8efef;
+    background-color: #e6dede;
     cursor:default;
 }
 
@@ -44,7 +46,7 @@ body {
 }
 
 .title{
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 500;
 }
 
@@ -57,7 +59,7 @@ body {
     width: 100%;
     height: 40px;
     border-radius: 5px;
-    border: 1px solid #a72f2f;
+    border: 1px solid hsl(136, 65%, 51%);
     display: flex;
     align-items: center;
 }
@@ -78,7 +80,7 @@ input{
 
 .account-controls>a {
     text-decoration: none;
-    color: #ff0b0b;
+    color: hsl(136, 65%, 51%);
     font-size: 12px;
 }
 
@@ -90,12 +92,13 @@ input{
     justify-content: center;
     gap: 5px;
     border: none;
-    background: #ff0b0b;
+    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+  color:hsl(0, 0%, 100%);
     color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: transform 500ms ease;
-    box-shadow: 0 3px 10px -5px #ff0b0b;
+    box-shadow: 0 3px 10px -5px #0cc51b;
     &:hover {
         transform: scale(1.1);
     }
@@ -111,7 +114,7 @@ input{
 .other-login-text {
     text-align: center;
     font-size: 12px;
-    color: #ff0b0b;
+    color: #0cc51b;
 }
 
 .placeholder-banner {
@@ -121,6 +124,7 @@ input{
     right:0;
     transition: all 500ms ease;
     z-index:4;
+    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
 }
 
 .social-logins {
@@ -154,7 +158,7 @@ input{
 #signup-form-toggler,#login-form-toggler{
     cursor: pointer;
     text-decoration: none;
-    color:#ff0b0b;
+    color:#0cc51b;
   &:hover{
     border-bottom:1px solid;
   }
@@ -163,5 +167,14 @@ input{
     width: 100%;
     height: inherit;
     object-fit: cover;
+    background-color: #0cc51b;
     transition: transform 500ms ease;
+    
+
 }
+
+h1 {
+    color:hsl(233, 26%, 24%);
+    
+}
+

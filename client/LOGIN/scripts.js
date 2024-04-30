@@ -1,5 +1,3 @@
-// Write your JavaScript code here
-
 
 const banner = document.getElementById("banner")
 const loginContainer = document.getElementById("login-container")
@@ -18,3 +16,31 @@ loginToggle.addEventListener('click', () => {
     loginContainer.style.transform = "scale(1)"
 })
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('button');
+
+    loginButton.addEventListener('click', async () => {
+        const dni = document.querySelector('input[type="text"]').value;
+        const password = document.querySelector('input[type="password"]').value;
+
+        const response = await fetch('http://localhost:3001/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dni, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('token', data.token);
+            console.log('Token JWT:', data.token);
+            alert('Inicio de sesión exitoso');
+        } else {
+            alert(data.message);
+        }
+    });
+});
