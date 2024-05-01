@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const mongoose = require('mongoose');
+require('dotenv').config();
+
 
 // Importar controladores
 const { getUsers, getUserById, createUser ,updateUser, deleteUser} = require('./controllers/users.js');
@@ -10,11 +12,13 @@ const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,dele
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
 const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
-
+const {verifyToken, verifyId} = require('./helpers/auth.js')
 // Importar modelos y rutas de autenticación
 const { User } = require('./models/modelUser');
 const authRoutes = require('./routes/authRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
+const { verify } = require('crypto');
+
 
 const app = express();
 app.use(express.json());
@@ -30,13 +34,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-mongoose.connect('mongodb://localhost:27017/bank', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/bank', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Rutas para usuarios
-app.get('/users', getUsers);
-app.get('/users/:nombre', getUserById);
+app.get('/users',verifyToken, verifyId, getUsers);
+app.get('/users/:id', verifyToken,verifyId, getUserById);
 app.post('/users/post', createUser);
-app.put('/users/:nombre', updateUser); 
+app.put('/users/:id',verifyToken,verifyId, updateUser); 
 app.delete('/users/:nombre', deleteUser);
 
 // Rutas para tipos de usuarios

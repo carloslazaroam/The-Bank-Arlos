@@ -1,7 +1,14 @@
 const recurso = "http://127.0.0.1:3001";
+const token = localStorage.getItem('token');
 
 const llamar = () => {
-    fetch(recurso + '/users')
+    fetch(recurso + '/users',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${token}`
+        }
+    })
         .then(res => res.json())
         .then(json => inicio(json))
         .catch(err => console.error('Error al obtener usuarios:', err));
@@ -59,10 +66,10 @@ function confirmarEliminacion(nombre) {
 
 
 // Agrega una variable global para almacenar el título del user que se está editando
-let userEditando = null;
+
 
 // Función para abrir el modal de edición con los datos del user seleccionado
-// Función para abrir el modal de edición con los datos del user seleccionado
+// Función para let userEditando = null;abrir el modal de edición con los datos del user seleccionado
 // Función para abrir el modal de edición con los datos del usuario seleccionado
 function editarUser(nombre,contra, apellido1, apellido2, direccion, pais,usertype) {
     // Almacenar los datos del usuario que se está editando

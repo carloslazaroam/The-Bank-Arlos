@@ -12,9 +12,13 @@ async function getUsers(req, res) {
 }
 
 async function getUserById(req, res) {
+    //console.log(req.params.id);
+
+   // if(req.userId !=req.params.id ) return res.status(403).json({ message: 'Acceso denegado' });
+
     try {
-        const users = await User.find({ nombre: req.params.nombre });
-        res.send(users);
+        const users = await User.find({ id: req.params.id });
+        res.send(JSON.stringify(users));
     } catch (err) {
         console.error("Error al obtener los usuarios:", err);
         res.status(500).send("Error interno del servidor");
@@ -44,8 +48,8 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const userName = req.params.nombre;
-        const updatedUser = await User.findOneAndUpdate({ nombre: userName }, req.body, { new: true });
+        const userId = req.params.id;
+        const updatedUser = await User.findOneAndUpdate({ id: userId }, req.body, { new: true });
         res.send(updatedUser);
     } catch (err) {
         console.error("Error al actualizar el usuario:", err);

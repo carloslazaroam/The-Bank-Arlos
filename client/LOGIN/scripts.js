@@ -30,15 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ dni, password })
+            body: JSON.stringify({ dni, contra: password })
         });
 
         const data = await response.json();
 
         if (response.ok) {
             localStorage.setItem('token', data.token);
-            console.log('Token JWT:', data.token);
+            localStorage.setItem('id', data.id);
+            console.log( data.usertype);
             alert('Inicio de sesión exitoso');
+            if(data.usertype === '6632844e043b8bf3927f1aed'){
+                window.location.href = '../USER/User-Admin/userAdmin.html';
+                return
+            }
+            
+            window.location.href = '../HOME/home.html';
         } else {
             alert(data.message);
         }
