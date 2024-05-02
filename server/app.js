@@ -40,7 +40,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/bank', { useNewUrlParser: true, useU
 app.get('/users',verifyToken, verifyId, getUsers);
 app.get('/users/:id', verifyToken,verifyId, getUserById);
 app.post('/users/post', createUser);
-app.put('/users/:id',verifyToken,verifyId, updateUser); 
+app.put('/users/:id', updateUser); 
 app.delete('/users/:nombre', deleteUser);
 
 // Rutas para tipos de usuarios

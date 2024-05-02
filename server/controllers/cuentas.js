@@ -1,6 +1,6 @@
 // cuentasController.js
 const { Cuenta } = require('../models/modelCuenta');
-const { User } = require('../models/modelUser');
+
 
 async function getCuentas(req, res) {
     try {
