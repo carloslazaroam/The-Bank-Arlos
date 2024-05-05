@@ -13,6 +13,7 @@ const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOp
 const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const {verifyToken, verifyId} = require('./helpers/auth.js')
+const { getCuentasByUserId } = require('./controllers/cuentas.js');
 // Importar modelos y rutas de autenticación
 const { User } = require('./models/modelUser');
 const authRoutes = require('./routes/authRoutes');
@@ -37,22 +38,27 @@ const upload = multer({ storage: storage });
 mongoose.connect('mongodb://127.0.0.1:27017/bank', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Rutas para usuarios
-app.get('/users',verifyToken, verifyId, getUsers);
+app.get('/users', getUsers);
 app.get('/users/:id', verifyToken,verifyId, getUserById);
 app.post('/users/post', createUser);
 app.put('/users/:id', updateUser); 
 app.delete('/users/:nombre', deleteUser);
+app.get('/users/:id/accounts',verifyToken, getCuentasByUserId);
+
+
+
 
 // Rutas para tipos de usuarios
 app.get('/tipousers', getTipoUsers);
 app.post('/tipousers/post', createTipoUser);
 
 // Rutas para cuentas
-app.get('/cuentas', getCuentas);
+app.get('/cuentas',verifyToken, getCuentas);
 app.get('/cuentas/:iban', getCuentaByIban);
 app.post('/cuentas/post', createCuenta);
 app.put('/cuentas/:iban', updateCuenta); 
 app.delete('/cuentas/:iban', deleteCuenta);
+
 
 // Rutas para tipos de cuentas
 app.get('/tipocuentas', getTipoCuentas);

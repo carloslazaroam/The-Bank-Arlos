@@ -18,6 +18,7 @@ async function getUserById(req, res) {
 
     try {
         const users = await User.find({ id: req.params.id });
+        
         res.send(JSON.stringify(users));
     } catch (err) {
         console.error("Error al obtener los usuarios:", err);
@@ -35,7 +36,9 @@ async function createUser(req, res) {
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
-            usertype: req.body.usertype// Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
+            usertype: req.body.usertype,
+            
+            // Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
         });
         await user.save();
         res.send(user);
@@ -73,6 +76,9 @@ async function deleteUser(req, res) {
         res.status(500).send("Error interno del servidor");
     }
 }
+
+
+
 
 
 // Exportar las funciones para su uso en app.js

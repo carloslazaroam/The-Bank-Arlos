@@ -10,12 +10,13 @@ const CounterUser = mongoose.model('CounterUser', counterUserSchema);
 
 const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
-    dni: {type: String, unique: true},
+    dni: { type: String, unique: true },
     nombre: String,
     apellido1: String,
     apellido2: String,
     direccion: String,
     contra: String,
+    validado: { type: Boolean, default: false },
     pais: String,
     usertype: {
         type: mongoose.Schema.Types.ObjectId,

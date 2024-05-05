@@ -23,7 +23,7 @@
             <ul class="nav navbar-nav navbar-right">
               
               <li class="active"><a title="View Website" href="#"><span class="glyphicon glyphicon-globe"></span></a></li>
-              <li><a href="#">Logout</a></li>
+              <li><a href="../../LOGIN/login.html">Logout</a></li>
             </ul>
           </div>
         </div>
@@ -84,6 +84,10 @@
           <hr>
           <p for="editUsertype">Tipo de Usuario:</p>
           <select id="editUsertype" name="editUsertype"></select><br>
+
+          <hr> 
+          <p for="editValidado">Validar cuenta:</p>
+          <input type="checkbox" id="editValidado" name="editValidado"><br>
           
           
           <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
@@ -166,6 +170,7 @@
       <th>Dirección</th>
       <th>Pais</th>
       <th>TipoUsuario</th>
+      <th>Validado</th>
       <th>Edición</th>
   
         </thead>

@@ -1,4 +1,5 @@
 // cuentasController.js
+
 const { Cuenta } = require('../models/modelCuenta');
 
 
@@ -74,7 +75,20 @@ async function updateCuenta(req, res) {
     }
 }
 
+async function getCuentasByUserId(req, res) {
+    try {
+        const userId = req.params.id;
+        const cuentas = await Cuenta.find({ id_usuario: userId });
+        res.send(cuentas);
+    } catch (err) {
+        console.error("Error al obtener las cuentas del usuario:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
+
 
 // Exportar las funciones para su uso en app.js
-module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta };
+module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId};
 
