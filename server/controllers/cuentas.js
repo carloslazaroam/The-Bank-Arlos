@@ -32,6 +32,7 @@ async function createCuenta(req, res) {
             iban: req.body.iban,
             validado: req.body.validado,
             saldo: req.body.saldo,
+            empresa: req.body.empresa,
             id_usuario: req.body.id_usuario,
             id_tipocuenta: req.body.id_tipocuenta
         });
@@ -86,9 +87,20 @@ async function getCuentasByUserId(req, res) {
     }
 }
 
+async function getEmpresas(req, res) {
+    try {
+        const empresas = await Cuenta.distinct("empresa");
+        res.send(empresas);
+    } catch (err) {
+        console.error("Error al obtener las empresas:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
 
 
 
 // Exportar las funciones para su uso en app.js
-module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId};
+module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId,getEmpresas};
 

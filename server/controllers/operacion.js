@@ -64,8 +64,19 @@ async function deleteOperacion(req, res) {
     }
 }
 
+async function getOperacionesByCuentaId(req, res) {
+    try {
+        const cuentaId = req.params.id;
+        const operaciones = await Operacion.find({ id_cuenta: cuentaId });
+        res.send(operaciones);
+    } catch (err) {
+        console.error("Error al obtener las operaciones asociadas a la cuenta:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
 
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion}
+
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId}
 
 /*async function updateOperacion(req, res) {
     try {

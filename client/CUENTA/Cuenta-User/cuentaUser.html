@@ -48,25 +48,25 @@
             <h2>Crear Nueva cuenta</h2>
             <hr> 
             <form id="crearFormulario" enctype="multipart/form-data">
-                <p>Marca esta opción para activar la cuenta:</p>
-    <input type="checkbox" id="createActiva" name="createActiva" required><br>
+               
     
-    <hr> 
+                
     
                 <p for="createIBAN">IBAN de la cuenta:</p>
                 <input type="text" id="createIBAN" name="createIBAN"  pattern="[A-Z]{4}-[A-Z]{4}-[A-Z]{4}" required><br>
                 <hr> 
-    
-                <p for="createValidacion">Validar cuenta:</p>
-                <input type="checkbox" id="createValidacion" name="createValidacion" required><br>
-                <hr> 
-    
-                <p for="createSaldo">Saldo</p>
-                <input type="text" id="createSaldo" name="createSaldo" required><br>
-                <hr> 
 
                 <p for="createTipocuenta">Seleccion Tipo de cuenta: </p>
                 <select id="createTipocuenta" name="createTipocuenta" required></select><br>
+                <hr>
+
+                <p for="createEmpresa">Empresa:</p>
+                <select id="createEmpresa" name="createEmpresa">
+                <option value="visa">Visa</option>
+                <option value="mastercard">Mastercard</option>
+                <option value="amex">Amex</option>
+                </select>
+                <hr>
     
     
     
@@ -74,6 +74,44 @@
             </form>
         </div>
     </div>
+
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cancelarEdicion()">&times;</span>
+            <h2>Editar Cuenta</h2>
+            <form>
+             <hr> 
+                <p for="editActiva">Marca esta opción para activar o desactivar la cuenta:</p>
+                <input type="checkbox" id="editActiva" name="editActiva"><br>
+                <hr> 
+                <p for="editTipocuenta">Tipo de Cuenta:</p>
+                <select id="editTipocuenta" name="editTipocuenta"></select><br>
+
+                <hr> 
+
+                <p for="editEmpresa">Empresa:</p>
+                <select id="editEmpresa" name="editEmpresa">
+                <option value="visa">Visa</option>
+                <option value="mastercard">Mastercard</option>
+                <option value="amex">Amex</option>
+                </select>
+                <hr>
+                <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
+            </form>
+        </div>
+      </div>
+
+
+      <div id="confirmModal" class="modal" >
+    <div class="modal-content">
+        <h2>Confirmar Eliminación</h2>
+        <hr> 
+        <p>¿Estás seguro de que deseas eliminar esta cuenta?</p>
+        <button id="confirmButton" style="background-color: rgb(17, 146, 17);">Confirmar</button>
+        <button onclick="cancelarEliminacion()" style="background-color: rgb(197, 21, 21);">Cancelar</button>
+    </div>
+</div>
 
     
 

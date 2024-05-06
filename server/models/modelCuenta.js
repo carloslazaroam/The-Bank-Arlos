@@ -20,6 +20,10 @@ const cuentaSchema = new mongoose.Schema({
     id_tipocuenta: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TipoCuenta'
+    },
+    empresa: {
+        type: String,
+        
     }
 });
 

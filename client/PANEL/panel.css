@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css?family=Public+Sans&display=swap');
+*{
+  box-sizing:border-box;
+  margin:0;
+}
+body{
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+  
+  
+}
+
+.container {
+	max-width: 880px;
+	margin: 0 auto;
+}
+
+.wallet-container {
+	background-color: #fff;
+	border-radius: 7px;
+	width: 100%;
+	margin: 40px auto 0;
+	box-shadow: 0 0 19px 5px rgba(0, 0, 0, .2);
+	display: flex;
+}
+
+	.wallet-container aside {
+		width: 40%;
+		background-color: #f2f2f2;
+		border-top-left-radius: 7px;
+		border-bottom-left-radius: 7px;
+		padding: 40px;
+	}
+
+		.wallet-container aside h3 {
+			font-weight: 400;
+			font-size: 24px;
+			color: #7c7f8d;
+		}
+
+			.wallet-container aside h3 a {
+				text-decoration: none;
+				color: #c6cce5;
+				font-size: 38px;
+				position: relative;
+				top: 1px;
+				font-weight: 500;
+				line-height: 0;
+			}
+
+
+		.wallet-container aside .cards {
+			list-style: none;
+			margin-top: 30px;
+		}
+
+			.wallet-container aside .cards li {
+				display: block;
+				background-color: #fff;
+				width: 100%;
+				font-size: 16px;
+				border-radius: 2px;
+				border: 2px solid #e1e1e1;
+				padding: 15px;
+				font-family: 'Roboto';
+				margin: 40px 0;
+				cursor: pointer;
+			}
+
+				.wallet-container aside .cards li:first-child { margin-top: 0; }
+				.wallet-container aside .cards li:last-child { margin-bottom: 0; }
+
+				.wallet-container aside .cards li.active {
+					border: 4px solid #8493c7;
+				}
+
+				.wallet-container aside .cards li .card-emblem {
+					width: 64px;
+					height: 44px;
+					margin-bottom: 15px;
+				}
+
+                .wallet-container aside .cards li.card-visa .card-emblem {
+                    background-image: url('https://www.mark-eriksson.com/work/designs/Wallet/img/visa.png');
+                }
+                
+                .wallet-container aside .cards li.card-amex .card-emblem {
+                    background-image: url('https://www.mark-eriksson.com/work/designs/Wallet/img/amex.png');
+                }
+                
+                .wallet-container aside .cards li.card-mastercard .card-emblem {
+                    background-image: url('https://www.mark-eriksson.com/work/designs/Wallet/img/mastercard.png');
+                }
+                
+
+				.wallet-container aside .cards li .card-number {
+					color: #676767;
+					font-size: 20px;
+					font-weight: 400;
+					letter-spacing: 0.07em;
+				}
+
+				.wallet-container aside .cards li .card-valid {
+					color: #b3b3b3;
+					margin-top: 8px;
+					font-size: 15px;
+				}
+
+
+	.wallet-container main {
+		width: 60%;
+		padding: 40px;
+	}
+
+		.wallet-container main .balance {
+			border-bottom: 1px solid #e5e5e5;
+			padding-bottom: 40px;
+			font-size: 24px;
+			color: #7c7f8d;
+		}
+
+			.wallet-container main .balance .balance-value {
+				position: relative;
+				font-weight: 700;
+				font-size: 38px;
+				color: #444750;
+				top: -5px;
+				line-height: 44px;
+			}
+
+				.wallet-container main .balance .balance-value .small-numbers {
+					font-size: 18px;
+					position: relative;
+					top: -13px;
+				}
+
+		.wallet-container main .transactions {
+			margin-top: 30px;
+		}
+
+			.wallet-container main .transactions ul {
+				list-style: none;
+			}
+
+				.wallet-container main .transactions ul li {
+					display: flex;
+					align-items: center;
+					width: 100%;
+					color: #333333;
+					justify-content: space-between;
+					cursor: pointer;
+					margin: 30px 0;
+				}
+
+					.wallet-container main .transactions ul li:first-child { margin-top: 0; }
+
+					.wallet-container main .transactions ul li:last-child { margin-bottom: 0; }
+
+					.wallet-container main .transactions ul li .transaction-details {
+						line-height: 1.4;
+					}
+
+						.wallet-container main .transactions ul li .transaction-details .transaction-symbol {
+							height: 22px;
+							width: 22px;
+							border: 2px solid #ebebeb;
+							font-weight: 700;
+							display: inline-block;
+							text-align: center;
+							font-size: 20px;
+							border-radius: 50%;
+							line-height: 16px;
+							padding-left: 1px;
+							margin: 12px 12px 0 0;
+						}					
+
+						.wallet-container main .transactions ul li .transaction-details .transaction-name {
+							font-size: 18px;
+							font-weight: 500;
+						}
+
+						.wallet-container main .transactions ul li .transaction-details .transaction-meta {
+							color: #a9a9a9;
+							font-size: 14px;
+						}
+
+					.wallet-container main .transactions ul li.funds-minus .transaction-balance {
+						color: #8493c7;
+					}
+
+					.wallet-container main .transactions ul li.funds-plus .transaction-balance {
+						color: #6bc93f;
+					}
+
+					.wallet-container main .transactions ul li .transaction-balance {
+						font-size: 18px;
+						font-weight: 500;
+						position: relative;
+					}
+
+						.wallet-container main .transactions ul li .transaction-balance .small-numbers {
+							position: relative;
+							font-size: 12px;
+							top: -4px;
+						}
+
+@media only screen and (max-width: 900px) {
+	.container {
+		max-width: 100%;
+	}
+	
+	.wallet-container {
+		display: block;
+		box-shadow: none;
+		margin: 0;
+		width: 100%;
+	}
+	
+	.wallet-container aside, .wallet-container main {
+		width: 100%;
+	}
+	
+	.wallet-container aside .cards {
+		display: block;
+	}
+	
+	.wallet-container aside .cards li {
+		margin: 5px;
+		width: calc(50% - 12px);
+		display: inline-block;
+	}
+}
+
+@media only screen and (max-width: 560px) {
+	.wallet-container aside .cards li {
+		width: 100%;
+	}
+	
+	.wallet-container main .transactions ul li .transaction-details .left {
+		display: none;
+	}
+}
+
+*, *:before, *:after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	outline: none;
+	-webkit-font-smoothing: antialiased;
+}
+
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.cf:before, .cf:after {
+	display: table;
+	content: " ";
+	font-size: 0;
+}
+
+.cf:after {
+	clear: both;
+}
+
+.left { float: left; }
+.right { float: right; }

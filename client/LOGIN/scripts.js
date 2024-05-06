@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('No tienes acceso. Tu cuenta aún no ha sido validada por un administrador.');
             } else {
                 alert('Inicio de sesión exitoso');
-                if (data.usertype === '6632844e043b8bf3927f1aed') {
+                if (data.usertype === '660d0966180c6017f4da9842') {
                     window.location.href = '../USER/User-Admin/userAdmin.html';
                 } else {
                     window.location.href = '../HOME/home.html';
