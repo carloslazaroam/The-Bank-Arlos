@@ -1,4 +1,5 @@
 const { Operacion } = require('../models/modelOperacion');
+const { Cuenta } = require('../models/modelCuenta')
 
 async function getOperacion(req,res) {
     try{
@@ -27,6 +28,7 @@ async function createOperacion(req, res) {
         const operacion = new Operacion({
             cantidad: req.body.cantidad,
             nombre: req.body.nombre,
+            concepto: req.body.concepto,
             id_cuenta: req.body.id_cuenta,
             id_tipoOperacion: req.body.id_tipoOperacion,
             
@@ -75,8 +77,71 @@ async function getOperacionesByCuentaId(req, res) {
     }
 }
 
+async function ingresarDinero(req, res) {
+    try {
+        const { cantidad, id_cuenta } = req.body;
+        
+        // Crear una nueva operación para el ingreso de dinero
+        const operacion = new Operacion({
+            nombre: req.body.nombre,
+            concepto: req.body.concepto,
+            cantidad: req.body.cantidad,
+            id_cuenta: req.body.id_cuenta,
+            
+        });
+        
+        // Guardar la operación en la base de datos
+        await operacion.save();
+        
+        // Actualizar el saldo de la cuenta sumando la cantidad ingresada
+        const cuenta = await Cuenta.findById(id_cuenta);
+        cuenta.saldo += parseFloat(cantidad);
+        await cuenta.save();
+        
+        // Enviar respuesta exitosa
+        res.status(200).json({ message: "Dinero ingresado exitosamente" });
 
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId}
+    } catch (err) {
+        console.error("Error al ingresar dinero en la cuenta:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
+
+
+async function retirarDinero(req, res) {
+    try {
+        const { cantidad, id_cuenta } = req.body;
+        
+        // Crear una nueva operación para el ingreso de dinero
+        const operacion = new Operacion({
+            nombre: req.body.nombre,
+            concepto: req.body.concepto,
+            cantidad: req.body.cantidad,
+            id_cuenta: req.body.id_cuenta,
+            
+        });
+        
+        // Guardar la operación en la base de datos
+        await operacion.save();
+        
+        // Actualizar el saldo de la cuenta sumando la cantidad ingresada
+        const cuenta = await Cuenta.findById(id_cuenta);
+        cuenta.saldo -= parseFloat(cantidad);
+        await cuenta.save();
+        
+        // Enviar respuesta exitosa
+        res.status(200).send("Dinero retirado exitosamente");
+    } catch (err) {
+        console.error("Error al ingresar dinero en la cuenta:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
+
+
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero}
 
 /*async function updateOperacion(req, res) {
     try {

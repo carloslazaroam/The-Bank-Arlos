@@ -10,6 +10,7 @@ const operacionSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     nombre: String,
     cantidad: String,
+    concepto: String,
     id_cuenta: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Cuenta'

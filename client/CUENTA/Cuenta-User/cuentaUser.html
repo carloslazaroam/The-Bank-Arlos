@@ -10,7 +10,11 @@
 
 </head>
 <body>
-    <div class="container mt-5" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
+
+
+    <div class="parent">
+    
+    <div class="container mt-5" id="div1" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
         <div class="row">
             <div class="col">
                 <div class="user-image">
@@ -25,7 +29,7 @@
         </div>
     </div>
 
-    <div class="container mt-5" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
+    <div class="container mt-5" id="div2" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
         <div class="row">
             <div class="col">
                 
@@ -40,6 +44,38 @@
             </div>
         </div>
     </div>
+
+    <div class="container mt-5" id="div3" style="background: white; color: black; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
+        <div class="d-flex justify-content-center align-items-center"> <!-- Añadido -->
+            <img src="./interrogacion.png" class="profile-image" width="100px" height="100px" style="box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 50%;">
+        </div> <!-- Añadido -->
+        <h1 class="text-center mb-5">Información sobre las cuentas</h1>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <h2>Cuenta Corriente</h2>
+                    <p>Máximo Negativo: -500 a -1000 unidades monetarias</p>
+                    <p>Tasa de Interés por Sobregiro: 12% anual</p>
+                    <p>Tarifa por Transacción Excedida: 1 a 2 unidades monetarias por transacción</p>
+                </div>
+                <div class="mb-3">
+                    <hr>
+                    <h2>Cuenta de Ahorros</h2>
+                    <p>Número Máximo de Transacciones Mensuales: 6 a 10</p>
+                    <p>Tasa de Interés: 0.5% a 2% anual</p>
+                </div>
+                <div class="mb-3">
+                    <hr>
+                    <h2>Cuenta de Cheques</h2>
+                    <p>Número Máximo de Transacciones Mensuales: 15 a 20</p>
+                    <p>Tasa de Interés por Sobregiro: 15% a 20% anual</p>
+                    <p>Tarifa por Transacción Excedida: 2 a 5 unidades monetarias por transacción</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 
     <div id="crearModal" class="modal">
@@ -102,6 +138,8 @@
         </div>
       </div>
 
+     
+
 
       <div id="confirmModal" class="modal" >
     <div class="modal-content">
@@ -121,6 +159,13 @@
 
 <style>
     .user-image {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+        border-radius: 50%;
+    }
+
+    .profile-image {
         display: flex;
         justify-content: center;
         margin-bottom: 10px;

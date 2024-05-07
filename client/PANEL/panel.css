@@ -1,10 +1,51 @@
-@import url('https://fonts.googleapis.com/css?family=Public+Sans&display=swap');
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9000;
+    left: 0;
+    
+    top: 2;
+    width: 100%; /* Cambiado de 50% a 100% */
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center; 
+    font-family: 'HP Simplified';/* Color de fondo para oscurecer la página */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 50px;
+    max-height: 400px; /* Altura máxima del contenido */
+    overflow-y: auto;
+   
+  }
+
+  /* Estilos para el título del modal */
+  .modal-content h2 {
+    font-weight: bold;
+  }
+  
+  /* Estilos para el modal activo */
+  .modal.active {
+    display: block;
+  }
+
+
 *{
   box-sizing:border-box;
   margin:0;
 }
 body{
-  font-family: 'Public Sans', sans-serif;
+  
   font-weight: 400;
   background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
   
@@ -14,6 +55,8 @@ body{
 .container {
 	max-width: 880px;
 	margin: 0 auto;
+	padding-top: 20px;
+	color: #7c7f8d;
 }
 
 .wallet-container {
@@ -26,11 +69,20 @@ body{
 }
 
 	.wallet-container aside {
-		width: 40%;
+		width: 43%;
 		background-color: #f2f2f2;
 		border-top-left-radius: 7px;
 		border-bottom-left-radius: 7px;
 		padding: 40px;
+		list-style: none;
+    overflow-y: auto; /* Agregamos overflow-y para permitir scroll vertical */
+    max-height: 620px; /* Establecemos una altura máxima para el contenedor */
+    margin-bottom: 0;
+	}
+
+	
+	.wallet-container aside::-webkit-scrollbar {
+		width: 0; /* Hacemos la barra de desplazamiento invisible */
 	}
 
 		.wallet-container aside h3 {
@@ -139,9 +191,15 @@ body{
 			margin-top: 30px;
 		}
 
-			.wallet-container main .transactions ul {
-				list-style: none;
-			}
+		.wallet-container main .transactions ul {
+			list-style: none;
+			overflow-y: auto; /* Agregamos overflow-y para permitir scroll vertical */
+			max-height: 400px; /* Establecemos una altura máxima para el contenedor */
+		}
+
+		.wallet-container main .transactions ul::-webkit-scrollbar {
+			width: 0; /* Ancho de la barra de desplazamiento */
+		}
 
 				.wallet-container main .transactions ul li {
 					display: flex;
@@ -221,15 +279,20 @@ body{
 		width: 100%;
 	}
 	
-	.wallet-container aside .cards {
-		display: block;
+	
+	
+	.wallet-container main .transactions ul {
+		list-style: none;
+		overflow-y: auto; /* Agregamos overflow-y para permitir scroll vertical */
+		max-height: 500px; /* Establecemos una altura máxima para el contenedor */
+	}
+
+	.wallet-container main .transactions ul::-webkit-scrollbar {
+		width: 0; /* Ancho de la barra de desplazamiento */
 	}
 	
-	.wallet-container aside .cards li {
-		margin: 5px;
-		width: calc(50% - 12px);
-		display: inline-block;
-	}
+	
+	
 }
 
 @media only screen and (max-width: 560px) {
@@ -268,3 +331,21 @@ input {
 
 .left { float: left; }
 .right { float: right; }
+
+
+
+button {
+    
+    border:none;
+    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+    color:hsl(0, 0%, 100%);
+    cursor:pointer;
+	width: 200px;
+    
+  }
+
+  .panelBtn{
+	text-align: center;
+  }
+
+  

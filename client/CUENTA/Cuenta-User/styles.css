@@ -82,9 +82,6 @@ animation: fadeIn 0.5s ease-in-out;
 
   
 
-  body {
-    padding-top: 80px;
-  }
   
   #sidebar {
     position: fixed;

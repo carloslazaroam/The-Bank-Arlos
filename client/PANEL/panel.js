@@ -125,7 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             </div>
     
-                            <div class="transaction-balance">&pound;299.<span class="small-numbers">00</span></div>
+                            <div class="transaction-balance"><span class="small-numbers">00</span></div>
                         </li>
                 
             `;
@@ -138,14 +138,129 @@ window.addEventListener('DOMContentLoaded', () => {
         balanceValue.textContent = `£${newBalance.toFixed(2)}`;
     }
     
-    
+
     
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('es-ES', options);
     }
-    
+
+   
 
    
 });
+
+
+const recurso = "http://127.0.0.1:3001";
+    const token = localStorage.getItem('token');
+    const id = localStorage.getItem('id');
+    const id2 = localStorage.getItem('id2');
+
+
+    // Función para mostrar el modal de creación de users
+function mostrarFormulario() {
+    const crearModal = document.getElementById('crearModal');
+    crearModal.style.display = 'block';
+
+    const url = `${recurso}/users/${id2}/accounts`;
+    fetch(url, {
+        method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+    })
+    .then(res => res.json())
+    .then(cuentas => {
+        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
+        const select = document.getElementById('createCuenta');
+        select.innerHTML = ""; // Limpiar las opciones existentes
+        cuentas.forEach(cuenta => {
+            const option = document.createElement('option');
+            option.value = cuenta._id;
+            option.textContent = cuenta.iban;
+            select.appendChild(option);
+        });
+    })
+    .catch(err => console.error('Error al obtener cuentas:', err));
+
+
+   
+   
+}
+
+// Función para cerrar el modal de creación de users
+function cancelarCreacion() {
+    const crearModal = document.getElementById('crearModal');
+    crearModal.style.display = 'none';
+}
+
+// Función para enviar la solicitud de creación de un nuevo operacion al servidor
+
+function guardarNuevaOperacion() {
+    const nombre = document.getElementById('createNombre').value;
+    const cantidad = document.getElementById('createCantidad').value;
+    const concepto = document.getElementById('createConcepto').value;
+    const id_cuenta = document.getElementById('createCuenta').value;
+    
+    
+    
+    // Crear un objeto con los datos del usuario
+    const operacionData = {
+        nombre: nombre,
+        cantidad: cantidad,
+        concepto: concepto,
+        id_cuenta: id_cuenta,
+       
+        
+    };
+
+    // Enviar la solicitud POST al servidor
+    fetch(recurso + '/operacion/ingresar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Nueva operación añadida:', data);
+        // Actualizar la interfaz con el nuevo operacion
+       
+        
+        // Limpiar el formulario después de añadir el operacion
+        document.getElementById('createNombre').value = '';
+        document.getElementById('createCantidad').value = '';
+        document.getElementById('createConcepto').value = '';
+        document.getElementById('createCuenta').value = '';
+        
+        
+        const crearModal = document.getElementById('crearModal');
+        crearModal.style.display = 'none';
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+
+document.getElementById('crearModal').style.display = 'none';
+
+
+
+
+
+
+
+
+
+
+
+

@@ -28,7 +28,10 @@ async function createTipoCuenta(req,res) {
         const tipoCuenta = new TipoCuenta({
             nombre: req.body.nombre,
             porcentajebeneficio: req.body.porcentajebeneficio,
-            maxnegativo: req.body.maxnegativo
+            maxnegativo: req.body.maxnegativo,
+            maxtransacciones: req.body.maxtransacciones,
+            tasaInteresSobregiro: req.body.tasaInteresSobregiro,
+            tarifaTransaccionExcedida: req.body.tarifaTransaccionExcedida
         });
         await tipoCuenta.save();
         res.send(tipoCuenta);
