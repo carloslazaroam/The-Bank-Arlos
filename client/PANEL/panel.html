@@ -22,9 +22,9 @@
 
                     <br>
                     <div class="panelBtn">
-                    <button type="button" onclick="mostrarFormulario()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary" id="btnIngresarDinero">Ingresar dinero</button>
+                        <button type="button" onclick="mostrarFormulario()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary" id="btnIngresarDinero">Ingresar dinero</button>
 
-                    <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Retirar dinero</button>
+                        <button type="button" onclick="mostrarFormulario2()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Retirar dinero</button>
 
                     <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Hacer bizum</button>
                     </div>
@@ -58,7 +58,7 @@
                 <div class="balance cf">
                     <div class="left">Saldo de la cuenta</div>
                     <div class="right">
-                        <div class="balance-value">&pound;729.<span class="small-numbers">00</span></div>
+                        <div class="balance-value"><span class="small-numbers"></span></div>
                     </div>
                 </div>
     
@@ -80,7 +80,7 @@
     <div id="crearModal" class="modal">
         <div class="modal-content" style="width:600px; margin: 0 auto;">
             <span class="close" onclick="cancelarCreacion()">&times;</span>
-            <h2>Crear Nueva Operación</h2>
+            <h2>Formulario</h2>
             <form id="crearFormulario" enctype="multipart/form-data">
                 <hr>
                 <p for="createCuenta">Seleccionar Cuenta:</p>
@@ -94,12 +94,44 @@
                 <hr>
                 <p for="createCantidad">Cantidad:</p>
                 <input type="text" id="createCantidad" name="createCantidad"><br>
+
+                <input type="hidden" id="tipo" name="tipo" value="ingreso">
+
                 
                 
                 
                
       <br><br>
-                <button type="button" onclick="guardarNuevaOperacion()">Guardar</button>
+                <button type="button" onclick="guardarNuevoIngreso()">Guardar</button>
+            </form>
+        </div>
+      </div>
+
+
+      <div id="crearModal2" class="modal">
+        <div class="modal-content" style="width:600px; margin: 0 auto;">
+            <span class="close" onclick="cancelarCreacion2()">&times;</span>
+            <h2>Formulario</h2>
+            <form id="crearFormulario2" enctype="multipart/form-data">
+                <hr>
+                <p for="createCuenta2">Seleccionar Cuenta:</p>
+              <select id="createCuenta2" name="createCuenta2"></select><br>
+              <hr>
+                <p for="createNombre2">Nombre:</p>
+                <input type="text" id="createNombre2" name="createNombre2"><br>
+                <hr>
+                <p for="createConcepto2">Concepto:</p>
+                <input type="text" id="createConcepto2" name="createConcepto2"><br>
+                <hr>
+                <p for="createCantidad2">Cantidad:</p>
+                <input type="text" id="createCantidad2" name="createCantidad2"><br>
+                <input type="hidden" id="tipo" name="tipo" value="retiro">
+                
+                
+                
+               
+      <br><br>
+                <button type="button" onclick="guardarNuevaRetirada()">Guardar</button>
             </form>
         </div>
       </div>

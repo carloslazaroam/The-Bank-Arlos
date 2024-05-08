@@ -20,6 +20,11 @@ const operacionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TipoOperacion'
     },
+
+    tipo: {
+        type: String,
+        enum: ['ingreso', 'retiro']
+    }
     
     
 });

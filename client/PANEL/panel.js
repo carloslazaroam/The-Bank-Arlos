@@ -106,36 +106,39 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function displayOperations(operaciones) {
+    async function displayOperations(operaciones) {
         const cajitasList = document.querySelector('.cajitas');
         cajitasList.innerHTML = ""; // Limpiar la lista antes de añadir nuevas operaciones
     
-        operaciones.forEach(operacion => {
+        operaciones.forEach(async operacion => {
+            // Determinar el símbolo correspondiente basado en el tipo de operación
+            const transactionSymbol = operacion.tipo === 'ingreso' ? '+' : '-';
+            const transactionClass = operacion.tipo === 'ingreso' ? 'funds-plus' : 'funds-minus';
             cajitasList.innerHTML += `
-
-            <li class="transaction funds-minus">
-                            <div class="transaction-details cf">
-                                <div class="left">
-                                    <div class="transaction-symbol">-</div>
-                                </div>
+            <li class="transaction ${transactionClass}">
+                    <div class="transaction-details cf">
+                        <div class="left">
+                            <div class="transaction-symbol">${transactionSymbol}</div>
+                        </div>
     
-                                <div class="right">
-                                    <div class="transaction-name">${operacion.nombre}</div>
-                                    <div class="transaction-meta">${operacion.cantidad}</div>
-                                </div>
-                            </div>
+                        <div class="right">
+                            <div class="transaction-name">${operacion.nombre}</div>
+                            <div class="transaction-meta">${operacion.concepto}</div>
+                        </div>
+                    </div>
     
-                            <div class="transaction-balance"><span class="small-numbers">00</span></div>
-                        </li>
-                
+                    <div class="transaction-balance">${operacion.cantidad}<span class="small-numbers">€</span></div>
+                </li>
             `;
         });
     }
     
     
+    
+    
     function updateBalance(newBalance) {
         const balanceValue = document.querySelector('.balance-value');
-        balanceValue.textContent = `£${newBalance.toFixed(2)}`;
+        balanceValue.textContent = `${newBalance.toFixed(2)}€`;
     }
     
 
@@ -190,19 +193,56 @@ function mostrarFormulario() {
    
 }
 
+function mostrarFormulario2() {
+    const crearModal = document.getElementById('crearModal2');
+    crearModal.style.display = 'block';
+
+    const url = `${recurso}/users/${id2}/accounts`;
+    fetch(url, {
+        method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+    })
+    .then(res => res.json())
+    .then(cuentas => {
+        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
+        const select = document.getElementById('createCuenta2');
+        select.innerHTML = ""; // Limpiar las opciones existentes
+        cuentas.forEach(cuenta => {
+            const option = document.createElement('option');
+            option.value = cuenta._id;
+            option.textContent = cuenta.iban;
+            select.appendChild(option);
+        });
+    })
+    .catch(err => console.error('Error al obtener cuentas:', err));
+
+
+   
+   
+}
+
 // Función para cerrar el modal de creación de users
 function cancelarCreacion() {
     const crearModal = document.getElementById('crearModal');
     crearModal.style.display = 'none';
 }
 
+function cancelarCreacion2() {
+    const crearModal = document.getElementById('crearModal2');
+    crearModal.style.display = 'none';
+}
+
 // Función para enviar la solicitud de creación de un nuevo operacion al servidor
 
-function guardarNuevaOperacion() {
+function guardarNuevoIngreso() {
     const nombre = document.getElementById('createNombre').value;
     const cantidad = document.getElementById('createCantidad').value;
     const concepto = document.getElementById('createConcepto').value;
     const id_cuenta = document.getElementById('createCuenta').value;
+    const tipo = document.getElementById('tipo').value;
     
     
     
@@ -212,6 +252,7 @@ function guardarNuevaOperacion() {
         cantidad: cantidad,
         concepto: concepto,
         id_cuenta: id_cuenta,
+        tipo: tipo
        
         
     };
@@ -240,6 +281,7 @@ function guardarNuevaOperacion() {
         document.getElementById('createCantidad').value = '';
         document.getElementById('createConcepto').value = '';
         document.getElementById('createCuenta').value = '';
+        document.getElementById('tipo').value = '';
         
         
         const crearModal = document.getElementById('crearModal');
@@ -251,7 +293,65 @@ function guardarNuevaOperacion() {
 }
 
 
-document.getElementById('crearModal').style.display = 'none';
+
+
+
+function guardarNuevaRetirada() {
+    const nombre = document.getElementById('createNombre2').value;
+    const cantidad = document.getElementById('createCantidad2').value;
+    const concepto = document.getElementById('createConcepto2').value;
+    const id_cuenta = document.getElementById('createCuenta2').value;
+    const tipo = document.getElementById('tipo').value;
+    
+    
+    
+    
+    
+    // Crear un objeto con los datos del usuario
+    const operacionData = {
+        nombre: nombre,
+        cantidad: cantidad,
+        concepto: concepto,
+        id_cuenta: id_cuenta,
+        tipo: tipo,
+       
+       
+        
+    };
+
+    // Enviar la solicitud POST al servidor
+    fetch(recurso + '/operacion/retirar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Nueva operación añadida:', data);
+        // Limpiar el formulario después de añadir el operacion
+        document.getElementById('createNombre2').value = '';
+        document.getElementById('createCantidad2').value = '';
+        document.getElementById('createConcepto2').value = '';
+        document.getElementById('createCuenta2').value = '';
+        document.getElementById('tipo').value = '';
+        
+        
+        const crearModal = document.getElementById('crearModal2');
+        crearModal.style.display = 'none';
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+document.getElementById('crearModal2').style.display = 'none';
 
 
 

@@ -87,6 +87,7 @@ async function ingresarDinero(req, res) {
             concepto: req.body.concepto,
             cantidad: req.body.cantidad,
             id_cuenta: req.body.id_cuenta,
+            tipo: req.body.tipo
             
         });
         
@@ -132,7 +133,7 @@ async function retirarDinero(req, res) {
         await cuenta.save();
         
         // Enviar respuesta exitosa
-        res.status(200).send("Dinero retirado exitosamente");
+        res.status(200).json({ message: "Dinero retirado exitosamente" });
     } catch (err) {
         console.error("Error al ingresar dinero en la cuenta:", err);
         res.status(500).send("Error interno del servidor");
