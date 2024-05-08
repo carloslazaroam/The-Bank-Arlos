@@ -140,9 +140,70 @@ async function retirarDinero(req, res) {
     }
 }
 
+async function transferirSaldo(req, res) {
+    try {
+        const { ibanEmisor, ibanReceptor, cantidad } = req.body;
+
+        // Buscar cuentas por IBAN
+        const cuentaEmisor = await Cuenta.findOne({ iban: ibanEmisor });
+        const cuentaReceptor = await Cuenta.findOne({ iban: ibanReceptor });
+
+        // Verificar si las cuentas existen
+        if (!cuentaEmisor || !cuentaReceptor) {
+            return res.status(404).json({ mensaje: 'Una o ambas cuentas no existen.' });
+        }
+
+        if (ibanEmisor === ibanReceptor) {
+            return res.status(400).json({ mensaje: 'No puedes transferir dinero a tu propia cuenta.' });
+        }
+
+         // Verificar si la cuenta del emisor existe y tiene saldo suficiente
+         if (!cuentaEmisor || cuentaEmisor.saldo < cantidad) {
+            return res.status(400).json({ mensaje: 'Saldo insuficiente en la cuenta emisora.' });
+        }
+
+        // Verificar saldo suficiente en el emisor
+        if (cuentaEmisor.saldo < cantidad) {
+            return res.status(400).json({ mensaje: 'Saldo insuficiente en la cuenta emisora.' });
+        }
+
+        // Realizar la transferencia
+        cuentaEmisor.saldo -= cantidad;
+        cuentaReceptor.saldo += cantidad;
+
+        // Guardar las operaciones
+        const operacionEmisor = new Operacion({
+            nombre: 'Transferencia emitida',
+            cantidad: cantidad,
+            concepto: 'Transferencia a ' + ibanReceptor,
+            id_cuenta: cuentaEmisor._id,
+            tipo: 'retiro'
+        });
+        await operacionEmisor.save();
+
+        const operacionReceptor = new Operacion({
+            nombre: 'Transferencia recibida',
+            cantidad: cantidad,
+            concepto: 'Transferencia de ' + ibanEmisor,
+            id_cuenta: cuentaReceptor._id,
+            tipo: 'ingreso'
+        });
+        await operacionReceptor.save();
+
+        // Guardar los cambios en las cuentas
+        await cuentaEmisor.save();
+        await cuentaReceptor.save();
+
+        res.status(200).json({ mensaje: 'Transferencia realizada con éxito.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+}
 
 
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero}
+
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo}
 
 /*async function updateOperacion(req, res) {
     try {

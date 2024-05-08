@@ -257,6 +257,8 @@ function guardarNuevoIngreso() {
         
     };
 
+    console.log(operacionData)
+
     // Enviar la solicitud POST al servidor
     fetch(recurso + '/operacion/ingresar', {
         method: 'POST',

@@ -10,7 +10,7 @@ const { getUsers, getUserById, createUser ,updateUser, deleteUser} = require('./
 const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const {verifyToken, verifyId} = require('./helpers/auth.js')
 const { getCuentasByUserId } = require('./controllers/cuentas.js');
@@ -85,6 +85,8 @@ app.delete('/operacion/:id', deleteOperacion);
 app.get('/operaciones/cuenta/:id', getOperacionesByCuentaId);
 app.post('/operacion/ingresar', ingresarDinero);
 app.post('/operacion/retirar', retirarDinero);
+app.post('/operacion/transferencia', transferirSaldo);
+
 
 // Rutas de Autenticación
 app.use('/auth', authRoutes);
