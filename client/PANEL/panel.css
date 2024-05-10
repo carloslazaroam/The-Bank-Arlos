@@ -305,13 +305,6 @@ body{
 	}
 }
 
-*, *:before, *:after {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	outline: none;
-	-webkit-font-smoothing: antialiased;
-}
 
 input {
 	-webkit-appearance: none;
@@ -346,6 +339,22 @@ button {
 
   .panelBtn{
 	text-align: center;
+  }
+
+  .close  {
+    display: flex;
+    justify-content: right;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0; /* Hacemos la barra de desplazamiento invisible */
+}
+
+
+#line-chart {
+	width: 500px;
+	height: 300px;
+	position: relative;
   }
 
   

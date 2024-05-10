@@ -7,7 +7,7 @@ require('dotenv').config();
 
 // Importar controladores
 const { getUsers, getUserById, createUser ,updateUser, deleteUser} = require('./controllers/users.js');
-const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas } = require('./controllers/cuentas.js');
+const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas, getCuentas2 } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
 const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo } = require('./controllers/operacion.js');
@@ -59,6 +59,7 @@ app.post('/cuentas/post', createCuenta);
 app.put('/cuentas/:iban', updateCuenta); 
 app.delete('/cuentas/:iban', deleteCuenta);
 app.get('/empresas',getEmpresas);
+app.get('/cuentas2/', getCuentas2)
 
 
 

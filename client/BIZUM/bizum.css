@@ -25,14 +25,13 @@ body {
 
 table {
     margin: 0 auto;
-    border-radius: 20px; /* Ajusta el radio de los bordes según tu preferencia */
+    padding-top: 20%;
     color: rgb(255, 255, 255); /* Color del texto igual al del borde */
     width: 80%; /* Ancho de la tabla */
     background: linear-gradient(to right, hsl(136, 65%, 51%), hsl(192, 70%, 51%)); /* Degradado de fondo */
-    border-collapse: collapse;
-    border-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-style: hidden; /* Oculta el borde estándar de la tabla (colapsado) */
-    box-shadow: 0 0 0 1px #666; /* Borde sólido con el mismo color */
+   
 }
 
 .flat-table th,
@@ -71,7 +70,7 @@ table {
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center; 
-    font-family: 'HP Simplified';/* Color de fondo para oscurecer la página */
+    font-family: 'Roboto';/* Color de fondo para oscurecer la página */
   }
   
   .modal-content {
@@ -88,23 +87,22 @@ table {
     overflow-y: auto;
    
   }
+
+  .modal :-webkit-scrollbar {
+		width: 0; /* Hacemos la barra de desplazamiento invisible */
+	}
+
   
   /* Estilos para el título del modal */
   .modal-content h2 {
     font-weight: bold;
+    text-align: center;
   }
   
   /* Estilos para el modal activo */
   .modal.active {
     display: block;
   }
-
-  .small-text {
-    font-size: 12px; /* Tamaño de fuente más pequeño */
-    color: red; /* Color rojo para resaltar el mensaje de error */
-    margin-bottom: 5px; /* Espacio inferior para separar el mensaje de error del campo de entrada */
-}
-
   
 /* Estilos para los botones */
 
@@ -138,4 +136,18 @@ animation: slideIn 0.5s ease-in-out;
 
 .modal-content button {
 animation: fadeIn 0.5s ease-in-out;
+}
+
+  #botonCrear{
+    background-color: #000000;
+  }
+
+  
+  span {
+    display: flex;
+    justify-content: right;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0; /* Hacemos la barra de desplazamiento invisible */
 }

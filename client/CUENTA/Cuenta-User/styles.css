@@ -14,7 +14,7 @@
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center; 
-    font-family: 'HP Simplified';/* Color de fondo para oscurecer la página */
+    font-family: 'Roboto';/* Color de fondo para oscurecer la página */
   }
   
   .modal-content {
@@ -31,10 +31,16 @@
     overflow-y: auto;
    
   }
+
+  .modal :-webkit-scrollbar {
+		width: 0; /* Hacemos la barra de desplazamiento invisible */
+	}
+
   
   /* Estilos para el título del modal */
   .modal-content h2 {
     font-weight: bold;
+    text-align: center;
   }
   
   /* Estilos para el modal activo */
@@ -81,6 +87,14 @@ animation: fadeIn 0.5s ease-in-out;
   }
 
   
+  span {
+    display: flex;
+    justify-content: right;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0; /* Hacemos la barra de desplazamiento invisible */
+}
 
   
   #sidebar {

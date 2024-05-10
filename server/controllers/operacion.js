@@ -168,8 +168,8 @@ async function transferirSaldo(req, res) {
         }
 
         // Realizar la transferencia
-        cuentaEmisor.saldo -= cantidad;
-        cuentaReceptor.saldo += cantidad;
+        cuentaEmisor.saldo -= parseFloat(cantidad);
+        cuentaReceptor.saldo += parseFloat(cantidad);
 
         // Guardar las operaciones
         const operacionEmisor = new Operacion({

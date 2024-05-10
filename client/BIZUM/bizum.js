@@ -5,7 +5,7 @@ const id2 = localStorage.getItem('id2');
 
 
 const llamar = () => {
-    fetch(recurso + '/cuentas', {
+    fetch(recurso + '/cuentas2', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -19,6 +19,8 @@ const llamar = () => {
 
 llamar();
 
+// En el cliente
+
 function inicio(cuentas) {
     const wrapper = document.getElementById('wrapper');
     wrapper.innerHTML = "";
@@ -27,7 +29,7 @@ function inicio(cuentas) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${cuenta.iban}</td>
-            <td>${cuenta.id_usuario}</td>
+            <td>${cuenta.id_usuario ? `${cuenta.id_usuario.nombre} ${cuenta.id_usuario.apellido1} (${cuenta.id_usuario.dni})` : 'Usuario no disponible'}</td>
         `;
         
         row.addEventListener('click', () => {
@@ -37,6 +39,7 @@ function inicio(cuentas) {
         wrapper.appendChild(row);
     });
 }
+
 
 
 function formatDate(dateString) {
@@ -85,21 +88,17 @@ function guardarTransferencia() {
     const concepto = document.getElementById('createConcepto').value;
     const ibanEmisor = document.getElementById('createEmisor').value;
     const ibanReceptor = document.getElementById('createReceptor').value;
-    
 
     // Verificar que los elementos existen antes de acceder a sus propiedades
     if (nombre && cantidad && concepto && ibanEmisor && ibanReceptor) {
-        // Crear un objeto con los datos del usuario
+        // Crear un objeto con los datos de la transferencia
         const operacionData = {
             nombre: nombre,
             cantidad: cantidad,
             concepto: concepto,
             ibanEmisor: ibanEmisor,
             ibanReceptor: ibanReceptor,
-           
         };
-
-        console.log(operacionData)
 
         // Enviar la solicitud POST al servidor
         fetch(recurso + '/operacion/transferencia', {
@@ -111,41 +110,73 @@ function guardarTransferencia() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
+                throw new Error('Error al realizar la transferencia: ' + response.status + ' ' + response.statusText);
             }
             return response.json();
         })
         .then(data => {
             console.log('Nueva operación añadida:', data);
-            // Actualizar la interfaz con el nuevo operacion
-
-            // Limpiar el formulario después de añadir el operacion
-            document.getElementById('createNombre').value = '';
-            document.getElementById('createCantidad').value = '';
-            document.getElementById('createConcepto').value = '';
-            document.getElementById('createEmisor').value = '';
-            document.getElementById('createReceptor').value = '';
-
-            console.log('Valores del formulario:');
-    console.log('Nombre:', nombre);
-    console.log('Cantidad:', cantidad);
-    console.log('Concepto:', concepto);
-    console.log('IBAN Emisor:', ibanEmisor);
-    console.log('IBAN Receptor:', ibanReceptor);
-   
-            
-
-            const crearModal = document.getElementById('crearModal');
-            crearModal.style.display = 'none';
-
-            location.reload()
+            // Mostrar modal de éxito
+            mostrarModal('modalConfirmacion');
         })
         .catch(error => {
             console.error(error);
+            // Mostrar modal de error
+            mostrarModal('modalEliminación');
         });
     } else {
         console.error('Algunos elementos del formulario no existen o están vacíos.');
     }
 }
+
+
+// En el cliente
+
+function mostrarModal(idModal) {
+    // Cerrar el modal de formulario antes de abrir otro modal
+    const crearModal = document.getElementById('crearModal');
+    crearModal.style.display = 'none';
+
+    // Mostrar el modal deseado
+    const modal = document.getElementById(idModal);
+    modal.style.display = 'block';
+}
+
+
+
+// Función para cerrar el modal
+function cancelarCreacion2() {
+    const modales = document.querySelectorAll('.modal');
+    modales.forEach(modal => {
+        modal.style.display = 'none';
+    });
+    location.reload();
+}
+
+function buscarPorNombre() {
+    const input = document.getElementById('searchInput');
+    const filtro = input.value.toUpperCase();
+
+    const tabla = document.getElementById('wrapper');
+    const filas = tabla.getElementsByTagName('tr');
+
+    for (let i = 0; i < filas.length; i++) {
+        const celdaNombre = filas[i].getElementsByTagName('td')[0];
+        if (celdaNombre) {
+            const textoCelda = celdaNombre.textContent || celdaNombre.innerText;
+            if (textoCelda.toUpperCase().indexOf(filtro) > -1) {
+                filas[i].style.display = '';
+            } else {
+                filas[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+
+
+
+
+
 
 

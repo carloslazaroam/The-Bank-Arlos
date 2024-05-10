@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const id = localStorage.getItem('id');
     const id2 = localStorage.getItem('id2');
 
+
     
 
     getUserData();
@@ -354,11 +355,6 @@ function guardarNuevaRetirada() {
 }
 
 document.getElementById('crearModal2').style.display = 'none';
-
-
-
-
-
 
 
 

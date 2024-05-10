@@ -97,10 +97,21 @@ async function getEmpresas(req, res) {
     }
 }
 
+async function getCuentas2(req, res) {
+    try {
+        const cuentas = await Cuenta.find({}).populate('id_usuario', 'nombre apellido1 dni');
+        console.log(cuentas); // Agregar console.log para depurar
+        res.send(cuentas);
+    } catch (err) {
+        console.error("Error al obtener las cuentas:", err);
+        res.status(500).send("Error interno del servidor");
+    }
+}
+
 
 
 
 
 // Exportar las funciones para su uso en app.js
-module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId,getEmpresas};
+module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId,getEmpresas,getCuentas2};
 
