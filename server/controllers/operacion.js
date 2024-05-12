@@ -31,6 +31,7 @@ async function createOperacion(req, res) {
             concepto: req.body.concepto,
             id_cuenta: req.body.id_cuenta,
             id_tipoOperacion: req.body.id_tipoOperacion,
+            fecha: req.body.fecha
             
             
             
@@ -80,7 +81,12 @@ async function getOperacionesByCuentaId(req, res) {
 async function ingresarDinero(req, res) {
     try {
         const { cantidad, id_cuenta } = req.body;
-        
+
+        // Verificar si la cantidad es un número positivo
+        if (parseFloat(cantidad) <= 0) {
+            return res.status(400).json({ error: "La cantidad debe ser un número positivo" });
+        }
+
         // Crear una nueva operación para el ingreso de dinero
         const operacion = new Operacion({
             nombre: req.body.nombre,
@@ -88,17 +94,16 @@ async function ingresarDinero(req, res) {
             cantidad: req.body.cantidad,
             id_cuenta: req.body.id_cuenta,
             tipo: req.body.tipo
-            
         });
-        
+
         // Guardar la operación en la base de datos
         await operacion.save();
-        
+
         // Actualizar el saldo de la cuenta sumando la cantidad ingresada
         const cuenta = await Cuenta.findById(id_cuenta);
         cuenta.saldo += parseFloat(cantidad);
         await cuenta.save();
-        
+
         // Enviar respuesta exitosa
         res.status(200).json({ message: "Dinero ingresado exitosamente" });
 
@@ -108,37 +113,47 @@ async function ingresarDinero(req, res) {
     }
 }
 
-
-
-
 async function retirarDinero(req, res) {
     try {
         const { cantidad, id_cuenta } = req.body;
-        
-        // Crear una nueva operación para el ingreso de dinero
+
+        // Verificar si la cantidad es un número positivo
+        if (parseFloat(cantidad) <= 0) {
+            return res.status(400).json({ error: "La cantidad debe ser un número positivo" });
+        }
+
+        // Obtener el saldo actual de la cuenta
+        const cuenta = await Cuenta.findById(id_cuenta);
+
+        // Verificar si hay saldo suficiente para la operación de retiro
+        if (parseFloat(cantidad) > cuenta.saldo) {
+            return res.status(400).json({ error: "No hay suficiente saldo disponible en la cuenta" });
+        }
+
+        // Crear una nueva operación para el retiro de dinero
         const operacion = new Operacion({
             nombre: req.body.nombre,
             concepto: req.body.concepto,
             cantidad: req.body.cantidad,
             id_cuenta: req.body.id_cuenta,
-            
+            tipo: 'retiro'
         });
-        
+
         // Guardar la operación en la base de datos
         await operacion.save();
-        
-        // Actualizar el saldo de la cuenta sumando la cantidad ingresada
-        const cuenta = await Cuenta.findById(id_cuenta);
+
+        // Actualizar el saldo de la cuenta restando la cantidad retirada
         cuenta.saldo -= parseFloat(cantidad);
         await cuenta.save();
-        
+
         // Enviar respuesta exitosa
         res.status(200).json({ message: "Dinero retirado exitosamente" });
     } catch (err) {
-        console.error("Error al ingresar dinero en la cuenta:", err);
+        console.error("Error al retirar dinero de la cuenta:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
+
 
 async function transferirSaldo(req, res) {
     try {

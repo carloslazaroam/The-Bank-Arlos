@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="./panel.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <title>Document</title>
     
 </head>
@@ -77,11 +78,36 @@
     
         </div>
 
-        <div class="container mt-3" id="div1" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
-            <h5>Traffic Over Time</h5>
-            <div id="line-chart"></div>
-    </div>
+        <div class="container mt-3" id="line-chart-container" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem; display: none; margin-top: 20px;">
+            <h5>Evolución de los ingresos y retiradas</h5>
+            <!-- Este div será el contenedor del gráfico -->
+            <canvas id="line-chart"></canvas>
+        </div>
+        
+        
+        <div class="graficos2" style="display: none;">
+            <div class="container mt-3" id="div1" style="width: 600px;margin-bottom: 10px; height: 630px; background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
+                <h5>Porcentaje de datos</h5>
+                <canvas id="pie-chart" width="200" height="200"></canvas>
+               
+                <!-- Este div será el contenedor del gráfico -->
+            </div>
+        
+            <div class="container mt-3" style="width: 600px; margin-bottom: 10px; height: 630px; background-color: white; color: black; border-radius: 20px; margin-right: 20px; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
+                <h5>Porcentaje de datos</h5>
+                <canvas id="bar-chart" width="200" height="200"></canvas>
+            </div>
+        </div>
 
+
+        <div class="container mt-3" id="monthly-evolution-chart-container" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem; display: none;">
+            <h5>Evolución mensual de ingresos y retiradas</h5>
+            <!-- Este div será el contenedor del gráfico -->
+            <canvas id="monthly-evolution-chart"></canvas>
+        </div>
+        
+        
+        
 
 
 
@@ -112,7 +138,7 @@
                 <input type="text" id="createConcepto" name="createConcepto"><br>
                 <hr>
                 <p for="createCantidad">Cantidad:</p>
-                <input type="text" id="createCantidad" name="createCantidad"><br>
+                <input type="number" id="createCantidad" name="createCantidad"><br>
 
                 <input type="hidden" id="tipo" name="tipo" value="ingreso">
 
@@ -153,7 +179,7 @@
                 <input type="text" id="createConcepto2" name="createConcepto2"><br>
                 <hr>
                 <p for="createCantidad2">Cantidad:</p>
-                <input type="text" id="createCantidad2" name="createCantidad2"><br>
+                <input type="number" id="createCantidad2" name="createCantidad2"><br>
                 <input type="hidden" id="tipo" name="tipo" value="retiro">
                 
                 
@@ -164,6 +190,51 @@
             </form>
         </div>
       </div>
+
+      <div id="modalConfirmacion" class="modal">
+        <div class="modal-content" style="background-color: #fefefe;
+        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        margin-bottom: 50px;
+        max-height: 400px; /* Altura máxima del contenido */
+        overflow-y: auto">
+           <a href="../PANEL/panel.html"> <span class="close">&times;</span></a>
+            <h2>Operación realizada con exito!!!</h2>
+            
+                <p>La operación se ha realizado con éxito, puedes consultar su información en el registro de operaciones</p>
+                
+                <br><br>
+                
+            </form>
+        </div>
+    </div>
+
+
+    <div id="modalEliminación" class="modal">
+        <div class="modal-content" style="background-color: #fefefe;
+            margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-bottom: 50px;
+            max-height: 400px; /* Altura máxima del contenido */
+            overflow-y: auto">
+           <a href="../PANEL/panel.html">  <span class="close" onclick="cerrarModalEliminacion()">&times;</span></a>
+            <h2>Error en la operación</h2>
+           <p>Hubo un problema para realizar la operación</p>
+            <br><br>
+        </div>
+    </div>
+    
+
       
     
 </body>

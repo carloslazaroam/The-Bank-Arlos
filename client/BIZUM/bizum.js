@@ -24,21 +24,28 @@ llamar();
 function inicio(cuentas) {
     const wrapper = document.getElementById('wrapper');
     wrapper.innerHTML = "";
-    
-    cuentas.forEach(cuenta => {
+
+    // Obtener el ID del usuario logeado desde el almacenamiento local
+    const idUsuarioLogeado = localStorage.getItem('id2');
+
+    // Filtrar las cuentas excluyendo aquellas que pertenecen al usuario logeado
+    const cuentasFiltradas = cuentas.filter(cuenta => !cuenta.id_usuario || cuenta.id_usuario._id !== idUsuarioLogeado);
+
+    cuentasFiltradas.forEach(cuenta => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${cuenta.iban}</td>
             <td>${cuenta.id_usuario ? `${cuenta.id_usuario.nombre} ${cuenta.id_usuario.apellido1} (${cuenta.id_usuario.dni})` : 'Usuario no disponible'}</td>
         `;
-        
+
         row.addEventListener('click', () => {
             mostrarFormulario(cuenta.iban); // Llamar a mostrarFormulario con el IBAN de la cuenta
         });
-        
+
         wrapper.appendChild(row);
     });
 }
+
 
 
 

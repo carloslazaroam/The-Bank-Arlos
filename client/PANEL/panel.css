@@ -66,6 +66,7 @@ body{
 	margin: 40px auto 0;
 	box-shadow: 0 0 19px 5px rgba(0, 0, 0, .2);
 	display: flex;
+	height: 620px;
 }
 
 	.wallet-container aside {
@@ -353,8 +354,14 @@ button {
 
 #line-chart {
 	width: 500px;
-	height: 300px;
+	height: 200px;
 	position: relative;
   }
+
+ .graficos2{
+	display: grid;
+ }
+
+ 
 
   

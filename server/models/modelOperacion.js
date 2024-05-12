@@ -24,7 +24,9 @@ const operacionSchema = new mongoose.Schema({
     tipo: {
         type: String,
         enum: ['ingreso', 'retiro']
-    }
+    },
+
+    fecha: { type: Date, default: Date.now }
     
     
 });
