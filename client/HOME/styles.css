@@ -297,7 +297,7 @@ h5{
   }
   .cards-container{
     margin:10px auto;
-    width:100%;
+    width:50%;
    
   }
   h2{
@@ -318,7 +318,12 @@ h5{
  
   .articles-container{
     height:auto;
-    margin:-20px auto 30px auto;
+    margin: 0 auto;
+    margin-left: 30px;
+  }
+
+  .articles-content{
+    margin: 0 auto;
   }
   .cards-flex{
     justify-content:center;

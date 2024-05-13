@@ -157,6 +157,37 @@ function confirmarEliminacion(iban) {
 
 
 
+// Función para verificar el formato del IBAN
+function verificarFormatoIBAN(iban) {
+    document.getElementById('createIBAN').addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+      });
+    return formatoCorrecto.test(iban);
+}
+
+
+
+// Función para modificar el párrafo según el formato del IBAN
+function modificarParrafoIBAN() {
+    const ibanInput = document.getElementById('createIBAN');
+    const parrafoError = document.getElementById('errorIBAN');
+    
+    if (!verificarFormatoIBAN(ibanInput.value)) {
+        parrafoError.innerHTML = 'El formato del IBAN debe ser: 1111 1111 1111 1111';
+    } else {
+        parrafoError.innerHTML = '';
+    }
+}
+
+// Evento onclick para modificar el párrafo al hacer clic en el campo IBAN
+document.getElementById('createIBAN').onclick = function() {
+    const parrafoError = document.getElementById('errorIBAN');
+    parrafoError.innerHTML = 'El formato del IBAN debe ser: 1111 1111 1111 1111';
+};
+
+// Evento oninput para verificar el formato del IBAN mientras el usuario escribe
+document.getElementById('createIBAN').oninput = modificarParrafoIBAN;
+
 
 
 
@@ -271,7 +302,7 @@ function editarCuenta(iban, activa, id_tipocuenta, empresa) {
 }
 
 function guardarEdicion() {
-   
+    const newIban = document.getElementById('editIban').value;
     const newActiva = document.getElementById('editActiva').checked;
     const newTipocuenta = document.getElementById('editTipocuenta').value;
     const newEmpresa = document.getElementById('editEmpresa').value;
@@ -284,10 +315,11 @@ function guardarEdicion() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          
+            iban: newIban,
             activa: newActiva, // Asignar el valor booleano al campo "activa"
             id_tipocuenta: newTipocuenta,
-            empresa: newEmpresa
+            empresa: newEmpresa,
+            
         
             
         })

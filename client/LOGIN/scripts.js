@@ -15,74 +15,116 @@ loginToggle.addEventListener('click', () => {
     loginContainer.style.transform = "scale(1)"
 })
 
+document.getElementById("modal").style.display = "none";
+
+// Agrega un evento al botón de aceptar del modal para cerrarlo
+document.getElementById("modalAceptarBtn").addEventListener("click", function() {
+    document.getElementById("modal").style.display = "none";
+});
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.querySelector('button');
 
     loginButton.addEventListener('click', async () => {
-        const dni = document.querySelector('input[type="text"]').value;
-        const password = document.querySelector('input[type="password"]').value;
+        const dni = document.getElementById('logeo').value;
+        const password = document.getElementById('contrao').value;
+
+        // Verifica si algún campo está vacío
+        if (!dni || !password) {
+            alert('Por favor, complete todos los campos.');
+            return null;
+        }
+
+        
 
         const response = await fetch('http://localhost:3001/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ dni, contra: password })
-        });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ dni, contra: password })
+});
 
-        const data = await response.json();
+const data = await response.json();
 
-        if (response.ok) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('id', data.id);
-            localStorage.setItem('dni', data.dni);
-            localStorage.setItem('id2', data.id2);
-            
-            console.log(data.dni);
-            console.log(data.id2);
-            if (data.validado === false) { // Verifica si el usuario está validado
-                alert('No tienes acceso. Tu cuenta aún no ha sido validada por un administrador.');
+if (response.ok) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('id', data.id);
+    localStorage.setItem('dni', data.dni);
+    localStorage.setItem('id2', data.id2);
+    
+    console.log(data.dni);
+    console.log(data.id2);
+    if (data.validado === false) { // Verifica si el usuario está validado
+        const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+    } else {
+        // Cambiar la alerta por la visualización del modal
+        const modal = document.getElementById('modal');
+        modal.style.display = 'block';
+        
+        // Event listener para el botón de aceptar del modal
+        const modalAceptarBtn = document.getElementById('modalAceptarBtn');
+        modalAceptarBtn.addEventListener('click', () => {
+            if (data.usertype === '660d0966180c6017f4da9842') {
+                window.location.href = '../USER/User-Admin/userAdmin.html';
             } else {
-                alert('Inicio de sesión exitoso');
-                if (data.usertype === '660d0966180c6017f4da9842') {
-                    window.location.href = '../USER/User-Admin/userAdmin.html';
-                } else {
-                    window.location.href = '../HOME/home.html';
-                }
+                window.location.href = '../HOME/home.html';
             }
-        } else {
-            alert(data.message);
-        }
+        });
+    }
+} else {
+    alert(data.message);
+}
     });
 
     const registroForm = document.getElementById('registroForm');
-
     const dniInput = document.getElementById("registroDNI");
+    const holamundo = document.getElementById("holamundo");
 
+    // Función para validar el formato del DNI
+function validarFormatoDNI(dni) {
+    // El DNI debe tener 9 caracteres, los primeros 8 son dígitos y el último es una letra
+    const dniRegex = /^\d{8}[a-zA-Z]$/;
+    return dniRegex.test(dni);
+}
+
+    
     dniInput.addEventListener('input', () => {
         const dni = dniInput.value;
         const dniContainer = dniInput.parentNode;
-
+    
         // Verifica si el campo del DNI está vacío
         if (dni.trim() === "") {
             return;
         }
-
+    
         // Verifica el formato del DNI
         if (!validarFormatoDNI(dni)) {
-            mostrarError(dniContainer, 'El DNI debe tener 9 caracteres.');
+            holamundo.innerHTML = "El DNI tiene 8 números y una letra";
         } else {
             limpiarError(dniContainer);
+            holamundo.innerHTML = ""; // Limpiar el mensaje cuando el formato es válido
         }
     });
 
     registroForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita el envío automático del formulario
+        event.preventDefault(); 
+        // Evita el envío automático del formulario
+       
+
+    // Verifica si el formato del DNI es válido
+  
     
         // Obtén los valores de los campos
         const dni = document.getElementById("registroDNI").value;
+        if (!validarFormatoDNI(dni)) {
+            alert('El formato del DNI no es válido. Debe tener 8 números seguidos de una letra.');
+            return; // Sale de la función si el formato no es válido
+        }
         const nombre = document.getElementById("registroNombre").value;
         const contraseña = document.getElementById("registroContraseña").value;
         const confirmarContraseña = document.getElementById("confirmarContraseña").value;
@@ -97,21 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return null;
         }
     
-        // Verifica el formato del DNI
-        if (!validarFormatoDNI(dni)) {
-            alert('El DNI debe tener 9 caracteres');
-            location.reload();
-            // Después de un envío fallido, puedes restablecer los valores manualmente
-            document.getElementById("registroDNI").value = "";
-            document.getElementById("registroNombre").value = "";
-            document.getElementById("registroContraseña").value = "";
-            document.getElementById("confirmarContraseña").value = "";
-            document.getElementById("registroApellido1").value = "";
-            document.getElementById("registroApellido2").value = "";
-            document.getElementById("registroDireccion").value = "";
-            document.getElementById("registroPais").value = "";
-            return null;
-        }
     
         // Verifica si las contraseñas coinciden
         if (contraseña !== confirmarContraseña) {
@@ -151,15 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("registroApellido2").value = "";
             document.getElementById("registroDireccion").value = "";
             document.getElementById("registroPais").value = "";
- // Recarga la página en caso de error
         }
     });
+    
 
-    // Función para validar el formato del DNI
-    function validarFormatoDNI(dni) {
-        const dniRegex = /^[0-9]{8}[A-Za-z]$/;
-        return dniRegex.test(dni);
-    }
+    
 
     // Función para mostrar un mensaje de error
     function mostrarError(container, message) {
@@ -198,6 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmarContraseñaInput.style.backgroundColor = ''; // Vaciar el color de fondo si falta contenido en algún campo
         }
     });
+
+    
+
 
    
 });

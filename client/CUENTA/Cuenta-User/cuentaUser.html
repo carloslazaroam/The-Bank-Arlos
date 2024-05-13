@@ -39,7 +39,8 @@
                     </tbody>
                 </table>
                 <div class="btn-container">
-                   <button type="button" class="btn btn-secondary"  onclick="mostrarFormulario()">Crear cuenta</button>
+                    <button type="button" class="btn btn-secondary" onclick="mostrarFormulario()">Crear cuenta</button>
+
                 </div>
             </div>
         </div>
@@ -89,11 +90,16 @@
                 
     
                 <p for="createIBAN">IBAN de la cuenta:</p>
-                <input type="text" id="createIBAN" name="createIBAN"  pattern="[A-Z]{4}-[A-Z]{4}-[A-Z]{4}" required><br>
+                <input type="text" id="createIBAN" name="createIBAN"  required><br>
+                <br>
+                <p id="errorIBAN" style="color: red;">xd</p>
+
                 <hr> 
 
                 <p for="createTipocuenta">Seleccion Tipo de cuenta: </p>
                 <select id="createTipocuenta" name="createTipocuenta" required></select><br>
+                <br>
+                
                 <hr>
 
                 <p for="createEmpresa">Empresa:</p>
@@ -102,6 +108,9 @@
                 <option value="mastercard">Mastercard</option>
                 <option value="amex">Amex</option>
                 </select>
+                <br>
+                
+                <p></p> 
                 <hr>
     
     
@@ -118,12 +127,24 @@
             <h2>Editar Cuenta</h2>
             <form>
              <hr> 
+                <p for="editIban">IBAN</p>
+                <input type="text" id="editIban" name="editIban"><br>
+                
+             <hr>
+                <p for="editSaldo">Saldo de la cuenta</p>
+                <input type="text" id="editSaldo" name="editSaldo" readonly><br>
+
+                <hr>
+                <p for="editFecha">Fecha creación</p>
+                <input type="text" id="editFecha" name="editFecha" readonly><br>
+
+                <hr>
                 <p for="editActiva">Marca esta opción para activar o desactivar la cuenta:</p>
                 <input type="checkbox" id="editActiva" name="editActiva"><br>
                 <hr> 
                 <p for="editTipocuenta">Tipo de Cuenta:</p>
                 <select id="editTipocuenta" name="editTipocuenta"></select><br>
-
+                
                 <hr> 
 
                 <p for="editEmpresa">Empresa:</p>
@@ -133,7 +154,7 @@
                 <option value="amex">Amex</option>
                 </select>
                 <hr>
-                <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
             </form>
         </div>
       </div>
@@ -141,7 +162,7 @@
      
 
 
-      <div id="confirmModal" class="modal" >
+<div id="confirmModal" class="modal" >
     <div class="modal-content">
         <h2>Confirmar Eliminación</h2>
         <hr> 
