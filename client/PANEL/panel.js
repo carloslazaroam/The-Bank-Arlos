@@ -39,45 +39,44 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function printAccounts(accountsData) {
         // Dentro de la función printAccounts
-
+    
         const cards = document.getElementById('cards');
         cards.innerHTML = ""; // Limpiar el contenedor antes de imprimir las cuentas
     
         accountsData.forEach(account => {
-            let cardType = ""; // Variable para almacenar el tipo de tarjeta
-            switch(account.empresa) {
-                case "visa":
-                    cardType = "card-visa";
-                    break;
-                case "mastercard":
-                    cardType = "card-mastercard";
-                    break;
-                case "amex":
-                    cardType = "card-amex";
-                    break;
-                default:
-                    cardType = ""; // Si no hay coincidencia, no se establece ninguna clase
-            }
+            // Verificar si la cuenta está activa
+            if (account.activa) {
+                let cardType = ""; // Variable para almacenar el tipo de tarjeta
+                switch(account.empresa) {
+                    case "visa":
+                        cardType = "card-visa";
+                        break;
+                    case "mastercard":
+                        cardType = "card-mastercard";
+                        break;
+                    case "amex":
+                        cardType = "card-amex";
+                        break;
+                    default:
+                        cardType = ""; // Si no hay coincidencia, no se establece ninguna clase
+                }
     
-            const cardElement = document.createElement('li');
-            cardElement.classList.add("card", cardType, "active");
-            cardElement.innerHTML = `
-                <div class="card-emblem"></div>
-                <div class="card-number">${account.iban}</div>
-                <div class="card-valid">${formatDate(account.fechacreacion)}</div>
-            `;
-            // Agrega un evento clic para obtener detalles de la cuenta
-            cardElement.addEventListener('click', () => {
-                getAccountDetails(account.iban); // Llama a la función para obtener detalles de la cuenta
-            });
-            cards.appendChild(cardElement);
-            // Dentro de la función printAccounts
-            
-           
-
-
+                const cardElement = document.createElement('li');
+                cardElement.classList.add("card", cardType, "active");
+                cardElement.innerHTML = `
+                    <div class="card-emblem"></div>
+                    <div class="card-number">${account.iban}</div>
+                    <div class="card-valid">${formatDate(account.fechacreacion)}</div>
+                `;
+                // Agrega un evento clic para obtener detalles de la cuenta
+                cardElement.addEventListener('click', () => {
+                    getAccountDetails(account.iban); // Llama a la función para obtener detalles de la cuenta
+                });
+                cards.appendChild(cardElement);
+            }
         });
     }
+    
 
    
     

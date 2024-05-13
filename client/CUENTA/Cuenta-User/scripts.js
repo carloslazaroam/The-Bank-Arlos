@@ -262,8 +262,12 @@ function guardarNuevaCuenta() {
 
 
 
-function editarCuenta(iban, activa, id_tipocuenta, empresa) {
-    cuentaEditando = { iban, activa, id_tipocuenta, empresa };
+function editarCuenta(iban,saldo,fechacreacion ,activa, id_tipocuenta, empresa) {
+    cuentaEditando = { iban,saldo,fechacreacion, activa, id_tipocuenta, empresa };
+    document.getElementById('editIban').value = iban;
+    document.getElementById('editSaldo').value = saldo;
+  
+    
 
     document.getElementById('editActiva').checked = activa;
 
@@ -302,7 +306,7 @@ function editarCuenta(iban, activa, id_tipocuenta, empresa) {
 }
 
 function guardarEdicion() {
-    const newIban = document.getElementById('editIban').value;
+    
     const newActiva = document.getElementById('editActiva').checked;
     const newTipocuenta = document.getElementById('editTipocuenta').value;
     const newEmpresa = document.getElementById('editEmpresa').value;
@@ -315,7 +319,6 @@ function guardarEdicion() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            iban: newIban,
             activa: newActiva, // Asignar el valor booleano al campo "activa"
             id_tipocuenta: newTipocuenta,
             empresa: newEmpresa,
