@@ -130,13 +130,128 @@ animation: fadeIn 0.5s ease-in-out;
     color: wheat;
   }
 
-  #botonEditar {
+  #botonEditar{
     border-radius: 5px;
+    width: 80px;
+    height: 35px;
+    background-image:linear-gradient(to right,hsl(236, 65%, 51%),hsl(192, 70%, 51%));
+color:hsl(0, 0%, 100%);
+  color: white;
+    
   }
 
-  #botonEliminar {
+
+  #botonEliminar{
     border-radius: 5px;
     margin-left: 5px;
+     width: 80px;
+    height: 35px;
+    background-image:linear-gradient(to right,hsl(357, 65%, 51%),hsl(0, 100%, 50%));
+ 
   }
+
+  #crearCuenta {
+    width: 200px;
+    height: 40px;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+color:hsl(0, 0%, 100%);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 500ms ease;
+  box-shadow: 0 3px 10px -5px #0cc51b;
+  &:hover {
+      transform: scale(1.1);
+  }
+
+  
+  }
+
+  #botonPanel {
+    width: 200px;
+    height: 40px;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background-image:linear-gradient(to right,hsl(249, 65%, 51%),hsl(54, 70%, 51%));
+color:hsl(0, 0%, 100%);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 500ms ease;
+  box-shadow: 0 3px 10px -5px #0cc51b;
+  &:hover {
+      transform: scale(1.1);
+  }
+
+   
+
+  
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+
+  #eliminButton {
+    width: 95px;
+    height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background-image:linear-gradient(to right,hsl(357, 65%, 51%),hsl(192, 70%, 51%));
+color:hsl(0, 0%, 100%);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 500ms ease;
+  box-shadow: 0 3px 10px -5px #0cc51b;
+  &:hover {
+      transform: scale(1.1);
+  }
+
+  }
+
+ 
+
+
+
+  
+
+
+  body{
+    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+  }
+
+  button  {
+    width: 95px;
+    height: 40px;
+    
+    gap: 5px;
+    border: none;
+    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+  color:hsl(0, 0%, 100%);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 500ms ease;
+    box-shadow: 0 3px 10px -5px #0cc51b;
+    &:hover {
+        transform: scale(1.1);
+    }
+  }
+
+  
 
 

@@ -55,7 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 <td>Pais</td>
                 <td>${user.pais}</td>
             </tr>
-            <button type="button" class="btn btn-secondary" onclick="editarUser('${user.id}','${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}')" style="margin-top:10px">Editar user</button>
+            <button type="button"  onclick="editarUser('${user.dni}','${user.id}','${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}')" style="margin-top:10px">Editar</button>
             
         `;
         
@@ -85,11 +85,12 @@ window.addEventListener('DOMContentLoaded', () => {
     // Función para abrir el modal de edición con los datos del user seleccionado
     // Función para let userEditando = null;abrir el modal de edición con los datos del user seleccionado
     // Función para abrir el modal de edición con los datos del usuario seleccionado
-    function editarUser(id,nombre,contra, apellido1, apellido2, direccion, pais) {
+    function editarUser(dni,id,nombre,contra, apellido1, apellido2, direccion, pais) {
         // Almacenar los datos del usuario que se está editando
-        userEditando = { id,nombre, apellido1, apellido2, direccion, pais };
+        userEditando = {dni, id,nombre, apellido1, apellido2, direccion, pais };
         
         // Llenar el formulario de edición con los datos del usuario
+        document.getElementById('editDni').value = dni;
         document.getElementById('editNombre').value = nombre;
         document.getElementById('editContra').value = contra;
         document.getElementById('editApellido1').value = apellido1;

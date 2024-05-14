@@ -12,6 +12,7 @@
     
 </head>
 <body>
+
     <a href="../HOME/home.html">Volver</a>
     <div class="container">
         <div class="container mt-5" id="div1" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem;">
@@ -40,7 +41,7 @@
             <aside>
                 <h3 class="cf">
                     <div class="left">Tarjetas</div>
-                    <div class="right"><a href="#">+</a></div>
+                    <div class="right" id="showModalButton">+</div>
                 </h3>
     
                 <ul class="cards" id="cards">
@@ -75,7 +76,7 @@
             </main>
 
             
-    
+            
         </div>
 
         <div class="container mt-3" id="line-chart-container" style="background-color: white; color: black; border-radius: 20px; margin-bottom: 40px;box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; padding: 2rem; display: none; margin-top: 20px;">
@@ -125,7 +126,7 @@
         max-height: 400px; /* Altura máxima del contenido */
         overflow-y: auto;">
             <span class="close" onclick="cancelarCreacion()">&times;</span>
-            <h2 style="text-align: center;color: #7c7f8d">Formulario de ingreso</h2>
+            <h2 style="text-align: center;color: #000000">Formulario de ingreso</h2>
             <form id="crearFormulario" enctype="multipart/form-data">
                 <hr>
                 <p for="createCuenta">Seleccionar Cuenta:</p>
@@ -186,7 +187,7 @@
                 
                
       <br><br>
-                <button type="button" class="btn btn-secondary"  onclick="guardarNuevaRetirada()">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="guardarNuevaRetirada()">Guardar</button>
             </form>
         </div>
       </div>
@@ -231,6 +232,34 @@
             <h2>Error en la operación</h2>
            <p>Hubo un problema para realizar la operación</p>
             <br><br>
+        </div>
+    </div>
+
+
+    <div id="modalAceptacion" class="modal" style="display: none; justify-content: center; align-items: center;
+    ">
+        <div class="modal-content" style="text-align: center;
+        width: 300px;">
+            <h2>¿Quieres crear una cuenta nueva?</h2>
+            <hr> 
+            <p style="margin: 0 auto;">Serás redirigido al panel de cuentas y abandonarás esta página, ¿deseas continuar?</p>
+            <div style="display: flex; justify-content: center; margin-top: 10px;">
+                <a href="../CUENTA/Cuenta-User/cuentaUser.html"><button id="confirmButton" style="margin-right: 10px;
+                border-radius: 5px;
+                width: 80px;
+                height: 35px;
+                background-image:linear-gradient(to right,hsl(138, 65%, 51%),hsl(192, 70%, 51%));
+                color:hsl(0, 0%, 100%);
+                color: white">Confirmar</button></a>
+                <button onclick="cancelarEliminacion()" style="margin-left: 10px;
+                 border-radius: 5px;
+                width: 80px;
+                height: 35px;
+                background-image:linear-gradient(to right,hsl(0, 65%, 51%),hsl(192, 70%, 51%));
+                color:hsl(0, 0%, 100%);
+                color: white;
+    " id="eliminButton">Cancelar</button>
+            </div>
         </div>
     </div>
     

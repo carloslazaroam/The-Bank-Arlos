@@ -96,6 +96,12 @@ function guardarTransferencia() {
     const ibanEmisor = document.getElementById('createEmisor').value;
     const ibanReceptor = document.getElementById('createReceptor').value;
 
+     // Verificar que todos los campos estén rellenados
+     if (!nombre || !cantidad || !concepto || !ibanEmisor || !ibanReceptor) {
+        alert('Por favor, complete todos los campos del formulario.');
+        return; // Detener la ejecución si hay campos vacíos
+    }
+
     // Verificar que los elementos existen antes de acceder a sus propiedades
     if (nombre && cantidad && concepto && ibanEmisor && ibanReceptor) {
         // Crear un objeto con los datos de la transferencia

@@ -18,7 +18,7 @@
     <ul>
       
       <li><a href="../CUENTA/Cuenta-User/cuentaUser.html">Cuentas</a></li>
-      <li><a href="../PANEL/panel.html">Panel de Operaciones</a></li>
+      <li><a href="../PANEL/panel.html" >Panel de Operaciones</a></li>
     </ul>
     <div class="botones" style="display: flex; justify-content: right; padding: 10px;">
     <a href="../USER/User-User/userUser.html" style="margin-right: 10px;"> <button class="btn btn-top"><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M2.5 9.5L12 4L21.5 9.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 21V20C7 17.2386 9.23858 15 12 15V15C14.7614 15 17 17.2386 17 20V21" stroke="#000000" stroke-width="1.5"></path><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></a>
@@ -52,7 +52,8 @@
   <p>
     Lleve su vida financiera en línea. Su cuenta será una ventanilla única para gastar, ahorrar, hacer presupuestos, invertir y mucho más.
   </p>
-  <button class="btn btn-top btn-introduction">Realiza una transacción</button>
+  <button class="btn btn-top btn-introduction" id="botonTransaccion">Realiza una transacción</button>
+
   </div>
    <div class="img-introduction">
   <img src="images/image-mockups.png">
@@ -129,5 +130,57 @@
   </div>
 </div>
 
+<div id="modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close" onclick="cancelarEdicion()">&times;</span>
+    <h2>Alerta!!</h2>
+    <hr> 
+    <p for="editIban">No tienes ninguna cuenta asociada, debes crearte una para poder operar.</p>
+  </div>
+</div>
+
 </body>
 </html>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: flex-start; /* Alineado en la parte superior */
+    font-family: 'Roboto';
+}
+
+.modal-content {
+    background-color: #fefefe;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 50%; /* Ancho del modal */
+    max-height: 45%; /* Altura máxima del modal */
+    overflow: auto;
+    animation: modalFadeIn 0.5s; /* Animación de entrada */
+    margin-top: 50px; /* Espacio desde arriba */
+    margin-left: auto; /* Centrado horizontal */
+    margin-right: auto; /* Centrado horizontal */
+}
+
+.modal-content h2 {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Animación de entrada */
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+</style>

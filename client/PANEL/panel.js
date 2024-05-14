@@ -330,8 +330,11 @@ async function getAccountDetails(iban) {
     async function displayOperations(operaciones) {
         const cajitasList = document.querySelector('.cajitas');
         cajitasList.innerHTML = ""; // Limpiar la lista antes de añadir nuevas operaciones
-    
-        operaciones.forEach(async operacion => {
+        
+        // Tomar solo las últimas 20 operaciones
+        const ultimasOperaciones = operaciones.slice(-20).reverse();
+        
+        ultimasOperaciones.forEach(async operacion => {
             // Determinar el símbolo correspondiente basado en el tipo de operación
             const transactionSymbol = operacion.tipo === 'ingreso' ? '+' : '-';
             const transactionClass = operacion.tipo === 'ingreso' ? 'funds-plus' : 'funds-minus';
@@ -357,6 +360,7 @@ async function getAccountDetails(iban) {
     
     
     
+    
     function updateBalance(newBalance) {
         const balanceValue = document.querySelector('.balance-value');
         balanceValue.textContent = `${newBalance.toFixed(2)}€`;
@@ -370,6 +374,16 @@ async function getAccountDetails(iban) {
         return new Date(dateString).toLocaleDateString('es-ES', options);
     }
 
+
+    const showModalButton = document.getElementById('showModalButton');
+    
+    // Verificar si el botón existe antes de agregar el evento de clic
+    if (showModalButton) {
+        showModalButton.addEventListener('click', function() {
+            mostrarModalAceptacion();
+        });
+    }
+
    
 
    
@@ -380,6 +394,22 @@ const recurso = "http://127.0.0.1:3001";
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     const id2 = localStorage.getItem('id2');
+
+
+    function mostrarModalAceptacion() {
+        const modalConfirmacion = document.getElementById('modalAceptacion');
+        if (modalConfirmacion) {
+            modalConfirmacion.style.display = 'block';
+        }
+    }
+    
+    function cancelarEliminacion() {
+        const confirmModal = document.getElementById('modalAceptacion');
+        if (confirmModal) {
+            confirmModal.style.display = 'none';
+        }
+    }
+
 
 
     // Función para mostrar el modal de creación de users
@@ -488,6 +518,13 @@ function guardarNuevoIngreso() {
     const id_cuenta = document.getElementById('createCuenta').value;
     const tipo = document.getElementById('tipo').value;
 
+    // Verificar que todos los campos estén rellenados
+if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
+    alert('Por favor, complete todos los campos del formulario.');
+    return; // Detener la ejecución si hay campos vacíos
+}
+
+
     // Crear un objeto con los datos del usuario
     const operacionData = {
         nombre: nombre,
@@ -533,11 +570,18 @@ function guardarNuevoIngreso() {
 
 // Función para enviar la solicitud de creación de una nueva retirada al servidor
 function guardarNuevaRetirada() {
+    // Obtener los valores de los campos del formulario
     const nombre = document.getElementById('createNombre2').value;
     const cantidad = document.getElementById('createCantidad2').value;
     const concepto = document.getElementById('createConcepto2').value;
     const id_cuenta = document.getElementById('createCuenta2').value;
     const tipo = document.getElementById('tipo').value;
+
+    // Verificar que todos los campos estén rellenados
+    if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
+        alert('Por favor, complete todos los campos del formulario.');
+        return; // Detener la ejecución si hay campos vacíos
+    }
 
     // Crear un objeto con los datos del usuario
     const operacionData = {
@@ -580,9 +624,15 @@ function guardarNuevaRetirada() {
         // Mostrar el modal de eliminación en caso de error
         mostrarModalEliminacion();
     });
+
+    document.getElementById('crearModal2').style.display = 'none';
 }
 
-document.getElementById('crearModal2').style.display = 'none';
+
+
+
+
+
 
 
 

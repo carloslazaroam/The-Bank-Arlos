@@ -13,12 +13,49 @@ body{
 
 button {
     
-    border:none;
-    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
-    color:hsl(0, 0%, 100%);
-    cursor:pointer;
+  width: 95px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+color:hsl(0, 0%, 100%);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 500ms ease;
+  box-shadow: 0 3px 10px -5px #0cc51b;
+  &:hover {
+      transform: scale(1.1);
+  }
+
+  
+  }
+
+  .cerrar{
+
+    width: 95px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: none;
+    background-image:linear-gradient(to right,hsl(357, 65%, 51%),hsl(192, 70%, 51%));
+  color:hsl(0, 0%, 100%);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 500ms ease;
+    box-shadow: 0 3px 10px -5px #0cc51b;
+    &:hover {
+        transform: scale(1.1);
+    }
     
   }
+    
 
   .nav{
     display:flex;
@@ -45,7 +82,7 @@ button {
     color:hsl(227, 12%, 61%);
   }
   p{
-    color:hsl(227, 12%, 61%);
+    color:hsl(0, 0%, 0%);
   }
 
 
@@ -61,7 +98,7 @@ button {
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center; 
-    font-family: 'HP Simplified';/* Color de fondo para oscurecer la página */
+    font-family: 'Roboto';/* Color de fondo para oscurecer la página */
   }
   
   .modal-content {
@@ -69,36 +106,59 @@ button {
     margin: 10% auto; /* Modificado el margen para centrar verticalmente */
     padding: 20px;
     border: 1px solid #888;
-    width: 40%;
+    width: 30%;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     padding: 10px;
     margin-bottom: 50px;
-    max-height: 400px; /* Altura máxima del contenido */
+    max-height: 500px; /* Altura máxima del contenido */
     overflow-y: auto;
    
   }
+
+  .modal :-webkit-scrollbar {
+		width: 0; /* Hacemos la barra de desplazamiento invisible */
+	}
+
   
   /* Estilos para el título del modal */
   .modal-content h2 {
     font-weight: bold;
+    text-align: center;
   }
   
   /* Estilos para el modal activo */
   .modal.active {
     display: block;
   }
-
-  .small-text {
-    font-size: 12px; /* Tamaño de fuente más pequeño */
-    color: red; /* Color rojo para resaltar el mensaje de error */
-    margin-bottom: 5px; /* Espacio inferior para separar el mensaje de error del campo de entrada */
-}
-
   
 /* Estilos para los botones */
 
+.form-group {
+  margin-bottom: 20px;
+}
 
+/* Estilos para etiquetas <p> en el formulario */
+.form-group p {
+  margin: 0;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Estilos para los inputs en el formulario */
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Estilos para los mensajes de error */
+.error-msg {
+  color: red;
+  margin-top: 5px;
+}
 
 
 /* Animación para mostrar el modal */
@@ -135,6 +195,21 @@ animation: fadeIn 0.5s ease-in-out;
   }
 
   
+  span {
+    display: flex;
+    justify-content: right;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0; /* Hacemos la barra de desplazamiento invisible */
+}
+
+
+  #botonCrear{
+    background-color: #000000;
+  }
+
+  
 
   body {
     padding-top: 80px;
@@ -156,7 +231,7 @@ animation: fadeIn 0.5s ease-in-out;
   }
   
   .side-bar > li > a {
-    color: #eee;
+    color: #000000;
     width: 220px;
   }
   
@@ -169,4 +244,4 @@ animation: fadeIn 0.5s ease-in-out;
     margin-top: 15px;
   }
 
-  
+ 
