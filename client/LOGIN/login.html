@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./styles.css" rel="stylesheet">
-    
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <script src="./scripts.js" defer></script>
    
 
@@ -21,17 +21,16 @@
             <h1 class="text-center mb-5">Login</h1>
             
             <div class="input-container ">
-                <input type="text" placeholder="Introduce tu DNI" id="logeo"  required>
+                <input type="text" placeholder="Introduce tu DNI" id="logeo"  maxlength="9" required>
             </div>
 
             <div class="input-container">
-                <input type="password" placeholder="Introduce tu contraseña" id="contrao" required>
+                <input type="password" placeholder="Introduce tu contraseña" maxlength="9" id="contrao" required>
             </div>
             
             <div class="account-controls">
-                <a href="">Has olvidado tu contraseña?</a>
-                
-            </div>
+    <a href="#" onclick="abrirModalRecuperacion()">Has olvidado tu contraseña?</a>
+</div>
 
             <div class="account-controls">
                 
@@ -57,39 +56,39 @@
             <p class="text-center mb-5">Registrate para empezar a usar una cuenta</p>
             <div class="input-container">
                 <form id="registroForm">
-                <input type="text" placeholder="Introduce tu DNI" id="registroDNI" required>
+                <input type="text" placeholder="Introduce tu DNI" id="registroDNI" maxlength="9" required>
             </div>
             <p style="font-size: 13px;" id="holamundo"></p>
             <div class="input-container">
-                <input type="text" placeholder="Introduce tu nombre" id="registroNombre" required>
+                <input type="text" placeholder="Introduce tu nombre" id="registroNombre" maxlength="9" required>
             </div>
 
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="text" placeholder="Primer apellido" id="registroApellido1" required>
+                <input type="text" placeholder="Primer apellido" id="registroApellido1" maxlength="9" required>
             </div>
 
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="text" placeholder="Segundo apellido" id="registroApellido2" required>
+                <input type="text" placeholder="Segundo apellido" id="registroApellido2" maxlength="9" required>
             </div>
 
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" required>
+                <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" maxlength="9" required>
             </div>
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" required>
+                <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" maxlength="9" required>
             </div>
             
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="text" placeholder="Dirección" id="registroDireccion" required>
+                <input type="text" placeholder="Dirección" id="registroDireccion" maxlength="16" required>
             </div>
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="text" placeholder="País" id="registroPais" required>
+                <input type="text" placeholder="País" id="registroPais" maxlength="16" required>
             </div>
             <p style="font-size: 10px;"></p>
             <div class="account-controls">
@@ -108,14 +107,14 @@
     <div id="modal" class="modal" style="display: none;">
         
         <div class="modal-content">
-            <h2>Inicio de sesión exitoso</h2>
+            <h2 style="margin-bottom: 15px;">Inicio de sesión exitoso</h2>
             <form>
-                <hr> 
-                <p for="editActiva" style="text-align: center;">Pulsa para navegar al home...</p>
+                
                 <button type="button" id="modalAceptarBtn" class="btn-secondary" style=" width: 65px;
                 height: 30px;
                 text-align: center;
                 gap: 5px;
+                margin-top: 10px;
                 display: block;
                 margin: 0 auto;
                 border: none;
@@ -133,16 +132,64 @@
         </div>
     </div>
 
-    <div id="modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Your account has not been validated by an admin yet</h2>
-            <form>
-                <hr> 
-                <p for="editActiva">Please wait for admin validation...</p>
-                <button type="button" id="modalAceptarBtn" style="margin-top: 20px;">OK</button>
-            </form>
+    
+
+    <div id="crearModalRecuperacion" class="modal">
+        <div class="modal-content" style="
+             background-color: #fefefe;
+    margin: 20% auto; /* Modificado el margen para centrar verticalmente */
+    padding: 60px;
+    border: 1px solid #888;
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 50px;
+    max-height: 400px; /* Altura máxima del contenido */
+    overflow-y: auto;">
+            <span class="close" onclick="cancelarCreacion()" style="display: flex; justify-content: right;">&times;</span>
+            <h2 style="margin-bottom: 25px;">Recuperar contraseña</h2>
+            
+            <div class="cajas" style="display: flex; align-items: center;">
+                <p for="createEmail" style="margin-right: 10px;">Email del usuario de la cuenta</p>
+                <input type="text" id="email" name="email"  placeholder="Introduce el email..." required style="
+                    width: 60%;
+                    height: 40px;
+                    border-radius: 5px;
+                    border: 1px solid hsl(136, 65%, 51%);
+                    display: flex;
+                    align-items: center;
+                    margin-top: 0;
+                ">
+            </div>
+            <br>
+                
+                
+            <button type="button"  style="
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 65px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border: none;
+            background-image: linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 500ms ease;
+            box-shadow: 0 3px 10px -5px #0cc51b;
+            &:hover {
+                transform: scale(1.1);
+            }"  id="guardarBtn">Guardar</button>
+        
+            
         </div>
     </div>
+    
     
     
 

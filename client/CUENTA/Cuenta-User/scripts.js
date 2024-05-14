@@ -202,15 +202,38 @@ document.getElementById('createIBAN').oninput = modificarParrafoIBAN;
 
 
 function guardarNuevaCuenta() {
+    const ibanInput = document.getElementById('createIBAN');
+    const iban = ibanInput.value.trim(); // Eliminar espacios en blanco al principio y al final
+
+    // Verificar que el IBAN tenga exactamente 16 caracteres numéricos
+    if (!(/^\d{16}$/.test(iban))) {
+        document.getElementById('errorIBAN').textContent = '* El IBAN debe tener 16 dígitos numéricos. (No puedes poner espacios)';
+        return;
+    }
+
+    // Formatear el IBAN con espacios cada 4 dígitos
+    const formattedIBAN = iban.replace(/(.{4})/g, '$1 ').trim();
+
+    // Asignar el IBAN formateado al campo de entrada
+    ibanInput.value = formattedIBAN;
+
+    // Restablecer el mensaje de error
+    document.getElementById('errorIBAN').textContent = '';
+
+    // Obtener los valores de los campos del formulario
+    const idTipocuenta = document.getElementById('createTipocuenta').value; 
+    const empresa = document.getElementById('createEmpresa').value; 
+
+    // Verificar que todos los campos estén rellenados
+    if (!idTipocuenta || !empresa) {
+        alert('Por favor, complete todos los campos del formulario.');
+        return; // Detener la ejecución si hay campos vacíos
+    }
+
     // Valores predeterminados para los campos
     const saldoPredeterminado = 0;
     const activaPredeterminado = true; // Activado por defecto
     const validadoPredeterminado = false; // Desactivado por defecto
-    
-    // Obtener los valores de los campos del formulario
-    const iban = document.getElementById('createIBAN').value;
-    const idTipocuenta = document.getElementById('createTipocuenta').value; 
-    const empresa = document.getElementById('createEmpresa').value; 
     
     // Obtener el id del usuario seleccionado (No sé de dónde viene id2, así que lo mantengo como está)
 
@@ -257,6 +280,7 @@ function guardarNuevaCuenta() {
         console.error(error);
     });
 }
+
 
 
 

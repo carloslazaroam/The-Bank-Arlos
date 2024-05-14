@@ -2,15 +2,16 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 
 // Importar controladores
-const { getUsers, getUserById, createUser ,updateUser, deleteUser} = require('./controllers/users.js');
+const { getUsers, getUserById, createUser ,updateUser, deleteUser, getPasswordByEmail, recuperarContrasena} = require('./controllers/users.js');
 const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas, getCuentas2 } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo, vaciarCuenta } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const {verifyToken, verifyId} = require('./helpers/auth.js')
 const { getCuentasByUserId } = require('./controllers/cuentas.js');
@@ -44,6 +45,17 @@ app.post('/users/post', createUser);
 app.put('/users/:id', updateUser); 
 app.delete('/users/:nombre', deleteUser);
 app.get('/users/:id/accounts',verifyToken, getCuentasByUserId);
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'carloslazaroam@gmail.com',
+        pass: 'Rompeolas69'
+    }
+});
+
+app.post('/forgotpassword', recuperarContrasena);
+
 
 
 
@@ -87,6 +99,7 @@ app.get('/operaciones/cuenta/:id', getOperacionesByCuentaId);
 app.post('/operacion/ingresar', ingresarDinero);
 app.post('/operacion/retirar', retirarDinero);
 app.post('/operacion/transferencia', transferirSaldo);
+app.post('/operacion/vaciada', vaciarCuenta);
 
 
 // Rutas de Autenticación

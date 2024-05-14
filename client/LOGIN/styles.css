@@ -20,8 +20,8 @@ body {
 }
 
 .form-container {
-    height: 650px;
-    width: 750px;
+    height: 750px;
+    width: 800px;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@ body {
 }
 
 input{
-    height: 100%;
+    
     border: none;
     margin-left: 5px;
     outline: none;

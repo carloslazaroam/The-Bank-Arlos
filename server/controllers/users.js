@@ -1,6 +1,6 @@
 // usersController.js
 const { User } = require('../models/modelUser');
-
+const nodemailer = require('nodemailer');
 async function getUsers(req, res) {
     try {
         const users = await User.find({});
@@ -10,6 +10,8 @@ async function getUsers(req, res) {
         res.status(500).send("Error interno del servidor");
     }
 }
+
+
 
 async function getUserById(req, res) {
     //console.log(req.params.id);
@@ -33,6 +35,7 @@ async function createUser(req, res) {
             dni: req.body.dni,
             apellido1: req.body.apellido1,
             apellido2: req.body.apellido2,
+            email: req.body.email,
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
@@ -77,12 +80,55 @@ async function deleteUser(req, res) {
     }
 }
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'polanskirichard513@gmail.com',
+        pass: 'nuxu xanb qtgm anod'
+    }
+});
+
+async function recuperarContrasena(req, res) {
+    const email = req.body.email;
+
+    try {
+        // Buscar el usuario por su correo electrónico
+        const usuario = await User.findOne({ email: email });
+
+        if (!usuario) {
+            return res.status(404).send("Usuario no encontrado");
+        }
+
+        // Enviar la contraseña por correo electrónico
+        const correoRecuperacion = {
+            from: email,
+            to: email,
+            subject: 'Recuperación de contraseña',
+            text: `Hola ${usuario.nombre}, has solicitado la recuperación de tu contraseña. Tu contraseña es: ${usuario.contra}`
+        };
+
+        transporter.sendMail(correoRecuperacion, function (error, info) {
+            if (error) {
+                console.error("Error al enviar el correo de recuperación:", error);
+                res.status(500).send("Error interno del servidor al enviar el correo de recuperación");
+            } else {
+                console.log('Correo de recuperación enviado:', info.response);
+                res.status(200).send("Correo de recuperación enviado correctamente");
+            }
+        });
+    } catch (err) {
+        console.error("Error al recuperar la contraseña:", err);
+        res.status(500).send("Error interno del servidor al recuperar la contraseña");
+    }
+}
+
+
 
 
 
 
 // Exportar las funciones para su uso en app.js
-module.exports = { getUsers, getUserById, createUser,updateUser,deleteUser};
+module.exports = { getUsers, getUserById, createUser,updateUser,deleteUser,recuperarContrasena};
 
 
 

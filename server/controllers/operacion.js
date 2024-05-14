@@ -216,9 +216,51 @@ async function transferirSaldo(req, res) {
     }
 }
 
+async function vaciarCuenta(req, res) {
+    try {
+        const { id_cuenta } = req.body;
+
+        // Verificar si se proporcionó la ID de la cuenta
+        if (!id_cuenta) {
+            return res.status(400).json({ error: "Se debe proporcionar la ID de la cuenta" });
+        }
+
+        // Obtener la cuenta por su ID
+        const cuenta = await Cuenta.findById(id_cuenta);
+
+        // Verificar si la cuenta existe
+        if (!cuenta) {
+            return res.status(404).json({ mensaje: 'La cuenta no existe.' });
+        }
+
+        // Crear una nueva operación para vaciar la cuenta
+        const operacion = new Operacion({
+            nombre: 'CUENTA VACIADA',
+            concepto: 'Saldo total retirado',
+            cantidad: cuenta.saldo,
+            id_cuenta: cuenta._id,
+            tipo: 'retiro'
+        });
+
+        // Guardar la operación en la base de datos
+        await operacion.save();
+
+        // Establecer el saldo de la cuenta en 0
+        cuenta.saldo = 0;
+        await cuenta.save();
+
+        // Enviar respuesta exitosa
+        res.status(200).json({ mensaje: 'Cuenta vaciada exitosamente.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+}
 
 
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo}
+
+
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo,vaciarCuenta}
 
 /*async function updateOperacion(req, res) {
     try {

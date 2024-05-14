@@ -23,19 +23,24 @@ async function getCuentaByIban(req,res) {
     }
 }
 
+
 async function createCuenta(req, res) {
     try {
-       
+        // Formatear el IBAN agregando espacios cada 4 caracteres
+        const formattedIBAN = formatIBAN(req.body.iban).trim();
+
+        // Crear una nueva cuenta con el IBAN formateado
         const cuenta = new Cuenta({
-            
             activa: req.body.activa,
-            iban: req.body.iban,
+            iban: formattedIBAN, // Utilizar el IBAN formateado
             validado: req.body.validado,
             saldo: req.body.saldo,
             empresa: req.body.empresa,
             id_usuario: req.body.id_usuario,
             id_tipocuenta: req.body.id_tipocuenta
         });
+
+        // Guardar la cuenta en la base de datos
         await cuenta.save();
         res.send(cuenta);
     } catch (err) {
@@ -43,6 +48,12 @@ async function createCuenta(req, res) {
         res.status(500).send("Error interno del servidor");
     }
 }
+
+// Función para formatear el IBAN agregando espacios cada 4 caracteres
+function formatIBAN(iban) {
+    return iban.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
+}
+
 
 async function getCuentaByIban(req, res) {
     try {

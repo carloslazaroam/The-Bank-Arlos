@@ -88,8 +88,11 @@ window.addEventListener('DOMContentLoaded', () => {
         let balanceAcumulado = 0;
         const datos = [];
         const etiquetas = [];
-        
-        operaciones.forEach(op => {
+    
+        // Limitar las operaciones a los primeros 20 registros
+        const primerasOperaciones = operaciones.slice(0, 20);
+    
+        primerasOperaciones.forEach(op => {
             if (op.tipo === 'ingreso') {
                 balanceAcumulado += parseFloat(op.cantidad);
             } else if (op.tipo === 'retiro') {
@@ -105,7 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     
         const ctx = document.getElementById('line-chart').getContext('2d');
-        
+    
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -127,6 +130,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
     
 
     // Agrega un contenedor en tu HTML para el gráfico de pastel con el id 'pie-chart'
@@ -470,9 +474,38 @@ function mostrarFormulario2() {
     })
     .catch(err => console.error('Error al obtener cuentas:', err));
 
+   
+}
 
-   
-   
+
+
+function mostrarFormulario3() {
+    const crearModal = document.getElementById('crearModal3');
+    crearModal.style.display = 'block';
+
+    const url = `${recurso}/users/${id2}/accounts`;
+    fetch(url, {
+        method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+    })
+    .then(res => res.json())
+    .then(cuentas => {
+        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
+        const select = document.getElementById('createCuenta3');
+        select.innerHTML = "";
+         // Limpiar las opciones existentes
+        cuentas.forEach(cuenta => {
+            const option = document.createElement('option');
+            option.value = cuenta._id;
+            option.textContent = cuenta.iban;
+            select.appendChild(option);
+        });
+    })
+    .catch(err => console.error('Error al obtener cuentas:', err));
+
 }
 
 // Función para mostrar el modal de confirmación
@@ -496,6 +529,12 @@ function cancelarCreacion() {
     const crearModal = document.getElementById('crearModal');
     crearModal.style.display = 'none';
 }
+
+function cancelarCreacion3() {
+    const crearModal = document.getElementById('crearModal3');
+    crearModal.style.display = 'none';
+}
+
 
 function cancelarCreacion2() {
     const crearModal = document.getElementById('crearModal2');
@@ -522,6 +561,11 @@ function guardarNuevoIngreso() {
 if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
     alert('Por favor, complete todos los campos del formulario.');
     return; // Detener la ejecución si hay campos vacíos
+}
+
+if (cantidad > 500) {
+    alert('La cantidad máxima permitida es de 500€.');
+    return; // Detener la ejecución si la cantidad supera 500
 }
 
 
@@ -583,6 +627,11 @@ function guardarNuevaRetirada() {
         return; // Detener la ejecución si hay campos vacíos
     }
 
+    if (cantidad > 500) {
+        alert('La cantidad máxima permitida es de 500€.');
+        return; // Detener la ejecución si la cantidad supera 500
+    }
+
     // Crear un objeto con los datos del usuario
     const operacionData = {
         nombre: nombre,
@@ -626,6 +675,58 @@ function guardarNuevaRetirada() {
     });
 
     document.getElementById('crearModal2').style.display = 'none';
+}
+
+
+// Función para enviar la solicitud de creación de una nueva retirada al servidor
+function vaciarCuenta() {
+    // Obtener los valores de los campos del formulario
+    const id_cuenta = document.getElementById('createCuenta3').value;
+
+    // Verificar que todos los campos estén rellenados
+    if ( !id_cuenta) {
+        alert('Por favor, eliga una cuenta válida');
+        return; // Detener la ejecución si hay campos vacíos
+    }
+
+    // Crear un objeto con los datos del usuario
+    const operacionData = {
+        id_cuenta: id_cuenta,
+       
+    };
+
+    // Enviar la solicitud POST al servidor
+    fetch(recurso + '/operacion/vaciada', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al vaciar la cuenta: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Cuenta vaciada:', data);
+        // Mostrar el modal de confirmación
+        mostrarModalConfirmacion();
+        // Limpiar el formulario después de añadir el operación
+        
+        document.getElementById('createCuenta3').value = '';
+        
+        const crearModal = document.getElementById('crearModal3');
+        crearModal.style.display = 'none';
+    })
+    .catch(error => {
+        console.error(error);
+        // Mostrar el modal de eliminación en caso de error
+        mostrarModalEliminacion();
+    });
+
+    document.getElementById('crearModal3').style.display = 'none';
 }
 
 

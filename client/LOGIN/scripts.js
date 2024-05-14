@@ -1,4 +1,6 @@
- const banner = document.getElementById("banner")
+ 
+const recurso = "http://127.0.0.1:3001";
+const banner = document.getElementById("banner")
 const loginContainer = document.getElementById("login-container")
 const signupContainer = document.getElementById("signup-container")
 const loginToggle = document.getElementById("login-form-toggler")
@@ -222,8 +224,49 @@ function validarFormatoDNI(dni) {
         }
     });
 
-    
 
+    const guardarBtn = document.getElementById('guardarBtn');
+
+    // Agrega un controlador de eventos al botón "Guardar"
+    guardarBtn.addEventListener('click', async () => {
+        // Obtén el valor del campo de entrada de correo electrónico
+        const email = document.getElementById('email').value;
+
+        // Realiza una solicitud POST al servidor
+        try {
+            const response = await fetch(recurso + '/forgotpassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email }) // Envía el correo electrónico al servidor
+            });
+
+            // Verifica si la solicitud fue exitosa
+            if (response.ok) {
+                alert('Correo de recuperación enviado correctamente');
+            } else {
+                const errorMessage = await response.text();
+                alert(`Error: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+            alert('Error interno del cliente al enviar la solicitud');
+        }
+    });
+
+ 
+   
 
    
 });
+function abrirModalRecuperacion() {
+    var modalRecuperacion = document.getElementById('crearModalRecuperacion');
+    modalRecuperacion.style.display = 'block';
+}
+
+function cancelarCreacion() {
+    var modalRecuperacion = document.getElementById('crearModalRecuperacion');
+    modalRecuperacion.style.display = 'none';
+}
+
