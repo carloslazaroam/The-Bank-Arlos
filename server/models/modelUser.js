@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     dni: { type: String, unique: true },
     nombre: String,
-    email: String,
+    email: { type: String, unique: true },
     apellido1: String,
     apellido2: String,
     direccion: String,

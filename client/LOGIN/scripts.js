@@ -123,6 +123,7 @@ function validarFormatoDNI(dni) {
     
         // Obtén los valores de los campos
         const dni = document.getElementById("registroDNI").value;
+        const email = document.getElementById("registroEmail").value;
         if (!validarFormatoDNI(dni)) {
             alert('El formato del DNI no es válido. Debe tener 8 números seguidos de una letra.');
             return; // Sale de la función si el formato no es válido
@@ -136,7 +137,7 @@ function validarFormatoDNI(dni) {
         const pais = document.getElementById("registroPais").value;
     
         // Verifica si algún campo está vacío
-        if (!dni || !nombre || !contraseña || !confirmarContraseña || !apellido1 || !apellido2 || !direccion || !pais) {
+        if (!dni || !email || !nombre || !contraseña || !confirmarContraseña || !apellido1 || !apellido2 || !direccion || !pais) {
             alert('Por favor, complete todos los campos.');
             return null;
         }
@@ -155,7 +156,7 @@ function validarFormatoDNI(dni) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ dni, nombre, contra: contraseña, apellido1, apellido2, direccion, pais })
+                body: JSON.stringify({ dni,email, nombre, contra: contraseña, apellido1, apellido2, direccion, pais })
             });
     
             const data = await response.json();
@@ -173,6 +174,7 @@ function validarFormatoDNI(dni) {
             location.reload();
             // Después de un envío fallido, puedes restablecer los valores manualmente
             document.getElementById("registroDNI").value = "";
+            document.getElementById("registroEmail").value = "";
             document.getElementById("registroNombre").value = "";
             document.getElementById("registroContraseña").value = "";
             document.getElementById("confirmarContraseña").value = "";
@@ -227,33 +229,34 @@ function validarFormatoDNI(dni) {
 
     const guardarBtn = document.getElementById('guardarBtn');
 
-    // Agrega un controlador de eventos al botón "Guardar"
-    guardarBtn.addEventListener('click', async () => {
-        // Obtén el valor del campo de entrada de correo electrónico
-        const email = document.getElementById('email').value;
+// Agrega un controlador de eventos al botón "Guardar"
+guardarBtn.addEventListener('click', async () => {
+    // Obtén los valores del correo electrónico y el DNI
+    const email = document.getElementById('email').value;
+    const dni = document.getElementById('dni').value;
 
-        // Realiza una solicitud POST al servidor
-        try {
-            const response = await fetch(recurso + '/forgotpassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email }) // Envía el correo electrónico al servidor
-            });
+    // Realiza una solicitud POST al servidor para recuperar la contraseña
+    try {
+        const response = await fetch(recurso + '/forgotpassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, dni: dni }) // Envía el correo electrónico y el DNI al servidor
+        });
 
-            // Verifica si la solicitud fue exitosa
-            if (response.ok) {
-                alert('Correo de recuperación enviado correctamente');
-            } else {
-                const errorMessage = await response.text();
-                alert(`Error: ${errorMessage}`);
-            }
-        } catch (error) {
-            console.error('Error al realizar la solicitud:', error);
-            alert('Error interno del cliente al enviar la solicitud');
+        // Verifica si la solicitud fue exitosa
+        if (response.ok) {
+            alert('Correo de recuperación enviado correctamente');
+        } else {
+            const errorMessage = await response.text();
+            alert(`Error: ${errorMessage}`);
         }
-    });
+    } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+        alert('Error interno del cliente al enviar la solicitud');
+    }
+});
 
  
    

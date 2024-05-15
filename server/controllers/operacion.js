@@ -136,6 +136,7 @@ async function retirarDinero(req, res) {
             concepto: req.body.concepto,
             cantidad: req.body.cantidad,
             id_cuenta: req.body.id_cuenta,
+            
             tipo: 'retiro'
         });
 
@@ -157,7 +158,7 @@ async function retirarDinero(req, res) {
 
 async function transferirSaldo(req, res) {
     try {
-        const { ibanEmisor, ibanReceptor, cantidad } = req.body;
+        const { ibanEmisor, ibanReceptor, cantidad, concepto , nombre} = req.body;
 
         // Buscar cuentas por IBAN
         const cuentaEmisor = await Cuenta.findOne({ iban: ibanEmisor });
@@ -188,18 +189,19 @@ async function transferirSaldo(req, res) {
 
         // Guardar las operaciones
         const operacionEmisor = new Operacion({
-            nombre: 'Transferencia emitida',
+            nombre: nombre,
             cantidad: cantidad,
-            concepto: 'Transferencia a ' + ibanReceptor,
+            concepto: '(Transferencia a '+  ibanReceptor + ') ' + concepto,
             id_cuenta: cuentaEmisor._id,
+           
             tipo: 'retiro'
         });
         await operacionEmisor.save();
 
         const operacionReceptor = new Operacion({
-            nombre: 'Transferencia recibida',
+            nombre: nombre,
             cantidad: cantidad,
-            concepto: 'Transferencia de ' + ibanEmisor,
+            concepto: '(Ingreso por parte de '+ ibanEmisor + ') ' + concepto,
             id_cuenta: cuentaReceptor._id,
             tipo: 'ingreso'
         });

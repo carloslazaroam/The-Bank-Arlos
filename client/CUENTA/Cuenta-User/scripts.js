@@ -8,7 +8,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     getUserData();
     
-
     getUserData();
     async function getUserData() {
         const user = await getUserDB();
@@ -16,11 +15,19 @@ window.addEventListener('DOMContentLoaded', () => {
         const cuentas = await getUserAccounts(); // Obtener cuentas del usuario
         printAccounts(cuentas);
     
-        // Verificar si el usuario tiene cuentas asociadas
-        if (cuentas.length === 0) {
-            document.getElementById('botonPanel').style.display = 'none'; // Ocultar el botón
+        // Verificar si el usuario tiene cuentas asociadas y al menos una cuenta activa
+        const cuentasActivas = cuentas.filter(cuenta => cuenta.activa);
+    
+        if (cuentas.length === 0 || cuentasActivas.length === 0) {
+            document.getElementById('botonPanel').style.display = 'none'; // Ocultar el botón si no hay cuentas o todas están desactivadas
+        } else {
+            document.getElementById('botonPanel').style.display = 'block'; // Mostrar el botón si hay al menos una cuenta activa
         }
     }
+
+
+  
+    
 
     async function getUserDB() {
         const url = `${recurso}/users/${id}`;
@@ -94,7 +101,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 <button id="botonEliminar" onclick="confirmarEliminacion('${account.iban}')">
                     <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                     </button>
+
+                    <button id="botonOperaciones" onclick="confirmarEliminacion('${account.iban}')">
+                    <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3H20C21.1046 3 22 3.89543 22 5Z" stroke="#000000" stroke-width="1.5"></path><path d="M2 12H6" stroke="#000000" stroke-width="1.5"></path><path d="M6 3V21" stroke="#000000" stroke-width="1.5"></path><path d="M15.5 11.5L12 14.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17 10.01L17.01 9.99889" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </button>
                     </div>
+
+                    
                 </td>
                     
             
@@ -283,22 +296,12 @@ function guardarNuevaCuenta() {
 
 
 
-
-
-
-
-
-
-
-
-
 function editarCuenta(iban,saldo,fechacreacion ,activa, id_tipocuenta, empresa) {
     cuentaEditando = { iban,saldo,fechacreacion, activa, id_tipocuenta, empresa };
     document.getElementById('editIban').value = iban;
     document.getElementById('editSaldo').value = saldo;
   
     
-
     document.getElementById('editActiva').value;
 
     // Llenar el campo editTipoCuenta con opciones disponibles y seleccionar el tipo de cuenta actual

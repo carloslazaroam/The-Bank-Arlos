@@ -35,6 +35,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 <td>DNI</td>
                 <td>${user.dni}</td>
             </tr>
+
+            <tr>
+                <td>Email</td>
+                <td>${user.email}</td>
+            </tr>
+
             <tr>
                 <td>Nombre</td>
                 <td>${user.nombre}</td>
@@ -55,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 <td>Pais</td>
                 <td>${user.pais}</td>
             </tr>
-            <button type="button"  onclick="editarUser('${user.dni}','${user.id}','${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}')" style="margin-top:10px">Editar</button>
+            <button type="button"  onclick="editarUser('${user.dni}','${user.email}','${user.id}','${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}')" style="margin-top:10px">Editar</button>
             
         `;
         
@@ -85,13 +91,14 @@ window.addEventListener('DOMContentLoaded', () => {
     // Función para abrir el modal de edición con los datos del user seleccionado
     // Función para let userEditando = null;abrir el modal de edición con los datos del user seleccionado
     // Función para abrir el modal de edición con los datos del usuario seleccionado
-    function editarUser(dni,id,nombre,contra, apellido1, apellido2, direccion, pais) {
+    function editarUser(dni,email,id,nombre,contra, apellido1, apellido2, direccion, pais) {
         // Almacenar los datos del usuario que se está editando
-        userEditando = {dni, id,nombre, apellido1, apellido2, direccion, pais };
+        userEditando = {dni,email, id,nombre, apellido1, apellido2, direccion, pais };
         
         // Llenar el formulario de edición con los datos del usuario
         document.getElementById('editDni').value = dni;
         document.getElementById('editNombre').value = nombre;
+        document.getElementById('editEmail').value = email;
         document.getElementById('editContra').value = contra;
         document.getElementById('editApellido1').value = apellido1;
         document.getElementById('editApellido2').value = apellido2;

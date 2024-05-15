@@ -215,13 +215,9 @@
                 <p for="createCuenta3">Seleccionar Cuenta:</p>
               <select id="createCuenta3" name="createCuenta3"></select><br>
               <hr>
-                <p><label for="w3review">Review of W3Schools:</label></p>
+                <p><label for="w3review">* Alerta</label></p>
                 <textarea id="w3review" name="w3review" rows="4" cols="50" readonly>Vaciar una cuenta supondrá la retirada de todo el dinero disponible en la cuenta.</textarea>
 
-                
-                
-                
-               
       <br><br>
                 <button type="button" class="btn btn-secondary"  onclick="vaciarCuenta()">Guardar</button>
             </form>
@@ -263,13 +259,22 @@
             padding: 10px;
             margin-bottom: 50px;
             max-height: 400px; /* Altura máxima del contenido */
-            overflow-y: auto">
-           <a href="../PANEL/panel.html">  <span class="close" onclick="cerrarModalEliminacion()">&times;</span></a>
+            overflow-y: auto;
+            text-align: center; /* Centro de texto */
+            color: black; /* Color de texto negro */">
+            <span class="close" onclick="recargarPagina()">&times;</span>
+
             <h2>Error en la operación</h2>
-           <p>Hubo un problema para realizar la operación</p>
-            <br><br>
+            <hr> 
+            <br>
+            <p>Hubo un problema para realizar la operación</p>
+            <br>
+            <p>* Recuerda rellenar todos los campos, no puedes introducir valores negativos 
+                o 0, tampoco puedes enviar más saldo del que dispones.
+            </p><br>
         </div>
     </div>
+    
 
 
     <div id="modalAceptacion" class="modal" style="display: none; justify-content: center; align-items: center;
@@ -298,7 +303,9 @@
             </div>
         </div>
     </div>
-    
+
+
+   
 
       
     

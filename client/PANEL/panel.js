@@ -435,10 +435,12 @@ function mostrarFormulario() {
         const select = document.getElementById('createCuenta');
         select.innerHTML = ""; // Limpiar las opciones existentes
         cuentas.forEach(cuenta => {
-            const option = document.createElement('option');
-            option.value = cuenta._id;
-            option.textContent = cuenta.iban;
-            select.appendChild(option);
+            if (cuenta.activa){
+                const option = document.createElement('option');
+                option.value = cuenta._id;
+                option.textContent = cuenta.iban;
+                select.appendChild(option);
+                }
         });
     })
     .catch(err => console.error('Error al obtener cuentas:', err));
@@ -466,10 +468,12 @@ function mostrarFormulario2() {
         const select = document.getElementById('createCuenta2');
         select.innerHTML = ""; // Limpiar las opciones existentes
         cuentas.forEach(cuenta => {
-            const option = document.createElement('option');
-            option.value = cuenta._id;
-            option.textContent = cuenta.iban;
-            select.appendChild(option);
+            if (cuenta.activa){
+                const option = document.createElement('option');
+                option.value = cuenta._id;
+                option.textContent = cuenta.iban;
+                select.appendChild(option);
+                }
         });
     })
     .catch(err => console.error('Error al obtener cuentas:', err));
@@ -498,11 +502,14 @@ function mostrarFormulario3() {
         select.innerHTML = "";
          // Limpiar las opciones existentes
         cuentas.forEach(cuenta => {
+            if (cuenta.activa){
             const option = document.createElement('option');
             option.value = cuenta._id;
             option.textContent = cuenta.iban;
             select.appendChild(option);
+            }
         });
+        
     })
     .catch(err => console.error('Error al obtener cuentas:', err));
 
@@ -559,12 +566,12 @@ function guardarNuevoIngreso() {
 
     // Verificar que todos los campos estén rellenados
 if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
-    alert('Por favor, complete todos los campos del formulario.');
+    mostrarModal('modalEliminación');
     return; // Detener la ejecución si hay campos vacíos
 }
 
 if (cantidad > 500) {
-    alert('La cantidad máxima permitida es de 500€.');
+    mostrarModal('modalEliminación');
     return; // Detener la ejecución si la cantidad supera 500
 }
 
@@ -608,7 +615,7 @@ if (cantidad > 500) {
     .catch(error => {
         console.error(error);
         // Mostrar el modal de eliminación en caso de error
-        mostrarModalEliminacion();
+        mostrarModal('modalEliminación');
     });
 }
 
@@ -623,12 +630,12 @@ function guardarNuevaRetirada() {
 
     // Verificar que todos los campos estén rellenados
     if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
-        alert('Por favor, complete todos los campos del formulario.');
+        mostrarModal('modalEliminación');
         return; // Detener la ejecución si hay campos vacíos
     }
 
     if (cantidad > 500) {
-        alert('La cantidad máxima permitida es de 500€.');
+        mostrarModal('modalEliminación');
         return; // Detener la ejecución si la cantidad supera 500
     }
 
@@ -671,10 +678,10 @@ function guardarNuevaRetirada() {
     .catch(error => {
         console.error(error);
         // Mostrar el modal de eliminación en caso de error
-        mostrarModalEliminacion();
+        mostrarModal('modalEliminación');
     });
 
-    document.getElementById('crearModal2').style.display = 'none';
+    
 }
 
 
@@ -728,6 +735,22 @@ function vaciarCuenta() {
 
     document.getElementById('crearModal3').style.display = 'none';
 }
+
+function mostrarModal(idModal) {
+    // Cerrar el modal de formulario antes de abrir otro modal
+    const crearModal = document.getElementById('crearModal');
+    crearModal.style.display = 'none';
+
+    // Mostrar el modal deseado
+    const modal = document.getElementById(idModal);
+    modal.style.display = 'block';
+}
+
+function recargarPagina() {
+    location.reload();
+}
+
+
 
 
 

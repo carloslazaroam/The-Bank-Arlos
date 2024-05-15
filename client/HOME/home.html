@@ -131,13 +131,26 @@
 </div>
 
 <div id="modal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close" onclick="cancelarEdicion()">&times;</span>
-    <h2>Alerta!!</h2>
-    <hr> 
-    <p for="editIban">No tienes ninguna cuenta asociada, debes crearte una para poder operar.</p>
+  <div class="modal-content" style="background-color: #fefefe;
+      margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 40%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      margin-bottom: 50px;
+      max-height: 400px; /* Altura máxima del contenido */
+      overflow-y: auto;
+      text-align: center; /* Centro de texto */
+      color: black; /* Color de texto negro */">
+      <span class="close" onclick="cancelarEdicion()">&times;</span>
+      <h2>Alerta!!</h2>
+      <hr> 
+      <p for="editIban">No tienes ninguna cuenta operativa actualmente.</p>
   </div>
 </div>
+
 
 </body>
 </html>
@@ -164,7 +177,7 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     padding: 20px;
     width: 50%; /* Ancho del modal */
-    max-height: 45%; /* Altura máxima del modal */
+    max-height: 25px; /* Altura máxima del modal */
     overflow: auto;
     animation: modalFadeIn 0.5s; /* Animación de entrada */
     margin-top: 50px; /* Espacio desde arriba */
@@ -181,6 +194,11 @@
 @keyframes modalFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+.close {
+  display: flex;
+  justify-content: right;
 }
 
 </style>

@@ -32,19 +32,28 @@ function inicio(cuentas) {
     const cuentasFiltradas = cuentas.filter(cuenta => !cuenta.id_usuario || cuenta.id_usuario._id !== idUsuarioLogeado);
 
     cuentasFiltradas.forEach(cuenta => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${cuenta.iban}</td>
-            <td>${cuenta.id_usuario ? `${cuenta.id_usuario.nombre} ${cuenta.id_usuario.apellido1} (${cuenta.id_usuario.dni})` : 'Usuario no disponible'}</td>
-        `;
+        // Verificar si la cuenta está activa
+        if (cuenta.activa) {
+            const row = document.createElement('tr');
 
-        row.addEventListener('click', () => {
-            mostrarFormulario(cuenta.iban); // Llamar a mostrarFormulario con el IBAN de la cuenta
-        });
+            // Reemplazar los primeros seis dígitos del DNI con asteriscos
+            const dni = cuenta.id_usuario ? cuenta.id_usuario.dni.replace(/^\d{6}/, '******') : 'DNI no disponible';
 
-        wrapper.appendChild(row);
+            row.innerHTML = `
+                <td>ES ${cuenta.iban}</td>
+                <td>${cuenta.id_usuario ? `${cuenta.id_usuario.nombre} ${cuenta.id_usuario.apellido1}` : 'Usuario no disponible'}</td>
+                <td>${dni}</td>
+            `;
+
+            row.addEventListener('click', () => {
+                mostrarFormulario(cuenta.iban); // Llamar a mostrarFormulario con el IBAN de la cuenta
+            });
+
+            wrapper.appendChild(row);
+        }
     });
 }
+
 
 
 
@@ -72,10 +81,12 @@ function mostrarFormulario(iban) {
         const select = document.getElementById('createEmisor');
         select.innerHTML = ""; // Limpiar las opciones existentes
         cuentas.forEach(cuenta => {
-            const option = document.createElement('option');
-            option.value = cuenta.iban;
-            option.textContent = cuenta.iban;
-            select.appendChild(option);
+            if (cuenta.activa){
+                const option = document.createElement('option');
+                option.value = cuenta._id;
+                option.textContent = cuenta.iban;
+                select.appendChild(option);
+                }
         });
     })
     .catch(err => console.error('Error al obtener cuentas:', err));
@@ -98,8 +109,18 @@ function guardarTransferencia() {
 
      // Verificar que todos los campos estén rellenados
      if (!nombre || !cantidad || !concepto || !ibanEmisor || !ibanReceptor) {
-        alert('Por favor, complete todos los campos del formulario.');
+        mostrarModal('modalEliminación');
         return; // Detener la ejecución si hay campos vacíos
+    }
+
+    if (cantidad <= 0 || isNaN(cantidad)) {
+        mostrarModal('modalEliminación');
+        return; // Detener la ejecución si la cantidad es negativa o no es un número
+    }
+
+    if (cantidad > 500) {
+        mostrarModal('modalEliminación');
+        return; // Detener la ejecución si la cantidad supera 500
     }
 
     // Verificar que los elementos existen antes de acceder a sus propiedades

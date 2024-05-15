@@ -61,7 +61,7 @@
         max-height: 400px; /* Altura máxima del contenido */
         overflow-y: auto">
             <span class="close" onclick="cancelarCreacion()">&times;</span>
-            <h2 style="text-align: center;color: #7c7f8d">Formulario</h2>
+            <h2 style="text-align: center;color: #000105">Información del bizum</h2>
             <form id="crearFormulario" enctype="multipart/form-data">
                 <hr>
                 <p for="createEmisor">Seleccionar una cuenta emisora</p>
@@ -70,13 +70,13 @@
                
                 
                 <p for="createNombre">Nombre:</p>
-                <input type="text" id="createNombre" name="createNombre"><br>
+                <input type="text" id="createNombre" name="createNombre" maxlength="20"><br>
                 <hr>
                 <p for="createConcepto">Concepto:</p>
-                <input type="text" id="createConcepto" name="createConcepto"><br>
+                <input type="text" id="createConcepto" name="createConcepto" maxlength="20"><br>
                 <hr>
                 <p for="createCantidad">Cantidad:</p>
-                <input type="number" id="createCantidad" name="createCantidad"><br>
+                <input type="number" id="createCantidad" name="createCantidad" maxlength="10" placeholder="(500€ Max.)"><br>
                 <hr>
                 <p for="createReceptor">Cuenta Receptora (IBAN):</p>
                 <input type="text" id="createReceptor" name="createReceptor" readonly><br>
@@ -85,57 +85,59 @@
     
                 
                 <br><br>
-                <button type="button" class="btn btn-secondary"  onclick="guardarTransferencia()">Guardar</button>
+                <button type="button"   onclick="guardarTransferencia()">Guardar</button>
             </form>
         </div>
     </div>
 
     <div id="modalConfirmacion" class="modal">
         <div class="modal-content" style="background-color: #fefefe;
-        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 40%;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        padding: 10px;
-        margin-bottom: 50px;
-        max-height: 400px; /* Altura máxima del contenido */
-        overflow-y: auto">
-           <a href="../PANEL/panel.html"> <span class="close">&times;</span></a>
-            <h2>Transferencia realizada con exito!!!</h2>
-            
-                <p>Bizum realizado correctamente</p>
-                
-                <br><br>
-                
-            </form>
+            margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-bottom: 50px;
+            max-height: 400px; /* Altura máxima del contenido */
+            overflow-y: auto;
+            text-align: center; /* Centro de texto */
+            color: black; /* Color de texto negro */">
+            <a href="../PANEL/panel.html"><span class="close">&times;</span></a>
+            <h2>Transferencia realizada con éxito!!!</h2>
+            <p>Bizum realizado correctamente</p>
+            <br><br>
         </div>
     </div>
-
+    
 
     <div id="modalEliminación" class="modal">
         <div class="modal-content" style="background-color: #fefefe;
-        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 40%;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        padding: 10px;
-        margin-bottom: 50px;
-        max-height: 400px; /* Altura máxima del contenido */
-        overflow-y: auto">
+            margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-bottom: 50px;
+            max-height: 400px; /* Altura máxima del contenido */
+            overflow-y: auto;
+            text-align: center; /* Centro de texto */
+            color: black; /* Color de texto negro */">
             <span class="close" onclick="cancelarCreacion2()">&times;</span>
             <h2>Error en la operación</h2>
-            
-                <p>Hubo un problema para realizar la operación</p>
-                
-                <br><br>
-                
-            </form>
+            <hr> 
+            <br>
+            <p>Hubo un problema para realizar la operación</p>
+            <br>
+            <p>* Recuerda rellenar todos los campos, no puedes introducir valores negativos 
+                o 0, tampoco puedes enviar más saldo del que dispones.
+            </p><br>
         </div>
     </div>
+    
 
     
     

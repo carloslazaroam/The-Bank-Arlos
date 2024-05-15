@@ -25,7 +25,7 @@
             </div>
 
             <div class="input-container">
-                <input type="password" placeholder="Introduce tu contraseña" maxlength="9" id="contrao" required>
+                <input type="password" placeholder="Introduce tu contraseña" maxlength="16" id="contrao" required>
             </div>
             
             <div class="account-controls">
@@ -58,6 +58,13 @@
                 <form id="registroForm">
                 <input type="text" placeholder="Introduce tu DNI" id="registroDNI" maxlength="9" required>
             </div>
+
+            <p style="font-size: 13px;" id="holamundo"></p>
+            <div class="input-container">
+                <input type="email" placeholder="Introduce tu email" id="registroEmail" maxlength="30" required>
+            </div>
+
+            
             <p style="font-size: 13px;" id="holamundo"></p>
             <div class="input-container">
                 <input type="text" placeholder="Introduce tu nombre" id="registroNombre" maxlength="9" required>
@@ -75,11 +82,11 @@
 
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" maxlength="9" required>
+                <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" maxlength="16" required>
             </div>
             <p style="font-size: 10px;"></p>
             <div class="input-container">
-                <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" maxlength="9" required>
+                <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" maxlength="16" required>
             </div>
             
             <p style="font-size: 10px;"></p>
@@ -136,40 +143,52 @@
 
     <div id="crearModalRecuperacion" class="modal">
         <div class="modal-content" style="
-             background-color: #fefefe;
-    margin: 20% auto; /* Modificado el margen para centrar verticalmente */
-    padding: 60px;
-    border: 1px solid #888;
-    width: 40%;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    margin-bottom: 50px;
-    max-height: 400px; /* Altura máxima del contenido */
-    overflow-y: auto;">
+            background-color: #fefefe;
+            margin: 20% auto; /* Modificado el margen para centrar verticalmente */
+            padding: 60px;
+            border: 1px solid #888;
+            width: 40%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-bottom: 50px;
+            max-height: 400px; /* Altura máxima del contenido */
+            overflow-y: auto;
+        ">
             <span class="close" onclick="cancelarCreacion()" style="display: flex; justify-content: right;">&times;</span>
             <h2 style="margin-bottom: 25px;">Recuperar contraseña</h2>
             
-            <div class="cajas" style="display: flex; align-items: center;">
-                <p for="createEmail" style="margin-right: 10px;">Email del usuario de la cuenta</p>
-                <input type="text" id="email" name="email"  placeholder="Introduce el email..." required style="
-                    width: 60%;
+            <!-- Input para Email -->
+            <div class="cajas" style="margin-bottom: 20px;">
+                <label for="createEmail" style="margin-right: 10px;">Email del usuario de la cuenta</label>
+                <input type="text" id="email" name="email" placeholder="Introduce el email..." required style="
+                    flex: 1;
+                    width: 53%;
                     height: 40px;
                     border-radius: 5px;
                     border: 1px solid hsl(136, 65%, 51%);
-                    display: flex;
-                    align-items: center;
-                    margin-top: 0;
                 ">
             </div>
-            <br>
-                
-                
+    
+            <!-- Input para DNI -->
+            <div class="cajas" style="margin-bottom: 20px;">
+                <label for="createDni" style="margin-right: 10px;">DNI de la cuenta</label>
+                <input type="text" id="dni" name="dni" placeholder="Introduce el DNI..." required style="
+                    flex: 1;
+                    width: 53%;
+                    margin-left: 100px;
+                    height: 40px;
+                    border-radius: 5px;
+                    border: 1px solid hsl(136, 65%, 51%);
+                ">
+            </div>
+    
+            <!-- Botón Guardar -->
             <button type="button"  style="
             margin-top: 20px;
             margin-left: auto;
             margin-right: auto;
-            width: 65px;
+            width: 90px;
             height: 30px;
             display: flex;
             align-items: center;
@@ -185,8 +204,6 @@
             &:hover {
                 transform: scale(1.1);
             }"  id="guardarBtn">Guardar</button>
-        
-            
         </div>
     </div>
     

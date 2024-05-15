@@ -90,6 +90,7 @@ const transporter = nodemailer.createTransport({
 
 async function recuperarContrasena(req, res) {
     const email = req.body.email;
+    const dni = req.body.dni;
 
     try {
         // Buscar el usuario por su correo electrónico
@@ -97,6 +98,11 @@ async function recuperarContrasena(req, res) {
 
         if (!usuario) {
             return res.status(404).send("Usuario no encontrado");
+        }
+
+        // Verificar si el DNI proporcionado coincide con el del usuario
+        if (usuario.dni !== dni) {
+            return res.status(400).send("El DNI proporcionado no coincide con el del usuario");
         }
 
         // Enviar la contraseña por correo electrónico
