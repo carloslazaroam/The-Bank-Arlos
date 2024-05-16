@@ -1,6 +1,9 @@
 const { Operacion } = require('../models/modelOperacion');
 const { Cuenta } = require('../models/modelCuenta')
+const { User } = require('../models/modelUser')
 const pdf = require('html-pdf');
+const nodemailer = require('nodemailer');
+
 
 async function getOperacion(req,res) {
     try{
@@ -83,60 +86,127 @@ async function ingresarDinero(req, res) {
     try {
         const { cantidad, id_cuenta, nombre, concepto, tipo, fecha, generarComprobante } = req.body;
 
-        // Verificar si el cliente desea generar un comprobante
-        if (generarComprobante === "si") {
-            // Generar y guardar comprobante PDF
-            const operacion = new Operacion({
-                nombre,
-                concepto,
-                cantidad,
-                id_cuenta,
-                tipo: 'ingreso',
-                fecha
+        // Crear y guardar la operación
+        const operacion = new Operacion({
+            nombre,
+            concepto,
+            cantidad,
+            id_cuenta,
+            tipo: 'ingreso',
+            fecha
+        });
+
+        await operacion.save(); // Guardar la operación en la base de datos
+
+        // Actualizar el saldo de la cuenta
+        const cuenta = await Cuenta.findById(id_cuenta);
+        cuenta.saldo += parseFloat(cantidad);
+        await cuenta.save();
+
+        const usuarioReceptor = await User.findById(cuenta.id_usuario);
+
+        if (!usuarioReceptor) {
+            return res.status(404).json({ mensaje: 'Usuario receptor no encontrado.' });
+        }
+
+        // Enviar correo electrónico al usuario receptor
+        const transporter = nodemailer.createTransport({
+            service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+            auth: {
+                user: 'polanskirichard513@gmail.com', // Tu correo electrónico
+                pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+            }
+        });
+
+        const mailOptions = {
+            from: 'polanskirichard513@gmail.com',
+            to: usuarioReceptor.email,
+            subject: 'Notificación de Ingreso',
+            text: `Estimado ${usuarioReceptor.nombre}.Has realizado un ingreso de ${cantidad}€.
+
+            Concepto: ${concepto}
+
+            Saludos,
+            The Bank-Arlos`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error al enviar el correo:', error);
+                } else {
+                    console.log('Correo enviado:', info.response);
+                }
             });
 
-            await operacion.save(); // Guardar la operación en la base de datos
+            
+     
 
+        if (generarComprobante === "si") {
             // Generar y guardar comprobante PDF
             const html = `
             <style>
-            /* Aquí va tu CSS */
-            body {
-                font-family: 'Roboto', sans-serif;
-                background-color: #ffffff;
-                margin: 0;
-                padding: 0;
-            }
+                body {
+                    font-family: 'Roboto', sans-serif;
+                    background-color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
 
-            /* Otros estilos que desees aplicar */
+                .invoice-card {
+                    border: 1px solid #cce7e8;
+                    padding: 20px;
+                    max-width: 600px;
+                    margin: 20px auto;
+                }
+
+                .invoice-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                }
+
+                .invoice-title h4 {
+                    margin: 0;
+                }
+
+                .invoice-details {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                }
+
+                .invoice-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+
+                .invoice-table td {
+                    padding: 8px;
+                    border: 1px solid #cce7e8;
+                }
+
+                .invoice-section {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
             </style>
             <div class="invoice-card">
                 <div class="invoice-title">
                     <div id="main-title">
-                        <h4>COMPROBANTE DE OPERACIÓN</h4>
-                        <span>#${operacion._id}</span>
+                        <h4>COMPROBANTE DE INGRESO</h4>
+                        <span>Nº recibo: ${operacion._id}</span>
                     </div>
-                    <span id="date">${fecha}</span>
+                    <div>
+                        <span>Fecha: ${new Date().toLocaleDateString()}</span><br>
+                    </div>
                 </div>
-                <div class="invoice-details">
-                    <table class="invoice-table">
-                        <thead>
-                            <tr>
-                                <td>Nombre del titular</td>
-                                <td>Concepto</td>
-                                <td>Cantidad ingresada</td>
-                                <td>Tipo de operación</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="row-data">
-                                <td>${nombre}</td>
-                                <td>${concepto}</td>
-                                <td>${cantidad}</td>
-                                <td>${tipo}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="invoice-section">
+                    <p><strong>CONCEPTO:</strong> ${concepto}</p>
+                    <p>Pago: total/parcial</p>
+                    <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
+                    <p><strong>MEDIO DE PAGO:</strong> Ingreso</p>
                 </div>
             </div>
             `;
@@ -165,31 +235,14 @@ async function ingresarDinero(req, res) {
             });
         } else {
             // No se genera comprobante, solo realizar la operación
-            // Código para ingresar dinero y realizar la operación
-            const operacion = new Operacion({
-                nombre,
-                concepto,
-                cantidad,
-                id_cuenta,
-                tipo: 'ingreso',
-                fecha
-            });
-
-            await operacion.save(); // Guardar la operación en la base de datos
-
-            // Actualizar el saldo de la cuenta
-            const cuenta = await Cuenta.findById(id_cuenta);
-            cuenta.saldo += parseFloat(cantidad);
-            await cuenta.save();
-
             res.status(200).json({ message: "Dinero ingresado exitosamente" });
         }
-
     } catch (err) {
         console.error("Error al ingresar dinero en la cuenta:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
+
 
 async function retirarDinero(req, res) {
     try {
@@ -352,73 +405,156 @@ async function transferirSaldo(req, res) {
         await cuentaEmisor.save();
         await cuentaReceptor.save();
 
-        // Verificar si se debe generar un comprobante
-        if (generarComprobante === "si") {
-            // Generar y enviar comprobante PDF
-            const html = `
-            <style>
-            /* Aquí va tu CSS */
-            body {
-                font-family: 'Roboto', sans-serif;
-                background-color: #ffffff;
-                margin: 0;
-                padding: 0;
-            }
+        // Obtener información del usuario receptor
+        const usuarioReceptor = await User.findById(cuentaReceptor.id_usuario);
 
-            /* Otros estilos que desees aplicar */
-            </style>
-            <div class="invoice-card">
-                <div class="invoice-title">
-                    <div id="main-title">
-                        <h4>COMPROBANTE DE TRANSFERENCIA</h4>
-                        <span>#${operacionEmisor._id}</span>
-                    </div>
-                    <span id="date">${new Date().toLocaleDateString()}</span>
+        if (!usuarioReceptor) {
+            return res.status(404).json({ mensaje: 'Usuario receptor no encontrado.' });
+        }
+
+        // Enviar correo electrónico al usuario receptor
+        const transporter = nodemailer.createTransport({
+            service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+            auth: {
+                user: 'polanskirichard513@gmail.com', // Tu correo electrónico
+                pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+            }
+        });
+
+        const mailOptions = {
+            from: 'polanskirichard513@gmail.com',
+            to: usuarioReceptor.email,
+            subject: 'Notificación de Bizum',
+            text: `Estimado ${usuarioReceptor.nombre}.Has recibido una transferencia de ${cantidad}€ por parte de  IBAN ${ibanEmisor}.
+
+            Concepto: ${concepto}
+
+            Saludos,
+            The Bank-Arlos`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error al enviar el correo:', error);
+                } else {
+                    console.log('Correo enviado:', info.response);
+                }
+            });
+     
+            // Verificar si se debe generar un comprobante
+            if (generarComprobante === "si") {
+                // Generar y enviar comprobante PDF
+                const html = `
+                <style>
+                body {
+                    font-family: 'Roboto', sans-serif;
+                    background-color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
+     
+                .invoice-card {
+                    border: 1px solid #cce7e8;
+                    padding: 20px;
+                    max-width: 600px;
+                    margin: 20px auto;
+                }
+     
+                .invoice-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                }
+     
+                .invoice-title h4 {
+                    margin: 0;
+                }
+     
+                .invoice-details {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                }
+     
+                .invoice-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+     
+                .invoice-table td {
+                    padding: 8px;
+                    border: 1px solid #cce7e8;
+                }
+     
+                .invoice-section {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
+                </style>
+                <div class="invoice-card">
+            <div class="invoice-title">
+                <div id="main-title">
+                    <h4>COMPROBANTE DE TRANSFERENCIA</h4>
+                    <span>Nº recibo: ${operacionEmisor._id}</span>
                 </div>
-                <div class="invoice-details">
-                    <table class="invoice-table">
-                        <thead>
-                            <tr>
-                                <td>Nombre del emisor</td>
-                                <td>Nombre del receptor</td>
-                                <td>Concepto</td>
-                                <td>Cantidad transferida</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="row-data">
-                                <td>${ibanEmisor}</td>
-                                <td>${ibanReceptor}</td>
-                                <td>${concepto}</td>
-                                <td>${cantidad}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div>
+                    <span>Fecha: ${new Date().toLocaleDateString()}</span><br>
+                    
                 </div>
             </div>
-            `;
-
-            const options = { format: 'Letter' };
-
-            pdf.create(html, options).toBuffer((err, buffer) => {
-                if (err) {
-                    console.error("Error al generar el PDF:", err);
-                    return res.status(500).send("Error al generar el comprobante");
-                }
-
-                res.setHeader('Content-Disposition', 'attachment; filename="comprobante_transferencia.pdf"');
-                res.setHeader('Content-Type', 'application/pdf');
-                res.send(buffer);
-            });
-        } else {
-            // No se genera comprobante
-            res.status(200).json({ mensaje: 'Transferencia realizada con éxito.' });
+            
+            <div class="invoice-section">
+                <div>
+                    <strong>EMISOR</strong>
+                    <p>IBAN: ES ${ibanEmisor}</p>
+                    <p>Nombre:</p>
+                    <p>Apellido 1:</p>
+                    <p>Apellido 2:</p>
+                    <p>Email:</p>
+                    <p>Dirección:</p>
+                </div>
+            </div>
+            <div class="invoice-section">
+                <div>
+                    <strong>RECEPTOR</strong>
+                    <p>IBAN: ES ${ibanReceptor}</p>
+                    <p>Dirección:</p>
+                </div>
+            </div>
+            <div class="invoice-section">
+                <p><strong>CONCEPTO:</strong> ${concepto}</p>
+                <p>Pago: total/parcial</p>
+                <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
+                <p><strong>MEDIO DE PAGO:</strong> Transferencia</p>
+            </div>
+        </div>
+                `;
+     
+                const options = { format: 'Letter' };
+     
+                pdf.create(html, options).toBuffer((err, buffer) => {
+                    if (err) {
+                        console.error("Error al generar el PDF:", err);
+                        return res.status(500).send("Error al generar el comprobante");
+                    }
+     
+                    res.setHeader('Content-Disposition', 'attachment; filename="comprobante_transferencia.pdf"');
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.send(buffer);
+                });
+            } else {
+                // No se genera comprobante
+                res.status(200).json({ mensaje: 'Transferencia realizada con éxito.' });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ mensaje: 'Error interno del servidor.' });
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensaje: 'Error interno del servidor.' });
+
     }
-}
+     
 
 
 

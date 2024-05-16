@@ -558,20 +558,32 @@ function cerrarModalEliminacion() {
 
 function guardarNuevoIngreso() {
     const nombre = document.getElementById('createNombre').value;
-    const cantidad = document.getElementById('createCantidad').value;
+    const cantidad = parseFloat(document.getElementById('createCantidad').value); // Parse as float for numeric comparison
     const concepto = document.getElementById('createConcepto').value;
     const id_cuenta = document.getElementById('createCuenta').value;
     const tipo = document.getElementById('tipo').value;
-    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no'; // Obtener el valor del checkbox
+    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no'; // Checkbox value
 
-    // Crear un objeto con los datos del formulario
+    // Check for empty fields
+    if (!nombre || !concepto || !id_cuenta || !tipo || isNaN(cantidad)) {
+        mostrarModal('modalEliminación');
+        return; // Stop execution if any field is empty or cantidad is not a number
+    }
+
+    // Validate the cantidad field
+    if (cantidad > 500 || cantidad <= 0) {
+        mostrarModal('modalEliminación');
+        return; // Stop execution if cantidad is greater than 500 or less than 0
+    }
+
+    // Create an object with the form data
     const operacionData = {
         nombre: nombre,
         cantidad: cantidad,
         concepto: concepto,
         id_cuenta: id_cuenta,
         tipo: tipo,
-        generarComprobante: generarComprobante // Agregar el campo generarComprobante al objeto
+        generarComprobante: generarComprobante // Add the generarComprobante field to the object
     };
 
     // Enviar la solicitud POST al servidor
@@ -639,20 +651,23 @@ function guardarNuevoIngreso() {
 function guardarNuevaRetirada() {
     // Obtener los valores de los campos del formulario
     const nombre = document.getElementById('createNombre2').value;
-    const cantidad = document.getElementById('createCantidad2').value;
+    const cantidad = parseFloat(document.getElementById('createCantidad2').value); // Parse as float for numeric comparison
     const concepto = document.getElementById('createConcepto2').value;
     const id_cuenta = document.getElementById('createCuenta2').value;
     const tipo = document.getElementById('tipo').value;
 
     // Verificar que todos los campos estén rellenados
-    if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
+    if (!nombre || !concepto || !id_cuenta || !tipo || isNaN(cantidad)) {
+        cerrarModal('modalFormulario'); // Close the form modal
         mostrarModal('modalEliminación');
-        return; // Detener la ejecución si hay campos vacíos
+        return; // Detener la ejecución si hay campos vacíos o cantidad no es un número
     }
 
-    if (cantidad > 500) {
+    // Validar la cantidad
+    if (cantidad > 500 || cantidad <= 0) {
+        cerrarModal('modalFormulario'); // Close the form modal
         mostrarModal('modalEliminación');
-        return; // Detener la ejecución si la cantidad supera 500
+        return; // Detener la ejecución si la cantidad supera 500 o es negativa
     }
 
     // Crear un objeto con los datos del usuario
@@ -688,16 +703,19 @@ function guardarNuevaRetirada() {
         document.getElementById('createConcepto2').value = '';
         document.getElementById('createCuenta2').value = '';
         document.getElementById('tipo').value = '';
-        const crearModal = document.getElementById('crearModal2');
-        crearModal.style.display = 'none';
     })
     .catch(error => {
         console.error(error);
-        // Mostrar el modal de eliminación en caso de error
         mostrarModal('modalEliminación');
     });
+}
 
-    
+// Assuming cerrarModal is a function to close a modal by its ID
+function cerrarModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none'; // or use the appropriate method to close the modal
+    }
 }
 
 
