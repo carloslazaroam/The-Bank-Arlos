@@ -1,5 +1,6 @@
 const { Operacion } = require('../models/modelOperacion');
 const { Cuenta } = require('../models/modelCuenta')
+const pdf = require('html-pdf');
 
 async function getOperacion(req,res) {
     try{
@@ -80,32 +81,109 @@ async function getOperacionesByCuentaId(req, res) {
 
 async function ingresarDinero(req, res) {
     try {
-        const { cantidad, id_cuenta } = req.body;
+        const { cantidad, id_cuenta, nombre, concepto, tipo, fecha, generarComprobante } = req.body;
 
-        // Verificar si la cantidad es un número positivo
-        if (parseFloat(cantidad) <= 0) {
-            return res.status(400).json({ error: "La cantidad debe ser un número positivo" });
+        // Verificar si el cliente desea generar un comprobante
+        if (generarComprobante === "si") {
+            // Generar y guardar comprobante PDF
+            const operacion = new Operacion({
+                nombre,
+                concepto,
+                cantidad,
+                id_cuenta,
+                tipo: 'ingreso',
+                fecha
+            });
+
+            await operacion.save(); // Guardar la operación en la base de datos
+
+            // Generar y guardar comprobante PDF
+            const html = `
+            <style>
+            /* Aquí va tu CSS */
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Otros estilos que desees aplicar */
+            </style>
+            <div class="invoice-card">
+                <div class="invoice-title">
+                    <div id="main-title">
+                        <h4>COMPROBANTE DE OPERACIÓN</h4>
+                        <span>#${operacion._id}</span>
+                    </div>
+                    <span id="date">${fecha}</span>
+                </div>
+                <div class="invoice-details">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <td>Nombre del titular</td>
+                                <td>Concepto</td>
+                                <td>Cantidad ingresada</td>
+                                <td>Tipo de operación</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-data">
+                                <td>${nombre}</td>
+                                <td>${concepto}</td>
+                                <td>${cantidad}</td>
+                                <td>${tipo}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            `;
+
+            const options = { format: 'Letter' };
+
+            // Generar el PDF y guardarlo en el servidor
+            pdf.create(html, options).toFile(`comprobante_${operacion._id}.pdf`, (err, result) => {
+                if (err) {
+                    console.error("Error al generar el PDF:", err);
+                    res.status(500).send("Error al generar el comprobante");
+                } else {
+                    console.log("PDF generado exitosamente:", result);
+
+                    // Enviar el PDF al cliente para descargarlo
+                    const filePath = `comprobante_${operacion._id}.pdf`;
+                    res.download(filePath, (err) => {
+                        if (err) {
+                            console.error("Error al enviar el archivo al cliente:", err);
+                            res.status(500).send("Error al enviar el comprobante al cliente");
+                        } else {
+                            console.log("Comprobante enviado al cliente");
+                        }
+                    });
+                }
+            });
+        } else {
+            // No se genera comprobante, solo realizar la operación
+            // Código para ingresar dinero y realizar la operación
+            const operacion = new Operacion({
+                nombre,
+                concepto,
+                cantidad,
+                id_cuenta,
+                tipo: 'ingreso',
+                fecha
+            });
+
+            await operacion.save(); // Guardar la operación en la base de datos
+
+            // Actualizar el saldo de la cuenta
+            const cuenta = await Cuenta.findById(id_cuenta);
+            cuenta.saldo += parseFloat(cantidad);
+            await cuenta.save();
+
+            res.status(200).json({ message: "Dinero ingresado exitosamente" });
         }
-
-        // Crear una nueva operación para el ingreso de dinero
-        const operacion = new Operacion({
-            nombre: req.body.nombre,
-            concepto: req.body.concepto,
-            cantidad: req.body.cantidad,
-            id_cuenta: req.body.id_cuenta,
-            tipo: req.body.tipo
-        });
-
-        // Guardar la operación en la base de datos
-        await operacion.save();
-
-        // Actualizar el saldo de la cuenta sumando la cantidad ingresada
-        const cuenta = await Cuenta.findById(id_cuenta);
-        cuenta.saldo += parseFloat(cantidad);
-        await cuenta.save();
-
-        // Enviar respuesta exitosa
-        res.status(200).json({ message: "Dinero ingresado exitosamente" });
 
     } catch (err) {
         console.error("Error al ingresar dinero en la cuenta:", err);
@@ -115,50 +193,119 @@ async function ingresarDinero(req, res) {
 
 async function retirarDinero(req, res) {
     try {
-        const { cantidad, id_cuenta } = req.body;
+        const { cantidad, id_cuenta, nombre, concepto, tipo, fecha, generarComprobante } = req.body;
 
-        // Verificar si la cantidad es un número positivo
-        if (parseFloat(cantidad) <= 0) {
-            return res.status(400).json({ error: "La cantidad debe ser un número positivo" });
+        // Verificar si el cliente desea generar un comprobante
+        if (generarComprobante === "si") {
+            // Generar y guardar comprobante PDF
+            const operacion = new Operacion({
+                nombre,
+                concepto,
+                cantidad,
+                id_cuenta,
+                tipo: 'retiro',
+                fecha
+            });
+
+            await operacion.save(); // Guardar la operación en la base de datos
+
+            // Generar y guardar comprobante PDF
+            const html = `
+            <style>
+            /* Aquí va tu CSS */
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Otros estilos que desees aplicar */
+            </style>
+            <div class="invoice-card">
+                <div class="invoice-title">
+                    <div id="main-title">
+                        <h4>COMPROBANTE DE OPERACIÓN</h4>
+                        <span>#${operacion._id}</span>
+                    </div>
+                    <span id="date">${fecha}</span>
+                </div>
+                <div class="invoice-details">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <td>Nombre del titular</td>
+                                <td>Concepto</td>
+                                <td>Cantidad ingresada</td>
+                                <td>Tipo de operación</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-data">
+                                <td>${nombre}</td>
+                                <td>${concepto}</td>
+                                <td>${cantidad}</td>
+                                <td>${tipo}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            `;
+
+            const options = { format: 'Letter' };
+
+            // Generar el PDF y guardarlo en el servidor
+            pdf.create(html, options).toFile(`comprobante_${operacion._id}.pdf`, (err, result) => {
+                if (err) {
+                    console.error("Error al generar el PDF:", err);
+                    res.status(500).send("Error al generar el comprobante");
+                } else {
+                    console.log("PDF generado exitosamente:", result);
+
+                    // Enviar el PDF al cliente para descargarlo
+                    const filePath = `comprobante_${operacion._id}.pdf`;
+                    res.download(filePath, (err) => {
+                        if (err) {
+                            console.error("Error al enviar el archivo al cliente:", err);
+                            res.status(500).send("Error al enviar el comprobante al cliente");
+                        } else {
+                            console.log("Comprobante enviado al cliente");
+                        }
+                    });
+                }
+            });
+        } else {
+            // No se genera comprobante, solo realizar la operación
+            // Código para retirar dinero y realizar la operación
+            const operacion = new Operacion({
+                nombre,
+                concepto,
+                cantidad,
+                id_cuenta,
+                tipo: 'retiro',
+                fecha
+            });
+
+            await operacion.save(); // Guardar la operación en la base de datos
+
+            // Actualizar el saldo de la cuenta
+            const cuenta = await Cuenta.findById(id_cuenta);
+            cuenta.saldo -= parseFloat(cantidad);
+            await cuenta.save();
+
+            res.status(200).json({ message: "Dinero retirado exitosamente" });
         }
 
-        // Obtener el saldo actual de la cuenta
-        const cuenta = await Cuenta.findById(id_cuenta);
-
-        // Verificar si hay saldo suficiente para la operación de retiro
-        if (parseFloat(cantidad) > cuenta.saldo) {
-            return res.status(400).json({ error: "No hay suficiente saldo disponible en la cuenta" });
-        }
-
-        // Crear una nueva operación para el retiro de dinero
-        const operacion = new Operacion({
-            nombre: req.body.nombre,
-            concepto: req.body.concepto,
-            cantidad: req.body.cantidad,
-            id_cuenta: req.body.id_cuenta,
-            
-            tipo: 'retiro'
-        });
-
-        // Guardar la operación en la base de datos
-        await operacion.save();
-
-        // Actualizar el saldo de la cuenta restando la cantidad retirada
-        cuenta.saldo -= parseFloat(cantidad);
-        await cuenta.save();
-
-        // Enviar respuesta exitosa
-        res.status(200).json({ message: "Dinero retirado exitosamente" });
     } catch (err) {
         console.error("Error al retirar dinero de la cuenta:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
 
-
 async function transferirSaldo(req, res) {
     try {
-        const { ibanEmisor, ibanReceptor, cantidad, concepto , nombre} = req.body;
+        const { ibanEmisor, ibanReceptor, cantidad, concepto, nombre, generarComprobante } = req.body;
 
         // Buscar cuentas por IBAN
         const cuentaEmisor = await Cuenta.findOne({ iban: ibanEmisor });
@@ -171,11 +318,6 @@ async function transferirSaldo(req, res) {
 
         if (ibanEmisor === ibanReceptor) {
             return res.status(400).json({ mensaje: 'No puedes transferir dinero a tu propia cuenta.' });
-        }
-
-         // Verificar si la cuenta del emisor existe y tiene saldo suficiente
-         if (!cuentaEmisor || cuentaEmisor.saldo < cantidad) {
-            return res.status(400).json({ mensaje: 'Saldo insuficiente en la cuenta emisora.' });
         }
 
         // Verificar saldo suficiente en el emisor
@@ -191,9 +333,8 @@ async function transferirSaldo(req, res) {
         const operacionEmisor = new Operacion({
             nombre: nombre,
             cantidad: cantidad,
-            concepto: '(Transferencia a '+  ibanReceptor + ') ' + concepto,
+            concepto: '(Transferencia a ' + ibanReceptor + ') ' + concepto,
             id_cuenta: cuentaEmisor._id,
-           
             tipo: 'retiro'
         });
         await operacionEmisor.save();
@@ -201,7 +342,7 @@ async function transferirSaldo(req, res) {
         const operacionReceptor = new Operacion({
             nombre: nombre,
             cantidad: cantidad,
-            concepto: '(Ingreso por parte de '+ ibanEmisor + ') ' + concepto,
+            concepto: '(Ingreso por parte de ' + ibanEmisor + ') ' + concepto,
             id_cuenta: cuentaReceptor._id,
             tipo: 'ingreso'
         });
@@ -211,12 +352,75 @@ async function transferirSaldo(req, res) {
         await cuentaEmisor.save();
         await cuentaReceptor.save();
 
-        res.status(200).json({ mensaje: 'Transferencia realizada con éxito.' });
+        // Verificar si se debe generar un comprobante
+        if (generarComprobante === "si") {
+            // Generar y enviar comprobante PDF
+            const html = `
+            <style>
+            /* Aquí va tu CSS */
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Otros estilos que desees aplicar */
+            </style>
+            <div class="invoice-card">
+                <div class="invoice-title">
+                    <div id="main-title">
+                        <h4>COMPROBANTE DE TRANSFERENCIA</h4>
+                        <span>#${operacionEmisor._id}</span>
+                    </div>
+                    <span id="date">${new Date().toLocaleDateString()}</span>
+                </div>
+                <div class="invoice-details">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <td>Nombre del emisor</td>
+                                <td>Nombre del receptor</td>
+                                <td>Concepto</td>
+                                <td>Cantidad transferida</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-data">
+                                <td>${ibanEmisor}</td>
+                                <td>${ibanReceptor}</td>
+                                <td>${concepto}</td>
+                                <td>${cantidad}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            `;
+
+            const options = { format: 'Letter' };
+
+            pdf.create(html, options).toBuffer((err, buffer) => {
+                if (err) {
+                    console.error("Error al generar el PDF:", err);
+                    return res.status(500).send("Error al generar el comprobante");
+                }
+
+                res.setHeader('Content-Disposition', 'attachment; filename="comprobante_transferencia.pdf"');
+                res.setHeader('Content-Type', 'application/pdf');
+                res.send(buffer);
+            });
+        } else {
+            // No se genera comprobante
+            res.status(200).json({ mensaje: 'Transferencia realizada con éxito.' });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
 }
+
+
 
 async function vaciarCuenta(req, res) {
     try {

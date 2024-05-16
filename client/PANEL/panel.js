@@ -556,33 +556,22 @@ function cerrarModalEliminacion() {
     cerrarModalCreacion();
 }
 
-// Función para enviar la solicitud de creación de un nuevo ingreso al servidor
 function guardarNuevoIngreso() {
     const nombre = document.getElementById('createNombre').value;
     const cantidad = document.getElementById('createCantidad').value;
     const concepto = document.getElementById('createConcepto').value;
     const id_cuenta = document.getElementById('createCuenta').value;
     const tipo = document.getElementById('tipo').value;
+    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no'; // Obtener el valor del checkbox
 
-    // Verificar que todos los campos estén rellenados
-if (!nombre || !cantidad || !concepto || !id_cuenta || !tipo) {
-    mostrarModal('modalEliminación');
-    return; // Detener la ejecución si hay campos vacíos
-}
-
-if (cantidad > 500) {
-    mostrarModal('modalEliminación');
-    return; // Detener la ejecución si la cantidad supera 500
-}
-
-
-    // Crear un objeto con los datos del usuario
+    // Crear un objeto con los datos del formulario
     const operacionData = {
         nombre: nombre,
         cantidad: cantidad,
         concepto: concepto,
         id_cuenta: id_cuenta,
-        tipo: tipo
+        tipo: tipo,
+        generarComprobante: generarComprobante // Agregar el campo generarComprobante al objeto
     };
 
     // Enviar la solicitud POST al servidor
@@ -597,20 +586,46 @@ if (cantidad > 500) {
         if (!response.ok) {
             throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
         }
-        return response.json();
+        return response;
+    })
+    .then(response => {
+        // Verificar si la respuesta contiene un archivo adjunto (PDF)
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition && contentDisposition.includes('attachment')) {
+            // Obtener el nombre del archivo del encabezado Content-Disposition
+            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const match = contentDisposition.match(fileNameRegex);
+            const fileName = match && match[1] ? match[1].replace(/['"]/g, '') : 'comprobante.pdf';
+
+            // Convertir la respuesta a un blob y crear un enlace para descargar el archivo
+            response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+
+            // Mostrar el modal de confirmación
+            mostrarModalConfirmacion();
+        } else {
+            // Si la respuesta no es un archivo adjunto, mostrar un mensaje de éxito
+            return response.json().then(data => {
+                console.log('Nueva operación añadida:', data);
+                // Mostrar el modal de confirmación
+                mostrarModalConfirmacion();
+            });
+        }
     })
     .then(data => {
-        console.log('Nueva operación añadida:', data);
-        // Mostrar el modal de confirmación
-        mostrarModalConfirmacion();
-        // Limpiar el formulario después de añadir el operación
+        // Limpiar el formulario después de añadir la operación
         document.getElementById('createNombre').value = '';
         document.getElementById('createCantidad').value = '';
         document.getElementById('createConcepto').value = '';
         document.getElementById('createCuenta').value = '';
         document.getElementById('tipo').value = '';
-        const crearModal = document.getElementById('crearModal');
-        crearModal.style.display = 'none';
     })
     .catch(error => {
         console.error(error);
@@ -618,6 +633,7 @@ if (cantidad > 500) {
         mostrarModal('modalEliminación');
     });
 }
+
 
 // Función para enviar la solicitud de creación de una nueva retirada al servidor
 function guardarNuevaRetirada() {

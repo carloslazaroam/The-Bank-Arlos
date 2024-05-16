@@ -37,7 +37,9 @@ function inicio(cuentas) {
             const row = document.createElement('tr');
 
             // Reemplazar los primeros seis dígitos del DNI con asteriscos
-            const dni = cuenta.id_usuario ? cuenta.id_usuario.dni.replace(/^\d{6}/, '******') : 'DNI no disponible';
+            // Reemplazar los primeros seis dígitos del DNI con asteriscos
+const dni = cuenta.id_usuario ? (cuenta.id_usuario.dni ? cuenta.id_usuario.dni.replace(/^\d{6}/, '******') : 'DNI no disponible') : 'Usuario no disponible';
+
 
             row.innerHTML = `
                 <td>ES ${cuenta.iban}</td>
@@ -83,7 +85,7 @@ function mostrarFormulario(iban) {
         cuentas.forEach(cuenta => {
             if (cuenta.activa){
                 const option = document.createElement('option');
-                option.value = cuenta._id;
+                option.value = cuenta.iban;
                 option.textContent = cuenta.iban;
                 select.appendChild(option);
                 }
@@ -106,9 +108,10 @@ function guardarTransferencia() {
     const concepto = document.getElementById('createConcepto').value;
     const ibanEmisor = document.getElementById('createEmisor').value;
     const ibanReceptor = document.getElementById('createReceptor').value;
+    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no';
 
-     // Verificar que todos los campos estén rellenados
-     if (!nombre || !cantidad || !concepto || !ibanEmisor || !ibanReceptor) {
+    // Verificar que todos los campos estén rellenados
+    if (!nombre || !cantidad || !concepto || !ibanEmisor || !ibanReceptor) {
         mostrarModal('modalEliminación');
         return; // Detener la ejecución si hay campos vacíos
     }
@@ -132,6 +135,7 @@ function guardarTransferencia() {
             concepto: concepto,
             ibanEmisor: ibanEmisor,
             ibanReceptor: ibanReceptor,
+            generarComprobante: generarComprobante // Agregar el campo generarComprobante al objeto
         };
 
         // Enviar la solicitud POST al servidor
@@ -146,12 +150,38 @@ function guardarTransferencia() {
             if (!response.ok) {
                 throw new Error('Error al realizar la transferencia: ' + response.status + ' ' + response.statusText);
             }
-            return response.json();
+            return response;
         })
-        .then(data => {
-            console.log('Nueva operación añadida:', data);
-            // Mostrar modal de éxito
-            mostrarModal('modalConfirmacion');
+        .then(response => {
+            // Verificar si la respuesta contiene un archivo adjunto (PDF)
+            const contentDisposition = response.headers.get('Content-Disposition');
+            if (contentDisposition && contentDisposition.includes('attachment')) {
+                // Obtener el nombre del archivo del encabezado Content-Disposition
+                const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                const match = contentDisposition.match(fileNameRegex);
+                const fileName = match && match[1] ? match[1].replace(/['"]/g, '') : 'comprobante.pdf';
+
+                // Convertir la respuesta a un blob y crear un enlace para descargar el archivo
+                response.blob().then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                });
+
+                // Mostrar el modal de confirmación
+                mostrarModal('modalConfirmacion');
+            } else {
+                // Si la respuesta no es un archivo adjunto, mostrar un mensaje de éxito
+                return response.json().then(data => {
+                    console.log('Nueva operación añadida:', data);
+                    // Mostrar modal de éxito
+                    mostrarModal('modalConfirmacion');
+                });
+            }
         })
         .catch(error => {
             console.error(error);
@@ -162,6 +192,7 @@ function guardarTransferencia() {
         console.error('Algunos elementos del formulario no existen o están vacíos.');
     }
 }
+
 
 
 // En el cliente
