@@ -36,6 +36,7 @@ async function createUser(req, res) {
             apellido1: req.body.apellido1,
             apellido2: req.body.apellido2,
             email: req.body.email,
+            telfono: req.body.telefono,
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,

@@ -65,11 +65,11 @@ app.get('/tipousers', getTipoUsers);
 app.post('/tipousers/post', createTipoUser);
 
 // Rutas para cuentas
-app.get('/cuentas',verifyToken, getCuentas);
+app.get('/cuentas', getCuentas);
 app.get('/cuentas/:iban', getCuentaByIban);
 app.post('/cuentas/post', createCuenta);
-app.put('/cuentas/:iban', updateCuenta); 
-app.delete('/cuentas/:iban', deleteCuenta);
+app.put('/cuentas/:id', updateCuenta); 
+app.delete('/cuentas/:id', deleteCuenta);
 app.get('/empresas',getEmpresas);
 app.get('/cuentas2/', getCuentas2)
 

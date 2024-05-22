@@ -4,36 +4,22 @@ window.addEventListener('DOMContentLoaded', () => {
     const id = localStorage.getItem('id');
     const id2 = localStorage.getItem('id2');
 
-    
+    getUserData();
 
-    getUserData();
-    
-    getUserData();
     async function getUserData() {
         const user = await getUserDB();
         printUser(user);
-        const cuentas = await getUserAccounts(); // Obtener cuentas del usuario
+        const cuentas = await getUserAccounts();
         printAccounts(cuentas);
     
-        // Verificar si el usuario tiene cuentas asociadas y al menos una cuenta activa
         const cuentasActivas = cuentas.filter(cuenta => cuenta.activa);
     
         if (cuentas.length === 0 || cuentasActivas.length === 0) {
-            document.getElementById('botonPanel').style.display = 'none'; // Ocultar el botón si no hay cuentas o todas están desactivadas
+            document.getElementById('botonPanel').style.display = 'none';
         } else {
-            document.getElementById('botonPanel').style.display = 'block'; // Mostrar el botón si hay al menos una cuenta activa
+            document.getElementById('botonPanel').style.display = 'block';
         }
     }
-
-
-
-
-// Otro código de tu aplicación...
-
-
-
-  
-    
 
     async function getUserDB() {
         const url = `${recurso}/users/${id}`;
@@ -48,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getUserAccounts() {
-        const url = `${recurso}/users/${id2}/accounts`; // Cambio en la ruta para obtener cuentas del usuario
+        const url = `${recurso}/users/${id2}/accounts`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -62,8 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function printUser(userData) {
         const wrapper = document.getElementById('wrapper');
         const user = userData[0];
-        wrapper.innerHTML = "";
-        wrapper.innerHTML += `
+        wrapper.innerHTML = `
             <tr>
                 <th>Id</th>
                 <td>${user.id}</td>
@@ -75,78 +60,57 @@ window.addEventListener('DOMContentLoaded', () => {
             <tr>
                 <td>Usuario</td>
                 <td>${user.nombre} ${user.apellido1}</td>
-                
             </tr>
-           
-            
         `;
-        
     }
 
     function printAccounts(accountsData) {
         const wrapper2 = document.getElementById('wrapper2');
-        wrapper2.innerHTML = ""; // Limpiar el contenedor antes de imprimir las cuentas
-        
-        let count = 1; // Inicializar el contador
+        wrapper2.innerHTML = ""; 
         
         accountsData.forEach(account => {
             const activaText = account.activa ? 'activada' : 'desactivada';
+            const validado = account.validado;
+
             wrapper2.innerHTML += `
-            
                 <tr>
-                
-                    <th>Cuenta ${count}</th> <!-- Utilizar el contador en lugar de un número fijo -->
-                    <td>${account.iban}</td>
+                    <th>${account.nombre}</th>
                     <td>${formatDate(account.fechacreacion)}</td>
                     <td>${activaText}</td>
-                    
-                    <td><div class="botonessec"><button id="botonEditar" onclick="editarCuenta('${account.iban}','${account.activa}','${account.id_tipocuenta}','${account.empresa}')"> <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                    <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-                
-                <button id="botonEliminar" onclick="confirmarEliminacion('${account.iban}')">
-                    <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    <td>
+                        <div class="botonessec">
+                            ${validado ? `
+                            <button id="botonEditar" onclick="editarCuenta('${account.id}','${account.nombre}','${account.iban}','${account.activa}','${account.id_tipocuenta}','${account.empresa}')"> <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                            <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+        
+                        </button>
+                        <button id="botonOperaciones" onclick="getOperationsByAccountId('${account._id}')">
+                        <?xml version="1.0" encoding="UTF-8"?>
+                        <svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                            <path d="M22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3H20C21.1046 3 22 3.89543 22 5Z" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M2 12H6" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M6 3V21" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M15.5 11.5L12 14.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M17 10.01L17.01 9.99889" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
                     </button>
-
-                    <button id="botonOperaciones" onclick="getOperationsByAccountId('${account._id}')">
-                    <?xml version="1.0" encoding="UTF-8"?>
-                    <svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                        <path d="M22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3H20C21.1046 3 22 3.89543 22 5Z" stroke="#000000" stroke-width="1.5"></path>
-                        <path d="M2 12H6" stroke="#000000" stroke-width="1.5"></path>
-                        <path d="M6 3V21" stroke="#000000" stroke-width="1.5"></path>
-                        <path d="M15.5 11.5L12 14.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M17 10.01L17.01 9.99889" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                </button>
-                    </div>
-
-                    
-                </td>
-                    
-            
+                            ` : ''}
+                            <button id="botonEliminar" onclick="confirmarEliminacion('${account.id}')">
+                            <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </button>
+                        </div>
+                    </td>
+                    <td>${validado ? '<span class="label label-success"><span class="glyphicon glyphicon-ok-sign">&nbsp;</span>Validada' : '<span class="label label-info"><span class="glyphicon glyphicon-time">&nbsp;</span>Pendiente'}</td>
                 </tr>
-                
-
-                
-                    
-                    
             `;
-            count++; // Incrementar el contador para la próxima iteración
         });
     }
-
-
-   
-
- 
-
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('es-ES', options);
     }
-
-
 
     function fetchTiposCuenta() {
         fetch(`${recurso}/tipocuentas`)
@@ -171,10 +135,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchTiposCuenta(); 
-    
-
-   
 });
+
 
 const recurso = "http://127.0.0.1:3001";
 const token = localStorage.getItem('token');
@@ -189,13 +151,13 @@ const id2 = localStorage.getItem('id2');
 
 
 
-function confirmarEliminacion(iban) {
+function confirmarEliminacion(id) {
     const confirmModal = document.getElementById('confirmModal');
     confirmModal.style.display = 'block';
     
     const confirmButton = document.getElementById('confirmButton');
     confirmButton.onclick = function() {
-        eliminarCuenta(iban);
+        eliminarCuenta(id);
         confirmModal.style.display = 'none';
     };
 }
@@ -244,7 +206,7 @@ document.getElementById('createIBAN').oninput = modificarParrafoIBAN;
 
 
 function guardarNuevaCuenta() {
-    const ibanInput = document.getElementById('createIBAN');
+   /* const ibanInput = document.getElementById('createIBAN');
     const iban = ibanInput.value.trim(); // Eliminar espacios en blanco al principio y al final
 
     // Verificar que el IBAN tenga exactamente 16 caracteres numéricos
@@ -261,13 +223,15 @@ function guardarNuevaCuenta() {
 
     // Restablecer el mensaje de error
     document.getElementById('errorIBAN').textContent = '';
-
+    */
     // Obtener los valores de los campos del formulario
+
+    const nombre = document.getElementById('createNombre').value; 
     const idTipocuenta = document.getElementById('createTipocuenta').value; 
     const empresa = document.getElementById('createEmpresa').value; 
 
     // Verificar que todos los campos estén rellenados
-    if (!idTipocuenta || !empresa) {
+    if (!idTipocuenta || !empresa ||! nombre) {
         alert('Por favor, complete todos los campos del formulario.');
         return; // Detener la ejecución si hay campos vacíos
     }
@@ -276,11 +240,12 @@ function guardarNuevaCuenta() {
     const saldoPredeterminado = 0;
     const activaPredeterminado = true; // Activado por defecto
     const validadoPredeterminado = false; // Desactivado por defecto
-    
+    const iban = null;
     // Obtener el id del usuario seleccionado (No sé de dónde viene id2, así que lo mantengo como está)
 
     // Construir el objeto de datos de la cuenta con los valores predeterminados
     const cuentaData = {
+        nombre: nombre,
         activa: activaPredeterminado,
         iban: iban,
         validado: validadoPredeterminado,
@@ -309,7 +274,8 @@ function guardarNuevaCuenta() {
         console.log('Nueva cuenta añadida:', data);
         
         // Limpiar los campos después de guardar la nueva cuenta
-        document.getElementById('createIBAN').value = '';
+        //document.getElementById('createIBAN').value = '';
+        document.getElementById('createNombre').value = '';
         document.getElementById('createTipocuenta').value = '';
         document.getElementById('createEmpresa').value = '';
 
@@ -325,8 +291,10 @@ function guardarNuevaCuenta() {
 
 
 
-function editarCuenta(iban,saldo,fechacreacion ,activa, id_tipocuenta, empresa) {
-    cuentaEditando = { iban,saldo,fechacreacion, activa, id_tipocuenta, empresa };
+function editarCuenta(id,nombre,iban,saldo,fechacreacion ,activa, id_tipocuenta, empresa) {
+    cuentaEditando = { id,nombre,iban,saldo,fechacreacion, activa, id_tipocuenta, empresa };
+    
+    document.getElementById('editNombre').value = nombre;
     document.getElementById('editIban').value = iban;
     document.getElementById('editSaldo').value = saldo;
   
@@ -368,14 +336,15 @@ function editarCuenta(iban,saldo,fechacreacion ,activa, id_tipocuenta, empresa) 
 }
 
 function guardarEdicion() {
-    
+    const newNombre = document.getElementById('editNombre').value;
     const newActiva = document.getElementById('editActiva').checked;
+    
     const newTipocuenta = document.getElementById('editTipocuenta').value;
     const newEmpresa = document.getElementById('editEmpresa').value;
     
     
      
-    fetch(recurso + '/cuentas/' + cuentaEditando.iban, {
+    fetch(recurso + '/cuentas/' + cuentaEditando.id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -384,6 +353,7 @@ function guardarEdicion() {
             activa: newActiva, // Asignar el valor booleano al campo "activa"
             id_tipocuenta: newTipocuenta,
             empresa: newEmpresa,
+            nombre: newNombre
             
         
             
@@ -410,8 +380,8 @@ function mostrarFormulario() {
 
 }
 
-function eliminarCuenta(iban) {
-    fetch(recurso + '/cuentas/' + iban, {
+function eliminarCuenta(id) {
+    fetch(recurso + '/cuentas/' + id, {
         method: 'DELETE',
     })
     .then(res => {

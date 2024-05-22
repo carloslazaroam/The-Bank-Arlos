@@ -68,25 +68,16 @@
       <span class="close" onclick="cancelarEdicion()">&times;</span>
       <h2>Editar Cuenta</h2>
       <form>
-       <hr> 
-          <p for="editActiva">Marca esta opción para activar o desactivar la cuenta:</p>
-<input type="checkbox" id="editActiva" name="editActiva"><br>
-<hr> 
-
-          <p for="editIban">IBAN:</p>
-          <input type="text" id="editIban" name="editIban"><br>
+       
           <hr> 
+          <p for="editIban">IBAN</p>
+          <input type="text" id="editIban" name="editIban"  minlength="16" maxlength="16"  pattern="\d{16}" ><br>
+          <p id="errorIBAN" style="color: red; margin-top: 5px;"></p>
+
+          <hr>
           <p for="editValidado">Validar cuenta:</p>
           <input type="checkbox" id="editValidado" name="editValidado"><br>
-          <hr> 
-          <p for="editSaldo">Establecer saldo:</p>
-          <input id="editSaldo" name="editSaldo" required><br>
-          <hr> 
-          <label for="editUsuario">Seleccionar Usuario:</label><br>
-          <select id="editUsuario" name="editUsuario"></select><br>
-          <hr> 
-          <p for="editTipocuenta">Tipo de Cuenta:</p>
-          <select id="editTipocuenta" name="editTipocuenta"></select><br>
+          
 
          
 
@@ -121,7 +112,9 @@
 <hr> 
 
             <p for="createIBAN">IBAN de la cuenta:</p>
-            <input type="text" id="createIBAN" name="createIBAN" required><br>
+            <input type="text" id="createIBAN" name="createIBAN" minlength="16" maxlength="16" pattern="\d{16}" required><br>
+            <br>
+            <p id="errorIBAN" style="color: red;"></p>
             <hr> 
 
             <p for="createValidacion">Validar cuenta:</p>
@@ -157,6 +150,7 @@
       <table class="table table-hover">
         <thead>
           <th>ID</th>
+          <th>Nombre</th>
           <th class="text-center">IBAN</th>
           <th>Fecha creación</th>
           <th>Propietario</th>

@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     dni: { type: String, unique: true },
     nombre: String,
     email: { type: String, unique: true },
+    telefono: Number,
     apellido1: String,
     apellido2: String,
     direccion: String,

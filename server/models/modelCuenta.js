@@ -8,11 +8,12 @@ const CounterCuenta = mongoose.model('CounterCuenta', counterCuentaSchema);
 
 const cuentaSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
+    nombre: String,
     fechacreacion: { type: Date, default: Date.now }, // Cambiado para generar automáticamente la fecha de creación
     activa: Boolean,
     saldo: Number,
     validado: Boolean,
-    iban: { type: String, unique: true },
+    iban: String,
     id_usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

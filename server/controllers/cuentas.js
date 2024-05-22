@@ -1,6 +1,8 @@
 // cuentasController.js
 
 const { Cuenta } = require('../models/modelCuenta');
+const nodemailer = require('nodemailer');
+const { User } = require('../models/modelUser');
 
 
 async function getCuentas(req, res) {
@@ -24,16 +26,24 @@ async function getCuentaByIban(req,res) {
 }
 
 
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+    auth: {
+        user: 'polanskirichard513@gmail.com', // Tu correo electrónico
+        pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+    }
+});
+
+
 async function createCuenta(req, res) {
     try {
-        // Formatear el IBAN agregando espacios cada 4 caracteres
-        const formattedIBAN = formatIBAN(req.body.iban).trim();
-
-        // Crear una nueva cuenta con el IBAN formateado
+        // Crear una nueva cuenta con los datos recibidos en la solicitud
         const cuenta = new Cuenta({
-            activa: req.body.activa,
-            iban: formattedIBAN, // Utilizar el IBAN formateado
-            validado: req.body.validado,
+            activa: false,
+            iban: null, 
+            nombre: req.body.nombre,
+            validado: false,
             saldo: req.body.saldo,
             empresa: req.body.empresa,
             id_usuario: req.body.id_usuario,
@@ -42,6 +52,17 @@ async function createCuenta(req, res) {
 
         // Guardar la cuenta en la base de datos
         await cuenta.save();
+
+        // Obtener el correo electrónico del usuario que creó la cuenta
+        const usuario = await User.findById(req.body.id_usuario);
+        const correoUsuario = usuario.email;
+
+        // Verificar si se proporcionó un correo electrónico válido
+        if (correoUsuario) {
+            // Enviar correo electrónico al usuario que creó la cuenta
+            await enviarCorreo(correoUsuario, 'Solicitud de cuenta creada', 'Su solicitud de: ' + cuenta.nombre + ' ha sido creada, espera a que un administrador valide tu cuenta.');
+        }
+
         res.send(cuenta);
     } catch (err) {
         console.error("Error al postear cuenta:", err);
@@ -49,10 +70,26 @@ async function createCuenta(req, res) {
     }
 }
 
-// Función para formatear el IBAN agregando espacios cada 4 caracteres
-function formatIBAN(iban) {
-    return iban.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
+async function enviarCorreo(destinatario, asunto, cuerpo) {
+    try {
+        // Definir el contenido del correo electrónico
+        const mailOptions = {
+            from: 'polanskirichard513@gmail.com',
+            to: destinatario,
+            subject: asunto,
+            text: cuerpo
+        };
+
+        // Enviar el correo electrónico
+        await transporter.sendMail(mailOptions);
+        console.log('Correo electrónico enviado');
+    } catch (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+    }
 }
+
+
+
 
 
 async function getCuentaByIban(req, res) {
@@ -65,24 +102,46 @@ async function getCuentaByIban(req, res) {
     }
 }
 
-async function deleteCuenta(req, res) {
-    try {
-        const cuentaIBAN = req.params.iban;
-        await Cuenta.deleteMany({ iban: cuentaIBAN });
-        res.send("Cuenta eliminada exitosa.");
+async function deleteCuenta(req,res){
+    try{
+        const id = req.params.id;
+        await Cuenta.deleteMany({ id: id });
+        res.send("cuenta eliminada correctamente");
     } catch (err) {
-        console.error("Error al eliminar la cuenta:", err);
-        res.status(500).send("Error interno del servidor");
+        console.log("No se pudo eliminar la cuenta")
+        res.status(500).send("Error interno del servidor")
     }
 }
 
 async function updateCuenta(req, res) {
     try {
-        const cuentaIBAN = req.params.iban;
-        const updatedCuenta = await Cuenta.findOneAndUpdate({ iban: cuentaIBAN }, req.body, { new: true });
-        res.send(updatedCuenta);
+        const cuentaId = req.params.id;
+        const updateData = req.body;
+        const cuenta = await Cuenta.findOne({ id: cuentaId });
+
+        // Check if the 'validado' field is changing from false to true
+        if (!cuenta.validado && updateData.validado === true) {
+            // Update the cuenta
+            const updatedCuenta = await Cuenta.findOneAndUpdate({ id: cuentaId }, updateData, { new: true });
+
+            // Send email notification
+            const usuario = await User.findById(updatedCuenta.id_usuario);
+            const correoUsuario = usuario.email;
+            const iban = updatedCuenta.iban;
+
+            if (correoUsuario && iban) {
+                const asunto = '¡Buenas noticias! Solicitud validada';
+                const cuerpo = `Buenas noticias!!! Su solicitud ha sido validada, su nueva cuenta ya esta operativa. El IBAN de su cuenta es: ${iban}.`;
+                await enviarCorreo(correoUsuario, asunto, cuerpo);
+            }
+            res.send(updatedCuenta);
+        } else {
+            // No need to send email notification
+            const updatedCuenta = await Cuenta.findOneAndUpdate({ id: cuentaId }, updateData, { new: true });
+            res.send(updatedCuenta);
+        }
     } catch (err) {
-        console.error("Error al actualizar la cuenta:", err);
+        console.error("Error al actualizar el usuario:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
