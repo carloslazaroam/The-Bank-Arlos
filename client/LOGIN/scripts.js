@@ -71,7 +71,7 @@ if (response.ok) {
         // Event listener para el botón de aceptar del modal
         const modalAceptarBtn = document.getElementById('modalAceptarBtn');
         modalAceptarBtn.addEventListener('click', () => {
-            if (data.usertype === '660d0966180c6017f4da9842') {
+            if (data.usertype === '6632844e043b8bf3927f1aed') {
                 window.location.href = '../USER/User-Admin/userAdmin.html';
             } else {
                 window.location.href = '../HOME/home.html';

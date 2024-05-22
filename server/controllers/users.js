@@ -39,7 +39,7 @@ async function createUser(req, res) {
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
-            usertype: req.body.usertype,
+            usertype: req.body.usertype || '6632846b043b8bf3927f1af0', // Valor por defecto si no se proporciona usertype
             
             // Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
         });
@@ -50,6 +50,7 @@ async function createUser(req, res) {
         res.status(500).send("Error interno del servidor");
     }
 }
+
 
 
 async function updateUser(req, res) {

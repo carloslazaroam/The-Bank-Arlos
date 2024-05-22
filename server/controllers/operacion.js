@@ -452,45 +452,49 @@ async function transferirSaldo(req, res) {
                     margin: 0;
                     padding: 0;
                 }
-     
+        
                 .invoice-card {
                     border: 1px solid #cce7e8;
                     padding: 20px;
                     max-width: 600px;
                     margin: 20px auto;
                 }
-     
+        
                 .invoice-title {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 20px;
                 }
-     
+        
                 .invoice-title h4 {
                     margin: 0;
                 }
-     
+        
                 .invoice-details {
                     border: 1px solid #cce7e8;
                     padding: 10px;
                 }
-     
+        
                 .invoice-table {
                     width: 100%;
                     border-collapse: collapse;
                     margin-top: 10px;
                 }
-     
+        
                 .invoice-table td {
                     padding: 8px;
                     border: 1px solid #cce7e8;
                 }
-     
+        
                 .invoice-section {
                     border: 1px solid #cce7e8;
                     padding: 10px;
                     margin-bottom: 10px;
+                }
+        
+                .invoice-logo {
+                    max-width: 100px;
                 }
                 </style>
                 <div class="invoice-card">
@@ -500,6 +504,7 @@ async function transferirSaldo(req, res) {
                     <span>Nº recibo: ${operacionEmisor._id}</span>
                 </div>
                 <div>
+                <img src="./thebankarlos.png" alt="The Bank Arlos Logo" class="invoice-logo">
                     <span>Fecha: ${new Date().toLocaleDateString()}</span><br>
                     
                 </div>
@@ -509,18 +514,13 @@ async function transferirSaldo(req, res) {
                 <div>
                     <strong>EMISOR</strong>
                     <p>IBAN: ES ${ibanEmisor}</p>
-                    <p>Nombre:</p>
-                    <p>Apellido 1:</p>
-                    <p>Apellido 2:</p>
-                    <p>Email:</p>
-                    <p>Dirección:</p>
                 </div>
             </div>
             <div class="invoice-section">
                 <div>
                     <strong>RECEPTOR</strong>
                     <p>IBAN: ES ${ibanReceptor}</p>
-                    <p>Dirección:</p>
+                    
                 </div>
             </div>
             <div class="invoice-section">
@@ -604,14 +604,3 @@ async function vaciarCuenta(req, res) {
 
 module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo,vaciarCuenta}
 
-/*async function updateOperacion(req, res) {
-    try {
-        const id = req.params.id;
-        const updatedUser = await User.findOneAndUpdate({ nombre: userName }, req.body, { new: true });
-        res.send(updatedUser);
-    } catch (err) {
-        console.error("Error al actualizar el usuario:", err);
-        res.status(500).send("Error interno del servidor");
-    }
-}
-*/

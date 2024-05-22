@@ -10,9 +10,9 @@ router.post('/login', async (req, res) => {
     console.log(req.body);
     try {
         const user = await User.findOne({ dni, contra});
-        if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) return res.status(401).json({ message: 'Datos erroneos' });
         
-        if (!user.validado) return res.status(403).json({ message: 'Your account has not been validated by an admin yet' });
+        if (!user.validado) return res.status(403).json({ message: 'Tus datos deben de estar validados por un administrador' });
 
         const token = generateToken(user);
         res.json({ token, id: user.id, usertype: user.usertype,dni: user.dni,id2: user._id });

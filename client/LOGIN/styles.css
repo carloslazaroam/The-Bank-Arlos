@@ -6,8 +6,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-@import url('https://fonts.googleapis.com/css?family=Public+Sans&display=swap');
-
 body {
     font-family: 'Public Sans', sans-serif;
     font-weight: 400;
@@ -16,7 +14,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: #e6dede;
-    cursor:default;
+    cursor: default;
 }
 
 .form-container {
@@ -30,7 +28,7 @@ body {
     position: relative;
 }
 
-.login-container,.signup-container {
+.login-container, .signup-container {
     width: 50%;
     padding: 40px;
     height: 100%;
@@ -39,13 +37,13 @@ body {
     justify-content: center;
     gap: 15px;
     transition: all 500ms ease;
-    
-}
-.signup-container{
-  transform:scale(0);
 }
 
-.title{
+.signup-container {
+    transform: scale(0);
+}
+
+.title {
     font-size: 30px;
     font-weight: 500;
 }
@@ -64,8 +62,7 @@ body {
     align-items: center;
 }
 
-input{
-    
+input {
     border: none;
     margin-left: 5px;
     outline: none;
@@ -92,16 +89,16 @@ input{
     justify-content: center;
     gap: 5px;
     border: none;
-    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
-  color:hsl(0, 0%, 100%);
-    color: white;
+    background-image: linear-gradient(to right, hsl(136, 65%, 51%), hsl(192, 70%, 51%));
+    color: hsl(0, 0%, 100%);
     border-radius: 5px;
     cursor: pointer;
     transition: transform 500ms ease;
     box-shadow: 0 3px 10px -5px #0cc51b;
-    &:hover {
-        transform: scale(1.1);
-    }
+}
+
+.account-controls>button:hover {
+    transform: scale(1.1);
 }
 
 .line {
@@ -120,11 +117,19 @@ input{
 .placeholder-banner {
     width: 50%;
     height: 100%;
-    position:absolute;
-    right:0;
+    position: absolute;
+    right: 0;
     transition: all 500ms ease;
-    z-index:4;
-    background-image:linear-gradient(to right,hsl(136, 65%, 51%),hsl(192, 70%, 51%));
+    z-index: 4;
+    background-image: linear-gradient(to right, hsl(136, 65%, 51%), hsl(192, 70%, 51%));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-image {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .social-logins {
@@ -135,7 +140,6 @@ input{
 }
 
 .social-login {
-
     height: 40px;
     aspect-ratio: 1/1;
     border: 2px solid #bfc0c9;
@@ -144,40 +148,40 @@ input{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap:5px;
     cursor: pointer;
-    transition:transform 500ms ease;
-    &:hover{
-        transform:scale(1.1);
-    }
+    transition: transform 500ms ease;
 }
-.signup-text{
+
+.social-login:hover {
+    transform: scale(1.1);
+}
+
+.signup-text {
     margin-top: 5px;
     font-size: 12px;
 }
-#signup-form-toggler,#login-form-toggler{
+
+#signup-form-toggler, #login-form-toggler {
     cursor: pointer;
     text-decoration: none;
-    color:#0cc51b;
-  &:hover{
-    border-bottom:1px solid;
-  }
+    color: #0cc51b;
 }
+
+#signup-form-toggler:hover, #login-form-toggler:hover {
+    border-bottom: 1px solid;
+}
+
 .banner {
     width: 100%;
     height: inherit;
     object-fit: cover;
     background-color: #0cc51b;
     transition: transform 500ms ease;
-    
-
 }
 
 h1 {
-    color:hsl(233, 26%, 24%);
-    
+    color: hsl(233, 26%, 24%);
 }
-
 
 .modal {
     display: none;
