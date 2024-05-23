@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     dni: { type: String, unique: true },
     nombre: String,
+
     email: { type: String, unique: true },
     telefono: Number,
     apellido1: String,
@@ -23,7 +24,8 @@ const userSchema = new mongoose.Schema({
     usertype: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TipoUsuario'
-    }
+    },
+    cuentas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cuenta' }] 
     
 });
 

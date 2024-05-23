@@ -30,13 +30,15 @@
 
                     <br>
                     <div class="panelBtn">
-                        <button type="button" onclick="mostrarFormulario()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary" id="btnIngresarDinero">Ingresar dinero</button>
+                        
 
                         <button type="button" onclick="mostrarFormulario2()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Retirar dinero</button>
 
-                        <a href="../BIZUM/bizum.html"> <button type="button"  style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Hacer bizum</button></a>
+                        <button type="button"  onclick="mostrarFormulario4()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Hacer transferencia</button></a>
 
-                        <button type="button" onclick="mostrarFormulario3()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Vaciar cuenta</button>
+                        <button type="button"  onclick="mostrarFormulario()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Hacer bizum</button></a>
+
+                        <button type="button" onclick="mostrarFormulario3()" style="margin-top: 20px;margin-left: 30px;"  class="btn btn-secondary">Sacar porcentajes</button>
                     </div>
                 </div>
             </div>
@@ -113,59 +115,6 @@
         </div>
         
         
-        
-
-
-
-
-    <div id="crearModal" class="modal" style="font-family: Roboto;">
-        <div class="modal-content" style=" background-color: #fefefe;
-        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 40%;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        padding: 10px;
-        margin-bottom: 50px;
-        max-height: 400px; /* Altura máxima del contenido */
-        overflow-y: auto;">
-            <span class="close" onclick="cancelarCreacion()">&times;</span>
-            <h2 style="text-align: center;color: #000000">Formulario de ingreso</h2>
-            <form id="crearFormulario" enctype="multipart/form-data">
-                <hr>
-                <p for="createCuenta">Seleccionar Cuenta:</p>
-              <select id="createCuenta" name="createCuenta"></select><br>
-              <hr>
-                <p for="createNombre">Nombre:</p>
-                <input type="text" id="createNombre" name="createNombre" maxlength="12"><br>
-                <hr>
-                <p for="createConcepto">Concepto:</p>
-                <input type="text" id="createConcepto" name="createConcepto" maxlength="30"><br>
-                <hr>
-                <p for="createCantidad">Cantidad:</p>
-                <input type="number" id="createCantidad" name="createCantidad" placeholder="(500€ Max.)" max="500"><br>
-                <hr>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="generarComprobante" name="generarComprobante">
-                    <label for="generarComprobante">Generar comprobante</label>
-                    <span class="checkmark"></span>
-                </div>
-                
-                
-
-
-                <input type="hidden" id="tipo" name="tipo" value="ingreso">
-
-                
-                
-                
-               
-      <br><br>
-                <button type="button" class="btn btn-secondary"  onclick="guardarNuevoIngreso()">Guardar</button>
-            </form>
-        </div>
-      </div>
 
 
       <div id="crearModal2" class="modal" style="font-family: Roboto;">
@@ -173,7 +122,7 @@
         margin: 10% auto; /* Modificado el margen para centrar verticalmente */
         padding: 20px;
         border: 1px solid #888;
-        width: 40%;
+        width: 28%;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         padding: 10px;
@@ -216,38 +165,42 @@
 
       <div id="crearModal3" class="modal" style="font-family: Roboto;">
         <div class="modal-content" style=" background-color: #fefefe;
-        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 40%;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        padding: 10px;
-        margin-bottom: 50px;
-        max-height: 400px; /* Altura máxima del contenido */
-        overflow-y: auto;">
+            margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 28%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-bottom: 50px;
+            max-height: 400px; /* Altura máxima del contenido */
+            overflow-y: auto;">
             <span class="close" onclick="cancelarCreacion3()">&times;</span>
-            <h2 style="text-align: center;color: #000000">Vaciar una cuenta</h2>
-            <form id="crearFormulario" enctype="multipart/form-data">
+            <h2 style="text-align: center;color: #000000">Sacar Porcentajes de una Cuenta</h2>
+            <form id="crearFormulario3" enctype="multipart/form-data">
                 <hr>
                 <p for="createCuenta3">Seleccionar Cuenta:</p>
-              <select id="createCuenta3" name="createCuenta3"></select><br>
-              <hr>
-                <p><label for="w3review">* Alerta</label></p>
-                <textarea id="w3review" name="w3review" rows="4" cols="50" readonly>Vaciar una cuenta supondrá la retirada de todo el dinero disponible en la cuenta.</textarea>
-
-      <br><br>
-                <button type="button" class="btn btn-secondary"  onclick="vaciarCuenta()">Guardar</button>
+                <select id="createCuenta3" name="createCuenta3"></select><br>
+                <hr>
+                <p for="createPorcentaje">Seleccionar Porcentaje:</p>
+                <select id="createPorcentaje" name="createPorcentaje">
+                    <option value="25">25%</option>
+                    <option value="50">50%</option>
+                    <option value="75">75%</option>
+                    <option value="100">100%</option>
+                </select><br>
+                <hr>
+                <button type="button" class="btn btn-secondary" onclick="sacarPorcentajes()">Guardar</button>
             </form>
         </div>
-      </div>
-
+    </div>
+    
       <div id="modalConfirmacion" class="modal">
         <div class="modal-content" style="background-color: #fefefe;
         margin: 10% auto; /* Modificado el margen para centrar verticalmente */
         padding: 20px;
         border: 1px solid #888;
-        width: 40%;
+        width: 28%;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         padding: 10px;
@@ -266,33 +219,49 @@
     </div>
 
 
-    <div id="modalEliminación" class="modal">
-        <div class="modal-content" style="background-color: #fefefe;
-            margin: 10% auto; /* Modificado el margen para centrar verticalmente */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 40%;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            margin-bottom: 50px;
-            max-height: 400px; /* Altura máxima del contenido */
-            overflow-y: auto;
-            text-align: center; /* Centro de texto */
-            color: black; /* Color de texto negro */">
-            <span class="close" onclick="recargarPagina()">&times;</span>
-
-            <h2>Error en la operación</h2>
-            <hr> 
-            <br>
-            <p>Hubo un problema para realizar la operación</p>
-            <br>
-            <p>* Recuerda rellenar todos los campos, no puedes introducir valores negativos 
-                o 0, tampoco puedes enviar más saldo del que dispones.
-            </p><br>
-        </div>
+    <!-- Modal de Confirmación -->
+<div id="modalConfirmacion" class="modal">
+    <div class="modal-content" style="background-color: #fefefe;
+    margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 28%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 50px;
+    max-height: 400px; /* Altura máxima del contenido */
+    overflow-y: auto">
+        <a href="../PANEL/panel.html"> <span class="close">&times;</span></a>
+        <h2>Operación realizada con éxito!!!</h2>
+        <p>La operación se ha realizado con éxito, puedes consultar su información en el registro de operaciones</p>
     </div>
-    
+</div>
+
+
+<!-- Modal de Eliminación/Error -->
+<div id="modalEliminacion" class="modal">
+    <div class="modal-content" style="background-color: #fefefe;
+    margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 50px;
+    max-height: 400px; /* Altura máxima del contenido */
+    overflow-y: auto;
+    text-align: center; /* Centro de texto */
+    color: black;">
+        <span class="close" onclick="cerrarModal('modalEliminacion'); recargarPagina();">&times;</span>
+        <h2>Error en la operación</h2>
+        <hr>
+        <p>Hubo un problema para realizar la operación</p>
+        <p>* Recuerda rellenar todos los campos, no puedes introducir valores negativos o 0, tampoco puedes enviar más saldo del que dispones.</p>
+    </div>
+</div>
+
 
 
     <div id="modalAceptacion" class="modal" style="display: none; justify-content: center; align-items: center;
@@ -323,7 +292,93 @@
     </div>
 
 
-   
+
+    <div id="crearModal4" class="modal">
+        <div class="modal-content" style="background-color: #fefefe;
+        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 28%;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        margin-bottom: 50px;
+        max-height: 400px; /* Altura máxima del contenido */
+        overflow-y: auto">
+            <span class="close" onclick="cancelarCreacion4()">&times;</span>
+            <h2 style="text-align: center;color: #000105">Información de la transferencia</h2>
+            <form id="crearFormulario" enctype="multipart/form-data">
+                <hr>
+                <p for="createEmisor">Seleccionar una cuenta emisora</p>
+                <select id="createEmisor" name="createEmisor"></select><br>
+                <hr>
+                
+                <p for="createNombre">Nombre:</p>
+                <input type="text" id="createNombre4" name="createNombre4" maxlength="20"><br>
+                <hr>
+                <p for="createConcepto">Concepto:</p>
+                <input type="text" id="createConcepto4" name="createConcepto4" maxlength="20"><br>
+                <hr>
+                <p for="createCantidad">Cantidad:</p>
+                <input type="number" id="createCantidad4" name="createCantidad4" maxlength="10" placeholder="(500€ Max.)"><br>
+                <hr>
+                <p for="createReceptor">Cuenta Receptora (IBAN):</p>
+                <input type="text" id="createReceptor" name="createReceptor" minlength="16" maxlength="19"><br>
+                <hr>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="generarComprobante" name="generarComprobante">
+                    <label for="generarComprobante">Generar comprobante</label>
+                    <span class="checkmark"></span>
+                </div>
+
+
+    
+                
+                <br><br>
+                <button type="button"   onclick="guardarTransferencia()">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div id="crearModal" class="modal">
+        <div class="modal-content" style="background-color: #fefefe;
+        margin: 10% auto; /* Modificado el margen para centrar verticalmente */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 25%;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        margin-bottom: 50px;
+        max-height: 400px; /* Altura máxima del contenido */
+        overflow-y: auto">
+            <span class="close" onclick="cancelarCreacion()">&times;</span>
+            <div class="user-image" style="display: flex;
+            justify-content: center;">
+                <img src="./bisum.png" alt="user-profile" width="250px" height="100px" style="box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 50%;">
+            </div>
+            <form id="crearFormulario" enctype="multipart/form-data">
+                <hr>
+                <p for="createEmisor5">Seleccionar una cuenta emisora</p>
+                <select id="createEmisor5" name="createEmisor5"></select><br>
+                <hr>
+                <p for="createConcepto">Concepto:</p>
+                <input type="text" id="createConcepto5" name="createConcepto5" maxlength="20"><br>
+                <hr>
+                <p for="createCantidad">Cantidad:</p>
+                <input type="number" id="createCantidad5" name="createCantidad5" maxlength="10" placeholder="(500€ Max.)"><br>
+                <hr>
+
+                <p for="createTelefono">Número de telefono:</p>
+                <input type="text" id="createTelefono" name="createTelefono" maxlength="20"><br>
+            
+                <br><br>
+                <button type="button"   onclick="guardarBizum()">Guardar</button>
+            </form>
+        </div>
+    </div>
 
       
     

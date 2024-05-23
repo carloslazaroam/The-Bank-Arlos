@@ -78,21 +78,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     
 
-   
-    
-
-   
-
-
     function generateLineChart(operaciones) {
         let balanceAcumulado = 0;
         const datos = [];
         const etiquetas = [];
     
-        // Limitar las operaciones a los primeros 20 registros
-        const primerasOperaciones = operaciones.slice(0, 20);
-    
-        primerasOperaciones.forEach(op => {
+        operaciones.forEach(op => {
             if (op.tipo === 'ingreso') {
                 balanceAcumulado += parseFloat(op.cantidad);
             } else if (op.tipo === 'retiro') {
@@ -432,12 +423,12 @@ function mostrarFormulario() {
     .then(res => res.json())
     .then(cuentas => {
         console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
-        const select = document.getElementById('createCuenta');
+        const select = document.getElementById('createEmisor5');
         select.innerHTML = ""; // Limpiar las opciones existentes
         cuentas.forEach(cuenta => {
             if (cuenta.activa){
                 const option = document.createElement('option');
-                option.value = cuenta._id;
+                option.value = cuenta.iban;
                 option.textContent = cuenta.iban;
                 select.appendChild(option);
                 }
@@ -515,6 +506,60 @@ function mostrarFormulario3() {
 
 }
 
+
+
+function sacarPorcentajes() {
+    // Obtener los valores de los campos del formulario
+    const id_cuenta = document.getElementById('createCuenta3').value;
+    const porcentaje = document.getElementById('createPorcentaje').value;
+
+    // Verificar que todos los campos estén rellenados
+    if (!id_cuenta || !porcentaje) {
+        alert('Por favor, elija una cuenta válida y un porcentaje.');
+        return; // Detener la ejecución si hay campos vacíos
+    }
+
+    // Crear un objeto con los datos de la operación
+    const operacionData = {
+        id_cuenta: id_cuenta,
+        porcentaje: parseInt(porcentaje)
+    };
+
+    // Enviar la solicitud POST al servidor
+    fetch(recurso + '/operacion/porcentajes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al sacar porcentaje de la cuenta: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Operación realizada:', data);
+        // Mostrar el modal de confirmación
+        mostrarModalConfirmacion();
+        // Limpiar el formulario después de añadir la operación
+        document.getElementById('createCuenta3').value = '';
+        document.getElementById('createPorcentaje').value = '';
+
+        const crearModal = document.getElementById('crearModal3');
+        crearModal.style.display = 'none';
+    })
+    .catch(error => {
+        console.error(error);
+        // Mostrar el modal de eliminación en caso de error
+        mostrarModalEliminacion();
+    });
+
+    document.getElementById('crearModal3').style.display = 'none';
+}
+
+
 // Función para mostrar el modal de confirmación
 function mostrarModalConfirmacion() {
     // Obtener el modal de confirmación por su ID
@@ -530,186 +575,6 @@ function mostrarModalEliminacion() {
     // Mostrar el modal de eliminación
     modalEliminacion.style.display = 'block';
 }
-
-// Función para cerrar el modal de creación de users
-function cancelarCreacion() {
-    const crearModal = document.getElementById('crearModal');
-    crearModal.style.display = 'none';
-}
-
-function cancelarCreacion3() {
-    const crearModal = document.getElementById('crearModal3');
-    crearModal.style.display = 'none';
-}
-
-
-function cancelarCreacion2() {
-    const crearModal = document.getElementById('crearModal2');
-    crearModal.style.display = 'none';
-}
-
-function cerrarModalEliminacion() {
-    const modalEliminacion = document.getElementById('modalEliminación');
-    modalEliminacion.style.display = 'none';
-
-    // Cerrar el otro modal si está abierto
-    cerrarModalCreacion();
-}
-
-function guardarNuevoIngreso() {
-    const nombre = document.getElementById('createNombre').value;
-    const cantidad = parseFloat(document.getElementById('createCantidad').value); // Parse as float for numeric comparison
-    const concepto = document.getElementById('createConcepto').value;
-    const id_cuenta = document.getElementById('createCuenta').value;
-    const tipo = document.getElementById('tipo').value;
-    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no'; // Checkbox value
-
-    // Check for empty fields
-    if (!nombre || !concepto || !id_cuenta || !tipo || isNaN(cantidad)) {
-        mostrarModal('modalEliminación');
-        return; // Stop execution if any field is empty or cantidad is not a number
-    }
-
-    // Validate the cantidad field
-    if (cantidad > 500 || cantidad <= 0) {
-        mostrarModal('modalEliminación');
-        return; // Stop execution if cantidad is greater than 500 or less than 0
-    }
-
-    // Create an object with the form data
-    const operacionData = {
-        nombre: nombre,
-        cantidad: cantidad,
-        concepto: concepto,
-        id_cuenta: id_cuenta,
-        tipo: tipo,
-        generarComprobante: generarComprobante // Add the generarComprobante field to the object
-    };
-
-    // Enviar la solicitud POST al servidor
-    fetch(recurso + '/operacion/ingresar', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
-        }
-        return response;
-    })
-    .then(response => {
-        // Verificar si la respuesta contiene un archivo adjunto (PDF)
-        const contentDisposition = response.headers.get('Content-Disposition');
-        if (contentDisposition && contentDisposition.includes('attachment')) {
-            // Obtener el nombre del archivo del encabezado Content-Disposition
-            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-            const match = contentDisposition.match(fileNameRegex);
-            const fileName = match && match[1] ? match[1].replace(/['"]/g, '') : 'comprobante.pdf';
-
-            // Convertir la respuesta a un blob y crear un enlace para descargar el archivo
-            response.blob().then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-            });
-
-            // Mostrar el modal de confirmación
-            mostrarModalConfirmacion();
-        } else {
-            // Si la respuesta no es un archivo adjunto, mostrar un mensaje de éxito
-            return response.json().then(data => {
-                console.log('Nueva operación añadida:', data);
-                // Mostrar el modal de confirmación
-                mostrarModalConfirmacion();
-            });
-        }
-    })
-    .then(data => {
-        // Limpiar el formulario después de añadir la operación
-        document.getElementById('createNombre').value = '';
-        document.getElementById('createCantidad').value = '';
-        document.getElementById('createConcepto').value = '';
-        document.getElementById('createCuenta').value = '';
-        document.getElementById('tipo').value = '';
-    })
-    .catch(error => {
-        console.error(error);
-        // Mostrar el modal de eliminación en caso de error
-        mostrarModal('modalEliminación');
-    });
-}
-
-
-// Función para enviar la solicitud de creación de una nueva retirada al servidor
-function guardarNuevaRetirada() {
-    // Obtener los valores de los campos del formulario
-    const nombre = document.getElementById('createNombre2').value;
-    const cantidad = parseFloat(document.getElementById('createCantidad2').value); // Parse as float for numeric comparison
-    const concepto = document.getElementById('createConcepto2').value;
-    const id_cuenta = document.getElementById('createCuenta2').value;
-    const tipo = document.getElementById('tipo').value;
-
-    // Verificar que todos los campos estén rellenados
-    if (!nombre || !concepto || !id_cuenta || !tipo || isNaN(cantidad)) {
-        cerrarModal('modalFormulario'); // Close the form modal
-        mostrarModal('modalEliminación');
-        return; // Detener la ejecución si hay campos vacíos o cantidad no es un número
-    }
-
-    // Validar la cantidad
-    if (cantidad > 500 || cantidad <= 0) {
-        cerrarModal('modalFormulario'); // Close the form modal
-        mostrarModal('modalEliminación');
-        return; // Detener la ejecución si la cantidad supera 500 o es negativa
-    }
-
-    // Crear un objeto con los datos del usuario
-    const operacionData = {
-        nombre: nombre,
-        cantidad: cantidad,
-        concepto: concepto,
-        id_cuenta: id_cuenta,
-        tipo: tipo
-    };
-
-    // Enviar la solicitud POST al servidor
-    fetch(recurso + '/operacion/retirar', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Nueva operación añadida:', data);
-        // Mostrar el modal de confirmación
-        mostrarModalConfirmacion();
-        // Limpiar el formulario después de añadir el operación
-        document.getElementById('createNombre2').value = '';
-        document.getElementById('createCantidad2').value = '';
-        document.getElementById('createConcepto2').value = '';
-        document.getElementById('createCuenta2').value = '';
-        document.getElementById('tipo').value = '';
-    })
-    .catch(error => {
-        console.error(error);
-        mostrarModal('modalEliminación');
-    });
-}
-
 // Assuming cerrarModal is a function to close a modal by its ID
 function cerrarModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -719,70 +584,273 @@ function cerrarModal(modalId) {
 }
 
 
-// Función para enviar la solicitud de creación de una nueva retirada al servidor
-function vaciarCuenta() {
-    // Obtener los valores de los campos del formulario
-    const id_cuenta = document.getElementById('createCuenta3').value;
 
-    // Verificar que todos los campos estén rellenados
-    if ( !id_cuenta) {
-        alert('Por favor, eliga una cuenta válida');
-        return; // Detener la ejecución si hay campos vacíos
+// Función para cerrar el modal de creación de users
+function cancelarCreacion() {
+    const crearModal = document.getElementById('crearModal');
+    crearModal.style.display = 'none';
+}
+
+function cancelarCreacion2() {
+    const crearModal = document.getElementById('crearModal2');
+    crearModal.style.display = 'none';
+}
+
+function cancelarCreacion3() {
+    const crearModal = document.getElementById('crearModal3');
+    crearModal.style.display = 'none';
+}
+
+
+function cancelarCreacion4() {
+    const crearModal = document.getElementById('crearModal4');
+    crearModal.style.display = 'none';
+}
+
+
+
+
+function mostrarFormulario4() {
+    const crearModal = document.getElementById('crearModal4');
+    crearModal.style.display = 'block';
+
+    const url = `${recurso}/users/${id2}/accounts`;
+    fetch(url, {
+        method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+    })
+    .then(res => res.json())
+    .then(cuentas => {
+        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
+        const select = document.getElementById('createEmisor');
+        select.innerHTML = "";
+         // Limpiar las opciones existentes
+        cuentas.forEach(cuenta => {
+            if (cuenta.activa){
+            const option = document.createElement('option');
+            option.value = cuenta.iban;
+            option.textContent = cuenta.iban;
+            select.appendChild(option);
+            }
+        });
+        
+    })
+    .catch(err => console.error('Error al obtener cuentas:', err));
+
+}
+
+// Función para cerrar todos los modales activos
+function cerrarModalesActivos() {
+    const modales = document.querySelectorAll('.modal');
+    modales.forEach(modal => {
+        modal.style.display = 'none';
+    });
+}
+
+// Función para mostrar un modal específico
+function mostrarModal(idModal) {
+    cerrarModalesActivos();
+    const modal = document.getElementById(idModal);
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function recargarPagina() {
+    window.location.reload();
+}
+
+// Función para enviar la solicitud de creación de una nueva retirada al servidor
+function guardarNuevaRetirada() {
+    const nombre = document.getElementById('createNombre2').value;
+    const cantidad = parseFloat(document.getElementById('createCantidad2').value);
+    const concepto = document.getElementById('createConcepto2').value;
+    const id_cuenta = document.getElementById('createCuenta2').value;
+    const tipo = document.getElementById('tipo').value;
+
+    if (!nombre || !concepto || !id_cuenta || !tipo || isNaN(cantidad)) {
+        mostrarModal('modalEliminacion');
+        return;
     }
 
-    // Crear un objeto con los datos del usuario
+    if (cantidad > 500 || cantidad <= 0) {
+        mostrarModal('modalEliminacion');
+        return;
+    }
+
     const operacionData = {
+        nombre: nombre,
+        cantidad: cantidad,
+        concepto: concepto,
         id_cuenta: id_cuenta,
-       
+        tipo: tipo
     };
 
-    // Enviar la solicitud POST al servidor
-    fetch(recurso + '/operacion/vaciada', {
+    fetch(recurso + '/operacion/retirar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(operacionData) // Convertir el objeto a JSON antes de enviarlo
+        body: JSON.stringify(operacionData)
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al vaciar la cuenta: ' + response.status + ' ' + response.statusText);
+            throw new Error('Error al añadir la operación: ' + response.status + ' ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
-        console.log('Cuenta vaciada:', data);
-        // Mostrar el modal de confirmación
-        mostrarModalConfirmacion();
-        // Limpiar el formulario después de añadir el operación
-        
-        document.getElementById('createCuenta3').value = '';
-        
-        const crearModal = document.getElementById('crearModal3');
-        crearModal.style.display = 'none';
+        console.log('Nueva operación añadida:', data);
+        mostrarModal('modalConfirmacion');
+        document.getElementById('createNombre2').value = '';
+        document.getElementById('createCantidad2').value = '';
+        document.getElementById('createConcepto2').value = '';
+        document.getElementById('createCuenta2').value = '';
+        document.getElementById('tipo').value = '';
     })
     .catch(error => {
         console.error(error);
-        // Mostrar el modal de eliminación en caso de error
-        mostrarModalEliminacion();
+        mostrarModal('modalEliminacion');
     });
-
-    document.getElementById('crearModal3').style.display = 'none';
 }
 
-function mostrarModal(idModal) {
-    // Cerrar el modal de formulario antes de abrir otro modal
-    const crearModal = document.getElementById('crearModal');
-    crearModal.style.display = 'none';
+function guardarTransferencia() {
+    const nombre = document.getElementById('createNombre4').value;
+    const cantidad = parseFloat(document.getElementById('createCantidad4').value);
+    const concepto = document.getElementById('createConcepto4').value;
+    const ibanEmisor = document.getElementById('createEmisor').value;
+    const ibanReceptor = document.getElementById('createReceptor').value;
+    const generarComprobante = document.getElementById('generarComprobante').checked ? 'si' : 'no';
 
-    // Mostrar el modal deseado
-    const modal = document.getElementById(idModal);
-    modal.style.display = 'block';
+    if (!nombre || !cantidad || !concepto || !ibanEmisor || !ibanReceptor) {
+        mostrarModal('modalEliminacion');
+        return;
+    }
+
+    if (cantidad <= 0 || isNaN(cantidad) || cantidad > 500) {
+        mostrarModal('modalEliminacion');
+        return;
+    }
+
+    const operacionData = {
+        nombre: nombre,
+        cantidad: cantidad,
+        concepto: concepto,
+        ibanEmisor: ibanEmisor,
+        ibanReceptor: ibanReceptor,
+        generarComprobante: generarComprobante
+    };
+
+    console.log('Formulario enviado:', operacionData);
+
+    fetch('http://127.0.0.1:3001/operacion/transferencia', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al realizar la transferencia: ' + response.status + ' ' + response.statusText);
+        }
+        return response;
+    })
+    .then(response => {
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition && contentDisposition.includes('attachment')) {
+            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const match = contentDisposition.match(fileNameRegex);
+            const fileName = match && match[1] ? match[1].replace(/['"]/g, '') : 'comprobante.pdf';
+
+            response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                // Cerrar el modal después de descargar el comprobante
+                cerrarModal('crearModal4');
+                // Mostrar el modal de confirmación
+                mostrarModal('modalConfirmacion');
+            });
+        } else {
+            return response.json().then(data => {
+                console.log('Nueva operación añadida:', data);
+                // Cerrar el modal después de una operación exitosa
+                cerrarModal('crearModal4');
+                // Mostrar el modal de confirmación
+                mostrarModal('modalConfirmacion');
+            });
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        mostrarModal('modalEliminacion');
+    });
 }
 
-function recargarPagina() {
-    location.reload();
+
+function guardarBizum() {
+    
+    const cantidad = parseFloat(document.getElementById('createCantidad5').value);
+    const concepto = document.getElementById('createConcepto5').value;
+    const ibanEmisor = document.getElementById('createEmisor5').value;
+    const telefonoReceptor = document.getElementById('createTelefono').value;
+
+    if ( !cantidad || !concepto || !ibanEmisor || !telefonoReceptor) {
+        mostrarModal('modalEliminacion');
+        return;
+    }
+
+    if (cantidad <= 0 || isNaN(cantidad) || cantidad > 500) {
+        mostrarModal('modalEliminacion');
+        return;
+    }
+
+    const operacionData = {
+        
+        cantidad: cantidad,
+        concepto: concepto,
+        ibanEmisor: ibanEmisor,
+        telefonoReceptor: telefonoReceptor
+    };
+
+    console.log('Formulario enviado:', operacionData);
+
+    fetch('http://127.0.0.1:3001/operacion/bizum', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(operacionData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al realizar la operación de bizum: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Nueva operación de bizum añadida:', data);
+        cerrarModal('crearModal');
+        mostrarModal('modalConfirmacion');
+    })
+    .catch(error => {
+        console.error(error);
+        mostrarModal('modalEliminacion');
+    });
 }
+
+
+
+
+
 
 
 

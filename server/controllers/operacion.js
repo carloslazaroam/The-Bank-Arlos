@@ -356,6 +356,111 @@ async function retirarDinero(req, res) {
     }
 }
 
+async function enviarBizum(req, res) {
+    try {
+        const { ibanEmisor, telefonoReceptor, cantidad, concepto, nombre, generarComprobante } = req.body;
+
+        // Buscar la cuenta del emisor por IBAN
+        const cuentaEmisor = await Cuenta.findOne({ iban: ibanEmisor });
+
+        if (!cuentaEmisor) {
+            return res.status(404).json({ mensaje: 'Cuenta del emisor no encontrada.' });
+        }
+
+        // Encontrar el usuario receptor por teléfono
+        const usuarioReceptor = await User.findOne({ telefono: telefonoReceptor });
+
+        if (!usuarioReceptor) {
+            return res.status(404).json({ mensaje: 'Usuario receptor no encontrado.' });
+        }
+
+        // Encontrar la cuenta más antigua del usuario receptor
+        const cuentasUsuarioReceptor = await Cuenta.find({ id_usuario: usuarioReceptor._id }).sort({ fechacreacion: 1 }).limit(1);
+
+        if (!cuentasUsuarioReceptor || cuentasUsuarioReceptor.length === 0) {
+            return res.status(404).json({ mensaje: 'No se encontraron cuentas para el usuario receptor.' });
+        }
+
+        const cuentaReceptor = cuentasUsuarioReceptor[0];
+
+        // Verificar saldo suficiente en el emisor
+        if (cuentaEmisor.saldo < cantidad) {
+            return res.status(400).json({ mensaje: 'Saldo insuficiente en la cuenta emisora.' });
+        }
+
+        // Realizar la transferencia
+        cuentaEmisor.saldo -= parseFloat(cantidad);
+        cuentaReceptor.saldo += parseFloat(cantidad);
+
+        // Guardar las operaciones
+        const operacionEmisor = new Operacion({
+            nombre: 'BIZUM ENVIADO',
+            cantidad: cantidad,
+            concepto: concepto,
+            id_cuenta: cuentaEmisor._id,
+            tipo: 'retiro'
+        });
+        await operacionEmisor.save();
+
+        const operacionReceptor = new Operacion({
+            nombre: 'BIZUM RECIBIDO',
+            cantidad: cantidad,
+            concepto: '(Bizum recibido por parte de ' + ibanEmisor + ') ',
+            id_cuenta: cuentaReceptor._id,
+            tipo: 'ingreso'
+        });
+        await operacionReceptor.save();
+
+        // Guardar los cambios en las cuentas
+        await cuentaEmisor.save();
+        await cuentaReceptor.save();
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+            auth: {
+                user: 'polanskirichard513@gmail.com', // Tu correo electrónico
+                pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+            }
+        });
+
+
+        // Enviar correo electrónico de notificación al usuario receptor
+        const correoReceptor = usuarioReceptor.email;
+        const asunto = 'Has recibido un Bizum';
+        const mensaje = `Has recibido un bizum de ${cantidad}€ por parte de ${usuarioReceptor.nombre} ${usuarioReceptor.apellido1}`;
+        const correoRecibido = {
+            from: 'tu_correo@gmail.com', // Reemplaza con tu dirección de correo electrónico
+            to: correoReceptor,
+            subject: asunto,
+            text: mensaje
+        };
+
+        transporter.sendMail(correoRecibido, function (error, info) {
+            if (error) {
+                console.error('Error al enviar el correo electrónico:', error);
+                // Si falla el envío del correo electrónico, puedes manejar el error aquí
+            } else {
+                console.log('Correo de notificación enviado:', info.response);
+                // Si se envía el correo electrónico correctamente, puedes hacer algo aquí si es necesario
+            }
+        });
+
+        
+        if (generarComprobante === "si") {
+            
+        } else {
+            // No se genera comprobante
+            res.status(200).json({ mensaje: 'Transferencia Bizum realizada con éxito.' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+}
+
+
+
+
 async function transferirSaldo(req, res) {
     try {
         const { ibanEmisor, ibanReceptor, cantidad, concepto, nombre, generarComprobante } = req.body;
@@ -555,52 +660,58 @@ async function transferirSaldo(req, res) {
 
     }
      
-
-
-
-async function vaciarCuenta(req, res) {
-    try {
-        const { id_cuenta } = req.body;
-
-        // Verificar si se proporcionó la ID de la cuenta
-        if (!id_cuenta) {
-            return res.status(400).json({ error: "Se debe proporcionar la ID de la cuenta" });
+    async function sacarPorcentajes(req, res) {
+        try {
+            const { id_cuenta, porcentaje } = req.body;
+    
+            // Verificar si se proporcionó la ID de la cuenta y el porcentaje
+            if (!id_cuenta || !porcentaje) {
+                return res.status(400).json({ error: "Se debe proporcionar la ID de la cuenta y el porcentaje" });
+            }
+    
+            // Obtener la cuenta por su ID
+            const cuenta = await Cuenta.findById(id_cuenta);
+    
+            // Verificar si la cuenta existe
+            if (!cuenta) {
+                return res.status(404).json({ mensaje: 'La cuenta no existe.' });
+            }
+    
+            // Calcular la cantidad a retirar
+            let cantidad = (cuenta.saldo * (porcentaje / 100)).toFixed(2); // Redondear a dos decimales
+            cantidad = parseFloat(cantidad); // Convertir de nuevo a número
+    
+            // Crear una nueva operación para retirar el porcentaje de la cuenta
+            const operacion = new Operacion({
+                nombre: `RETIRO ${porcentaje}%`,
+                concepto: `Retiro del ${porcentaje}% del saldo`,
+                cantidad: cantidad,
+                id_cuenta: cuenta._id,
+                tipo: 'retiro'
+            });
+    
+            // Guardar la operación en la base de datos
+            await operacion.save();
+    
+            // Actualizar el saldo de la cuenta
+            cuenta.saldo -= cantidad;
+            cuenta.saldo = parseFloat(cuenta.saldo.toFixed(2)); // Redondear a dos decimales y convertir a número
+            await cuenta.save();
+    
+            // Enviar respuesta exitosa
+            res.status(200).json({ mensaje: `Retirado el ${porcentaje}% del saldo de la cuenta.` });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ mensaje: 'Error interno del servidor.' });
         }
-
-        // Obtener la cuenta por su ID
-        const cuenta = await Cuenta.findById(id_cuenta);
-
-        // Verificar si la cuenta existe
-        if (!cuenta) {
-            return res.status(404).json({ mensaje: 'La cuenta no existe.' });
-        }
-
-        // Crear una nueva operación para vaciar la cuenta
-        const operacion = new Operacion({
-            nombre: 'CUENTA VACIADA',
-            concepto: 'Saldo total retirado',
-            cantidad: cuenta.saldo,
-            id_cuenta: cuenta._id,
-            tipo: 'retiro'
-        });
-
-        // Guardar la operación en la base de datos
-        await operacion.save();
-
-        // Establecer el saldo de la cuenta en 0
-        cuenta.saldo = 0;
-        await cuenta.save();
-
-        // Enviar respuesta exitosa
-        res.status(200).json({ mensaje: 'Cuenta vaciada exitosamente.' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
-}
+    
+    
+    module.exports = {
+        sacarPorcentajes
+    };
+    
 
 
-
-
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo,vaciarCuenta}
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo,sacarPorcentajes,enviarBizum}
 

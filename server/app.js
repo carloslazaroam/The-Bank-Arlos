@@ -11,12 +11,11 @@ const { getUsers, getUserById, createUser ,updateUser, deleteUser, getPasswordBy
 const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas, getCuentas2 } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo, vaciarCuenta } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo, vaciarCuenta, hacerBizum, enviarBizum, sacarPorcentajes } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const {verifyToken, verifyId} = require('./helpers/auth.js')
 const { getCuentasByUserId } = require('./controllers/cuentas.js');
 // Importar modelos y rutas de autenticación
-const { User } = require('./models/modelUser');
 const authRoutes = require('./routes/authRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
 const { verify } = require('crypto');
@@ -55,10 +54,6 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post('/forgotpassword', recuperarContrasena);
-
-
-
-
 
 // Rutas para tipos de usuarios
 app.get('/tipousers', getTipoUsers);
@@ -99,7 +94,8 @@ app.get('/operaciones/cuenta/:id', getOperacionesByCuentaId);
 app.post('/operacion/ingresar', ingresarDinero);
 app.post('/operacion/retirar', retirarDinero);
 app.post('/operacion/transferencia', transferirSaldo);
-app.post('/operacion/vaciada', vaciarCuenta);
+app.post('/operacion/bizum', enviarBizum)
+app.post('/operacion/porcentajes', sacarPorcentajes);
 
 
 // Rutas de Autenticación
