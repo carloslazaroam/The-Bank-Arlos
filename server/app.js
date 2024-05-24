@@ -7,11 +7,11 @@ require('dotenv').config();
 
 
 // Importar controladores
-const { getUsers, getUserById, createUser ,updateUser, deleteUser, getPasswordByEmail, recuperarContrasena} = require('./controllers/users.js');
+const { getUsers, getUserById, createUser ,updateUser, deleteUser, recuperarContrasena} = require('./controllers/users.js');
 const { getCuentas,getCuentaByIban, createCuenta,updateCuenta,deleteCuenta, getEmpresas, getCuentas2 } = require('./controllers/cuentas.js');
 const { getTipoCuentas,getTipoCuentaName, createTipoCuenta,updateTipoCuenta,deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById} = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, ingresarDinero, retirarDinero, transferirSaldo, vaciarCuenta, hacerBizum, enviarBizum, sacarPorcentajes } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, retirarDinero, transferirSaldo, vaciarCuenta, hacerBizum, enviarBizum, sacarPorcentajes } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const {verifyToken, verifyId} = require('./helpers/auth.js')
 const { getCuentasByUserId } = require('./controllers/cuentas.js');
@@ -91,7 +91,6 @@ app.post('/operacion/post', createOperacion);
 app.put('/operacion/:nombre', updateOperacion);
 app.delete('/operacion/:id', deleteOperacion);
 app.get('/operaciones/cuenta/:id', getOperacionesByCuentaId);
-app.post('/operacion/ingresar', ingresarDinero);
 app.post('/operacion/retirar', retirarDinero);
 app.post('/operacion/transferencia', transferirSaldo);
 app.post('/operacion/bizum', enviarBizum)

@@ -48,7 +48,7 @@
             <aside>
                 <h3 class="cf">
                     <div class="left">Tarjetas</div>
-                    <div class="right" id="showModalButton">+</div>
+                    <div class="right" id="showModalButton" style="cursor: pointer;">+</div>
                 </h3>
     
                 <ul class="cards" id="cards">
@@ -341,7 +341,7 @@
     </div>
 
 
-
+    
     <div id="crearModal" class="modal">
         <div class="modal-content" style="background-color: #fefefe;
         margin: 10% auto; /* Modificado el margen para centrar verticalmente */
@@ -355,8 +355,7 @@
         max-height: 400px; /* Altura máxima del contenido */
         overflow-y: auto">
             <span class="close" onclick="cancelarCreacion()">&times;</span>
-            <div class="user-image" style="display: flex;
-            justify-content: center;">
+            <div class="user-image" style="display: flex; justify-content: center;">
                 <img src="./bisum.png" alt="user-profile" width="250px" height="100px" style="box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 50%;">
             </div>
             <form id="crearFormulario" enctype="multipart/form-data">
@@ -370,16 +369,20 @@
                 <p for="createCantidad">Cantidad:</p>
                 <input type="number" id="createCantidad5" name="createCantidad5" maxlength="10" placeholder="(500€ Max.)"><br>
                 <hr>
-
-                <p for="createTelefono">Número de telefono:</p>
+                <p for="createTelefono">Número de teléfono:</p>
                 <input type="text" id="createTelefono" name="createTelefono" maxlength="20"><br>
-            
-                <br><br>
-                <button type="button"   onclick="guardarBizum()">Guardar</button>
+                <hr>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="generarComprobante3" name="generarComprobante3">
+                    <label for="generarComprobante3">Generar comprobante</label>
+                    <span class="checkmark"></span>
+                </div>
+                <button type="button" onclick="guardarBizum()">Guardar</button>
             </form>
         </div>
     </div>
-
+    
+    
       
     
 </body>

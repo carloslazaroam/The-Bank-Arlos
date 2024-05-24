@@ -186,18 +186,6 @@ function validarFormatoDNI(dni) {
     });
     
 
-    
-
-    // Función para mostrar un mensaje de error
-    function mostrarError(container, message) {
-        const errorElement = container.querySelector('.error-message');
-        if (!errorElement) {
-            const errorMessage = document.createElement('p');
-            errorMessage.classList.add('error-message');
-            errorMessage.textContent = message;
-            container.appendChild(errorMessage);
-        }
-    }
 
     // Función para limpiar el mensaje de error
     function limpiarError(container) {
@@ -212,7 +200,6 @@ function validarFormatoDNI(dni) {
     confirmarContraseñaInput.addEventListener('input', () => {
         const contraseña = document.getElementById("registroContraseña").value;
         const confirmarContraseña = confirmarContraseñaInput.value;
-        const confirmarContraseñaContainer = confirmarContraseñaInput.parentNode;
 
         // Verifica si hay contenido en ambos campos de contraseña
         if (contraseña.trim() !== "" && confirmarContraseña.trim() !== "") {
@@ -259,8 +246,6 @@ guardarBtn.addEventListener('click', async () => {
 });
 
  
-   
-
    
 });
 function abrirModalRecuperacion() {

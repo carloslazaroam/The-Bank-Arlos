@@ -2,7 +2,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const recurso = "http://127.0.0.1:3001";
     const token = localStorage.getItem('token');
-    const id = localStorage.getItem('id');
     const id2 = localStorage.getItem('id2');
 
 
@@ -82,8 +81,11 @@ window.addEventListener('DOMContentLoaded', () => {
         let balanceAcumulado = 0;
         const datos = [];
         const etiquetas = [];
-    
-        operaciones.forEach(op => {
+        
+        // Tomar solo las últimas 20 operaciones
+        const ultimasOperaciones = operaciones.slice(-20);
+        
+        ultimasOperaciones.forEach(op => {
             if (op.tipo === 'ingreso') {
                 balanceAcumulado += parseFloat(op.cantidad);
             } else if (op.tipo === 'retiro') {
@@ -92,14 +94,14 @@ window.addEventListener('DOMContentLoaded', () => {
             datos.push(balanceAcumulado);
             etiquetas.push(op.nombre);
         });
-    
+        
         const existingChart = Chart.getChart('line-chart'); // Obtener la instancia del gráfico existente
         if (existingChart) {
             existingChart.destroy(); // Destruir el gráfico existente si hay uno
         }
-    
+        
         const ctx = document.getElementById('line-chart').getContext('2d');
-    
+        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -125,7 +127,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
 
     // Agrega un contenedor en tu HTML para el gráfico de pastel con el id 'pie-chart'
-// Ejemplo: <canvas id="pie-chart"></canvas>
+
 
 function generatePieChart(ingresos, retiradas) {
     const existingChart = Chart.getChart('pie-chart'); // Obtener la instancia del gráfico existente
@@ -585,11 +587,13 @@ function cerrarModal(modalId) {
 
 
 
-// Función para cerrar el modal de creación de users
+// FUNCIÓN PARA CERRAR CADA MODAL AL HACER CLICK SOBRE LA X DEL MODAL
+//Cerrar modal de bizum
 function cancelarCreacion() {
     const crearModal = document.getElementById('crearModal');
     crearModal.style.display = 'none';
 }
+
 
 function cancelarCreacion2() {
     const crearModal = document.getElementById('crearModal2');
@@ -650,7 +654,7 @@ function cerrarModalesActivos() {
     });
 }
 
-// Función para mostrar un modal específico
+// Función para mostrar un modal específico (DE CONFIRMACIÓN O DE ERROR)
 function mostrarModal(idModal) {
     cerrarModalesActivos();
     const modal = document.getElementById(idModal);
@@ -663,7 +667,7 @@ function recargarPagina() {
     window.location.reload();
 }
 
-// Función para enviar la solicitud de creación de una nueva retirada al servidor
+// FUNCIÓN PARA HACER UN RETIRO
 function guardarNuevaRetirada() {
     const nombre = document.getElementById('createNombre2').value;
     const cantidad = parseFloat(document.getElementById('createCantidad2').value);
@@ -717,6 +721,8 @@ function guardarNuevaRetirada() {
     });
 }
 
+
+//FUNCIÓN PARA HACER TRANSFERENCIA
 function guardarTransferencia() {
     const nombre = document.getElementById('createNombre4').value;
     const cantidad = parseFloat(document.getElementById('createCantidad4').value);
@@ -796,14 +802,16 @@ function guardarTransferencia() {
 }
 
 
+
+
 function guardarBizum() {
-    
     const cantidad = parseFloat(document.getElementById('createCantidad5').value);
     const concepto = document.getElementById('createConcepto5').value;
     const ibanEmisor = document.getElementById('createEmisor5').value;
     const telefonoReceptor = document.getElementById('createTelefono').value;
+    const generarComprobante = document.getElementById('generarComprobante3').checked ? 'si' : 'no';
 
-    if ( !cantidad || !concepto || !ibanEmisor || !telefonoReceptor) {
+    if (!cantidad || !concepto || !ibanEmisor || !telefonoReceptor) {
         mostrarModal('modalEliminacion');
         return;
     }
@@ -814,11 +822,11 @@ function guardarBizum() {
     }
 
     const operacionData = {
-        
         cantidad: cantidad,
         concepto: concepto,
         ibanEmisor: ibanEmisor,
-        telefonoReceptor: telefonoReceptor
+        telefonoReceptor: telefonoReceptor,
+        generarComprobante: generarComprobante
     };
 
     console.log('Formulario enviado:', operacionData);
@@ -830,23 +838,43 @@ function guardarBizum() {
         },
         body: JSON.stringify(operacionData)
     })
-    .then(response => {
+    .then(async response => {
         if (!response.ok) {
             throw new Error('Error al realizar la operación de bizum: ' + response.status + ' ' + response.statusText);
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Nueva operación de bizum añadida:', data);
-        cerrarModal('crearModal');
-        mostrarModal('modalConfirmacion');
+
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition && contentDisposition.includes('attachment')) {
+            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const match = contentDisposition.match(fileNameRegex);
+            const fileName = match && match[1] ? match[1].replace(/['"]/g, '') : 'comprobante.pdf';
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            // Cerrar el modal después de descargar el comprobante
+            cerrarModal('crearModal');
+            // Mostrar el modal de confirmación
+            mostrarModal('modalConfirmacion');
+        } else {
+            const data = await response.json();
+            console.log('Nueva operación añadida:', data);
+            // Cerrar el modal después de una operación exitosa
+            cerrarModal('crearModal');
+            // Mostrar el modal de confirmación
+            mostrarModal('modalConfirmacion');
+        }
     })
     .catch(error => {
         console.error(error);
         mostrarModal('modalEliminacion');
     });
 }
-
 
 
 

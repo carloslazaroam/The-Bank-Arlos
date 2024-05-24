@@ -3,6 +3,9 @@ const { Cuenta } = require('../models/modelCuenta')
 const { User } = require('../models/modelUser')
 const pdf = require('html-pdf');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+
+
 
 
 async function getOperacion(req,res) {
@@ -82,166 +85,7 @@ async function getOperacionesByCuentaId(req, res) {
     }
 }
 
-async function ingresarDinero(req, res) {
-    try {
-        const { cantidad, id_cuenta, nombre, concepto, tipo, fecha, generarComprobante } = req.body;
 
-        // Crear y guardar la operación
-        const operacion = new Operacion({
-            nombre,
-            concepto,
-            cantidad,
-            id_cuenta,
-            tipo: 'ingreso',
-            fecha
-        });
-
-        await operacion.save(); // Guardar la operación en la base de datos
-
-        // Actualizar el saldo de la cuenta
-        const cuenta = await Cuenta.findById(id_cuenta);
-        cuenta.saldo += parseFloat(cantidad);
-        await cuenta.save();
-
-        const usuarioReceptor = await User.findById(cuenta.id_usuario);
-
-        if (!usuarioReceptor) {
-            return res.status(404).json({ mensaje: 'Usuario receptor no encontrado.' });
-        }
-
-        // Enviar correo electrónico al usuario receptor
-        const transporter = nodemailer.createTransport({
-            service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
-            auth: {
-                user: 'polanskirichard513@gmail.com', // Tu correo electrónico
-                pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
-            }
-        });
-
-        const mailOptions = {
-            from: 'polanskirichard513@gmail.com',
-            to: usuarioReceptor.email,
-            subject: 'Notificación de Ingreso',
-            text: `Estimado ${usuarioReceptor.nombre}.Has realizado un ingreso de ${cantidad}€.
-
-            Concepto: ${concepto}
-
-            Saludos,
-            The Bank-Arlos`
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.error('Error al enviar el correo:', error);
-                } else {
-                    console.log('Correo enviado:', info.response);
-                }
-            });
-
-            
-     
-
-        if (generarComprobante === "si") {
-            // Generar y guardar comprobante PDF
-            const html = `
-            <style>
-                body {
-                    font-family: 'Roboto', sans-serif;
-                    background-color: #ffffff;
-                    margin: 0;
-                    padding: 0;
-                }
-
-                .invoice-card {
-                    border: 1px solid #cce7e8;
-                    padding: 20px;
-                    max-width: 600px;
-                    margin: 20px auto;
-                }
-
-                .invoice-title {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-                }
-
-                .invoice-title h4 {
-                    margin: 0;
-                }
-
-                .invoice-details {
-                    border: 1px solid #cce7e8;
-                    padding: 10px;
-                }
-
-                .invoice-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 10px;
-                }
-
-                .invoice-table td {
-                    padding: 8px;
-                    border: 1px solid #cce7e8;
-                }
-
-                .invoice-section {
-                    border: 1px solid #cce7e8;
-                    padding: 10px;
-                    margin-bottom: 10px;
-                }
-            </style>
-            <div class="invoice-card">
-                <div class="invoice-title">
-                    <div id="main-title">
-                        <h4>COMPROBANTE DE INGRESO</h4>
-                        <span>Nº recibo: ${operacion._id}</span>
-                    </div>
-                    <div>
-                        <span>Fecha: ${new Date().toLocaleDateString()}</span><br>
-                    </div>
-                </div>
-                <div class="invoice-section">
-                    <p><strong>CONCEPTO:</strong> ${concepto}</p>
-                    <p>Pago: total/parcial</p>
-                    <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
-                    <p><strong>MEDIO DE PAGO:</strong> Ingreso</p>
-                </div>
-            </div>
-            `;
-
-            const options = { format: 'Letter' };
-
-            // Generar el PDF y guardarlo en el servidor
-            pdf.create(html, options).toFile(`comprobante_${operacion._id}.pdf`, (err, result) => {
-                if (err) {
-                    console.error("Error al generar el PDF:", err);
-                    res.status(500).send("Error al generar el comprobante");
-                } else {
-                    console.log("PDF generado exitosamente:", result);
-
-                    // Enviar el PDF al cliente para descargarlo
-                    const filePath = `comprobante_${operacion._id}.pdf`;
-                    res.download(filePath, (err) => {
-                        if (err) {
-                            console.error("Error al enviar el archivo al cliente:", err);
-                            res.status(500).send("Error al enviar el comprobante al cliente");
-                        } else {
-                            console.log("Comprobante enviado al cliente");
-                        }
-                    });
-                }
-            });
-        } else {
-            // No se genera comprobante, solo realizar la operación
-            res.status(200).json({ message: "Dinero ingresado exitosamente" });
-        }
-    } catch (err) {
-        console.error("Error al ingresar dinero en la cuenta:", err);
-        res.status(500).send("Error interno del servidor");
-    }
-}
 
 
 async function retirarDinero(req, res) {
@@ -358,7 +202,7 @@ async function retirarDinero(req, res) {
 
 async function enviarBizum(req, res) {
     try {
-        const { ibanEmisor, telefonoReceptor, cantidad, concepto, nombre, generarComprobante } = req.body;
+        const { ibanEmisor, telefonoReceptor, cantidad, concepto, generarComprobante } = req.body;
 
         // Buscar la cuenta del emisor por IBAN
         const cuentaEmisor = await Cuenta.findOne({ iban: ibanEmisor });
@@ -388,6 +232,13 @@ async function enviarBizum(req, res) {
             return res.status(400).json({ mensaje: 'Saldo insuficiente en la cuenta emisora.' });
         }
 
+        // Obtener información del usuario emisor
+        const usuarioEmisor = await User.findById(cuentaEmisor.id_usuario);
+
+        if (!usuarioEmisor) {
+            return res.status(404).json({ mensaje: 'Usuario emisor no encontrado.' });
+        }
+
         // Realizar la transferencia
         cuentaEmisor.saldo -= parseFloat(cantidad);
         cuentaReceptor.saldo += parseFloat(cantidad);
@@ -405,7 +256,7 @@ async function enviarBizum(req, res) {
         const operacionReceptor = new Operacion({
             nombre: 'BIZUM RECIBIDO',
             cantidad: cantidad,
-            concepto: '(Bizum recibido por parte de ' + ibanEmisor + ') ',
+            concepto: '(Bizum recibido por parte de ' + ibanEmisor + ') ' + concepto,
             id_cuenta: cuentaReceptor._id,
             tipo: 'ingreso'
         });
@@ -415,39 +266,160 @@ async function enviarBizum(req, res) {
         await cuentaEmisor.save();
         await cuentaReceptor.save();
 
+        // Enviar correo electrónico al usuario receptor
         const transporter = nodemailer.createTransport({
-            service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+            service: 'gmail',
             auth: {
-                user: 'polanskirichard513@gmail.com', // Tu correo electrónico
-                pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+                user: 'polanskirichard513@gmail.com',
+                pass: 'nuxu xanb qtgm anod'
             }
         });
 
+        const mailOptions = {
+            from: 'polanskirichard513@gmail.com',
+            to: usuarioReceptor.email,
+            subject: 'Notificación de Bizum',
+            text: `Has recibido un Bizum de ${cantidad}€ por parte de ${usuarioEmisor.nombre} ${usuarioEmisor.apellido1}.
 
-        // Enviar correo electrónico de notificación al usuario receptor
-        const correoReceptor = usuarioReceptor.email;
-        const asunto = 'Has recibido un Bizum';
-        const mensaje = `Has recibido un bizum de ${cantidad}€ por parte de ${usuarioReceptor.nombre} ${usuarioReceptor.apellido1}`;
-        const correoRecibido = {
-            from: 'tu_correo@gmail.com', // Reemplaza con tu dirección de correo electrónico
-            to: correoReceptor,
-            subject: asunto,
-            text: mensaje
+Concepto: ${concepto}
+
+Saludos,
+The Bank-Arlos`
         };
 
-        transporter.sendMail(correoRecibido, function (error, info) {
+        transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.error('Error al enviar el correo electrónico:', error);
-                // Si falla el envío del correo electrónico, puedes manejar el error aquí
+                console.error('Error al enviar el correo:', error);
             } else {
-                console.log('Correo de notificación enviado:', info.response);
-                // Si se envía el correo electrónico correctamente, puedes hacer algo aquí si es necesario
+                console.log('Correo enviado:', info.response);
             }
         });
 
-        
         if (generarComprobante === "si") {
-            
+            // Generar y enviar comprobante PDF
+            const imgPath = './thebankarlos.png';
+            const imgBase64 = fs.readFileSync(imgPath, { encoding: 'base64' });
+            const imgSrc = `data:image/png;base64,${imgBase64}`;
+
+
+
+            const imgPath2 = './bizum.png';
+            const imgBase642 = fs.readFileSync(imgPath2, { encoding: 'base64' });
+            const imgSrc2 = `data:image/png;base64,${imgBase642}`;
+
+            const html = `
+                        <style>
+                body {
+                    font-family: 'Roboto', sans-serif;
+                    background-color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .invoice-card {
+                    border: 1px solid #cce7e8;
+                    padding: 20px;
+                    max-width: 600px;
+                    margin: 20px auto;
+                    position: relative;
+                }
+
+                .invoice-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 20px;
+                }
+
+                .invoice-title h4 {
+                    margin: 0;
+                }
+
+                .invoice-title div {
+                    flex: 1;
+                }
+
+                .invoice-details {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                }
+
+                .invoice-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+
+                .invoice-table td {
+                    padding: 8px;
+                    border: 1px solid #cce7e8;
+                }
+
+                .invoice-section {
+                    border: 1px solid #cce7e8;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
+
+                .invoice-logo {
+                    max-width: 80px;
+                    height: auto;
+                    display: block;
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                }
+
+               
+            </style>
+            <div class="invoice-card">
+                <img src="${imgSrc}" alt="The Bank Arlos Logo" class="invoice-logo">
+                
+                <div class="invoice-title">
+                    <div id="main-title">
+                        <h4>COMPROBANTE DE BIZUM</h4>
+                        <span>Nº recibo: ${operacionEmisor._id}</span>
+                        <br>
+                        <span>Fecha: ${new Date().toLocaleDateString()}</span>
+                    </div>
+                </div>
+                <div class="invoice-section">
+                    <div>
+                        <strong>EMISOR</strong>
+                        <p>IBAN: ES ${ibanEmisor}</p>
+                        <p>Nombre: ${usuarioEmisor.nombre} ${usuarioEmisor.apellido1}</p>
+                        <p>Num. teléfono: ${usuarioEmisor.telefono}</p>
+                        <p>Dirección: ${usuarioEmisor.direccion}</p>
+                    </div>
+                </div>
+                <div class="invoice-section">
+                    <div>
+                        <strong>RECEPTOR</strong>
+                        <p>Nombre: ${usuarioReceptor.nombre} ${usuarioReceptor.apellido1}</p>
+                        <p>Teléfono: ${telefonoReceptor}</p>
+                    </div>
+                </div>
+                <div class="invoice-section">
+                    <p><strong>CONCEPTO:</strong> ${concepto}</p>
+                    <p>Pago: total/parcial</p>
+                    <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
+                    <p><strong>MEDIO DE PAGO:</strong> Bizum</p>
+                </div>
+            </div>
+            `;
+
+            const options = { format: 'Letter' };
+
+            pdf.create(html, options).toBuffer((err, buffer) => {
+                if (err) {
+                    console.error("Error al generar el PDF:", err);
+                    return res.status(500).send("Error al generar el comprobante");
+                }
+
+                res.setHeader('Content-Disposition', 'attachment; filename="comprobante_bizum.pdf"');
+                res.setHeader('Content-Type', 'application/pdf');
+                res.send(buffer);
+            });
         } else {
             // No se genera comprobante
             res.status(200).json({ mensaje: 'Transferencia Bizum realizada con éxito.' });
@@ -458,8 +430,9 @@ async function enviarBizum(req, res) {
     }
 }
 
-
-
+const imgPath = './thebankarlos.png';
+const imgBase64 = fs.readFileSync(imgPath, { encoding: 'base64' });
+const imgSrc = `data:image/png;base64,${imgBase64}`;
 
 async function transferirSaldo(req, res) {
     try {
@@ -511,6 +484,7 @@ async function transferirSaldo(req, res) {
         await cuentaReceptor.save();
 
         // Obtener información del usuario receptor
+        const usuarioEmisor = await User.findById(cuentaEmisor.id_usuario);
         const usuarioReceptor = await User.findById(cuentaReceptor.id_usuario);
 
         if (!usuarioReceptor) {
@@ -557,85 +531,97 @@ async function transferirSaldo(req, res) {
                     margin: 0;
                     padding: 0;
                 }
-        
+                
                 .invoice-card {
                     border: 1px solid #cce7e8;
                     padding: 20px;
                     max-width: 600px;
                     margin: 20px auto;
+                    position: relative;
                 }
-        
+                
                 .invoice-title {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
+                    align-items: flex-start;
                     margin-bottom: 20px;
                 }
-        
+                
                 .invoice-title h4 {
                     margin: 0;
                 }
-        
+                
+                .invoice-title div {
+                    flex: 1;
+                }
+                
                 .invoice-details {
                     border: 1px solid #cce7e8;
                     padding: 10px;
                 }
-        
+                
                 .invoice-table {
                     width: 100%;
                     border-collapse: collapse;
                     margin-top: 10px;
                 }
-        
+                
                 .invoice-table td {
                     padding: 8px;
                     border: 1px solid #cce7e8;
                 }
-        
+                
                 .invoice-section {
                     border: 1px solid #cce7e8;
                     padding: 10px;
                     margin-bottom: 10px;
                 }
-        
+                
                 .invoice-logo {
-                    max-width: 100px;
+                    max-width: 80px;
+                    height: auto;
+                    display: block;
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
                 }
                 </style>
                 <div class="invoice-card">
-            <div class="invoice-title">
-                <div id="main-title">
-                    <h4>COMPROBANTE DE TRANSFERENCIA</h4>
-                    <span>Nº recibo: ${operacionEmisor._id}</span>
+                    <img src="${imgSrc}" alt="The Bank Arlos Logo" class="invoice-logo">
+                    <div class="invoice-title">
+                        <div id="main-title">
+                            <h4>COMPROBANTE DE TRANSFERENCIA</h4>
+                            <span>Nº recibo: ${operacionEmisor._id}</span>
+                            <br>
+                            <span>Fecha: ${new Date().toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    <div class="invoice-section">
+                        <div>
+                        <strong>EMISOR</strong>
+                        <p>IBAN: ES ${ibanEmisor}</p>
+                        <p>Nombre: ${usuarioEmisor.nombre}</p>
+                        <p>Apellido 1: ${usuarioEmisor.apellido1}</p>
+                        <p>Apellido 2: ${usuarioEmisor.apellido2}</p>
+                        <p>Num. teléfono: ${usuarioEmisor.telefono}</p>
+                        <p>Dirección: ${usuarioEmisor.direccion}</p>
+                        </div>
+                    </div>
+                    <div class="invoice-section">
+                        <div>
+                            <strong>RECEPTOR</strong>
+                            <p>IBAN: ES ${ibanReceptor}</p>
+                            <p>Num. teléfono: ${usuarioReceptor.telefono}</p>
+                        </div>
+                    </div>
+                    <div class="invoice-section">
+                        <p><strong>CONCEPTO:</strong> ${concepto}</p>
+                        <p>Pago: total/parcial</p>
+                        <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
+                        <p><strong>MEDIO DE PAGO:</strong> Transferencia</p>
+                    </div>
                 </div>
-                <div>
-                <img src="./thebankarlos.png" alt="The Bank Arlos Logo" class="invoice-logo">
-                    <span>Fecha: ${new Date().toLocaleDateString()}</span><br>
-                    
-                </div>
-            </div>
-            
-            <div class="invoice-section">
-                <div>
-                    <strong>EMISOR</strong>
-                    <p>IBAN: ES ${ibanEmisor}</p>
-                </div>
-            </div>
-            <div class="invoice-section">
-                <div>
-                    <strong>RECEPTOR</strong>
-                    <p>IBAN: ES ${ibanReceptor}</p>
-                    
-                </div>
-            </div>
-            <div class="invoice-section">
-                <p><strong>CONCEPTO:</strong> ${concepto}</p>
-                <p>Pago: total/parcial</p>
-                <p><strong>CANTIDAD:</strong> ${cantidad}€</p>
-                <p><strong>MEDIO DE PAGO:</strong> Transferencia</p>
-            </div>
-        </div>
-                `;
+                                `;
      
                 const options = { format: 'Letter' };
      
@@ -713,5 +699,5 @@ async function transferirSaldo(req, res) {
     
 
 
-module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,ingresarDinero,retirarDinero,transferirSaldo,sacarPorcentajes,enviarBizum}
+module.exports = { getOperacion, createOperacion ,getOperacionById, updateOperacion, deleteOperacion, getOperacionesByCuentaId,retirarDinero,transferirSaldo,sacarPorcentajes,enviarBizum}
 
