@@ -37,7 +37,7 @@ function inicio(users) {
                     <button id="botonEliminar" onclick="confirmarEliminacion('${user.nombre}')">
                     <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                     </button>
-                    <button id="botonEditar"onclick="editarUser('${user.id}','${user.nombre}','${user.contra}', '${user.apellido1}', '${user.apellido2}', '${user.direccion}', '${user.pais}','${user.validado}')">
+                    <button id="botonEditar"onclick="editarUser('${user.id}','${user.dni}','${user.fotoDni}', '${user.validado}')">
                     <?xml version="1.0" encoding="UTF-8"?>
                     <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                         <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -66,63 +66,55 @@ function confirmarEliminacion(nombre) {
 
 
 
-// Agrega una variable global para almacenar el título del user que se está editando
 
 
-// Función para abrir el modal de edición con los datos del user seleccionado
-// Función para let userEditando = null;abrir el modal de edición con los datos del user seleccionado
-// Función para abrir el modal de edición con los datos del usuario seleccionado
-function editarUser(id,nombre,contra, apellido1, apellido2, direccion, pais,usertype,validado) {
+function editarUser(id, dni, fotoDni, validado) {
     // Almacenar los datos del usuario que se está editando
-    userEditando = { id,nombre, apellido1, apellido2, direccion, pais,usertype,validado};
-    
-    // Llenar el formulario de edición con los datos del usuario
-    document.getElementById('editNombre').value = nombre;
-    document.getElementById('editContra').value = contra;
-    document.getElementById('editApellido1').value = apellido1;
-    document.getElementById('editApellido2').value = apellido2;
-    document.getElementById('editDireccion').value = direccion;
-    document.getElementById('editPais').value = pais; 
-    document.getElementById('editValidado').checked = validado;
-    
+    userEditando = { id, dni, fotoDni, validado };
 
-    fetch(recurso + '/tipousers')
-        .then(res => res.json())
-        .then(usertypes => {
-            console.log("Tipos de usuario obtenidos:", usertypes); // Verificar los usuarios obtenidos
-            const select = document.getElementById('editUsertype');
-            select.innerHTML = ""; // Limpiar las opciones existentes
-            usertypes.forEach(usertype => {
-                const option = document.createElement('option');
-                option.value = usertype._id;
-                option.textContent = usertype.nombre;
-                if (usertype._id.toString() === usertype.toString()) {
-                    option.selected = true; // Seleccionar automáticamente el usuario asignado a la cuenta
-                }
-                select.appendChild(option);
-            });
-        })
-        .catch(err => console.error('Error al obtener los tipos de usuarios:', err));
-    
+    // Llenar el formulario de edición con los datos del usuario
+    document.getElementById('editDni').value = dni;
+
+    // Construir la URL completa de la imagen
+    const baseURL = 'http://localhost:3001/'; // Ajusta esta URL base según tu configuración
+    const fotoDniURL = baseURL + 'public/images/' + fotoDni;
+
+    // Log de los valores para verificar
+    console.log("ID:", id);
+    console.log("DNI:", dni);
+    console.log("Foto DNI:", fotoDni);
+    console.log("Validado:", validado);
+
+    // Asignar la URL de la imagen al elemento img
+    document.getElementById('fotoDniImg').src = fotoDniURL;
+    document.getElementById('editValidado').checked = validado;
+
     // Mostrar el modal de edición
     const modal = document.getElementById('modal');
     modal.style.display = 'block'; // Asegúrate de que el modal se muestre
     console.log('Modal de edición abierto'); // Agrega un mensaje de consola para verificar si el modal se abre correctamente
 }
 
-// Función para enviar la solicitud de actualización al servidor
+
+
 function guardarEdicion() {
-    // Obtener los nuevos datos del usuario desde el formulario
-    const newNombre = document.getElementById('editNombre').value;
-    const newContra = document.getElementById('editContra').value;
-    const newApellido1 = document.getElementById('editApellido1').value;
-    const newApellido2 = document.getElementById('editApellido2').value;
-    const newDireccion = document.getElementById('editDireccion').value;
-    const newPais = document.getElementById('editPais').value;
-    const newUsertype = document.getElementById('editUsertype').value; 
-    const newValidado = document.getElementById('editValidado').checked; 
-    
-   
+    // Obtener el nuevo DNI desde el formulario
+    const newDni = document.getElementById('editDni').value;
+
+    // Verificar si el DNI cumple con el formato requerido
+    const dniRegex = /^\d{8}[a-zA-Z]$/;
+    if (!dniRegex.test(newDni)) {
+        // Mostrar el mensaje de error
+        document.getElementById('dniErrorMessage').innerHTML = 'El DNI debe tener 8 números seguidos de una letra.';
+        return; // Salir de la función si el DNI no cumple con el formato requerido
+    } else {
+        // Limpiar el mensaje de error si el formato es válido
+        document.getElementById('dniErrorMessage').innerHTML = '';
+    }
+
+    // Obtener el nuevo estado de validación desde el formulario
+    const newValidado = document.getElementById('editValidado').checked;
+
     // Enviar la solicitud de actualización al servidor
     fetch(recurso + '/users/' + userEditando.id, {
         method: 'PUT',
@@ -130,16 +122,8 @@ function guardarEdicion() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            nombre: newNombre,
-            contra: newContra,
-            apellido1: newApellido1,
-            apellido2: newApellido2,
-            direccion: newDireccion,
-            pais: newPais.pais,
-            usertype: newUsertype,
+            dni: newDni,
             validado: newValidado
-            
-            // Conservamos el valor original del país
         })
     })
     .then(res => {
@@ -153,6 +137,9 @@ function guardarEdicion() {
     })
     .catch(err => console.error('Error al actualizar el usuario:', err));
 }
+
+
+
 
 
 // Función para cerrar el modal de edición

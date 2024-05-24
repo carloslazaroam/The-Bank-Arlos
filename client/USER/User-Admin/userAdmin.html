@@ -56,45 +56,26 @@
           </div>
         </div>
 
-        <!-- Agregar el modal de edición al HTML, pero inicialmente oculto --> 
-<div id="modal" class="modal">
-  <div class="modal-content">
-      <span class="close" onclick="cancelarEdicion()">&times;</span>
-      <h2>Editar User</h2>
-      <hr>
-      <form>
-          <p for="editNombre">Nombre:</p>
-          <input type="text" id="editNombre" name="editNombre"><br>
-        <hr>
-          <p for="editContra">Contraseña:</p>
-          <input type="text" id="editContra" name="editContra"><br>
-          <hr>
-          <p for="editApellido1">Apellido 1:</p>
-          <input type="text" id="editApellido1" name="editApellido1"><br>
-          <hr>
-          <p for="editApellido2">Apellido2:</p>
-          <input type="text" id="editApellido2" name="editApellido2"><br>
-          <hr>
-          <p for="editDireccion">Dirección:</label><p>
-          <input type="text" id="editDireccion" name="editDireccion"><br>
-          <hr>
-          <p for="editPais">Pais:</p>
-          <input type="text" id="editPais" name="editPais"><br>
-
-          <hr>
-          <p for="editUsertype">Tipo de Usuario:</p>
-          <select id="editUsertype" name="editUsertype"></select><br>
-
-          <hr> 
-          <p for="editValidado">Validar cuenta:</p>
-          <input type="checkbox" id="editValidado" name="editValidado"><br>
-          
-          
-          <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
-      </form>
-  </div>
-</div>
-
+        <div id="modal" class="modal">
+          <div class="modal-content">
+              <span class="close" onclick="cancelarEdicion()">&times;</span>
+              <h2>Editar User</h2>
+              <hr>
+              <form id="editUserForm">
+                  <label for="editDni">DNI:</label>
+                  <input type="text" id="editDni" name="editDni" maxlength="9" required>
+                  <p style="font-size: 12px; color: red;" id="dniErrorMessage"></p> <!-- Nuevo párrafo para mostrar el mensaje de error -->
+                  <hr>
+                  <label>Foto DNI:</label>
+                  <img id="fotoDniImg" src="" alt="Foto DNI" style="width: 100px; height: auto;"><br>
+                  <hr>
+                  <label for="editValidado">Validar cuenta:</label>
+                  <input type="checkbox" id="editValidado" name="editValidado"><br>
+                  <button type="button" onclick="guardarEdicion()" style="margin-top: 20px;">Guardar</button>
+              </form>
+          </div>
+      </div>
+      
  
 <div id="confirmModal" class="modal">
 	<div class="modal-content">

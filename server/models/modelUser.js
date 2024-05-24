@@ -10,7 +10,7 @@ const CounterUser = mongoose.model('CounterUser', counterUserSchema);
 
 const userSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
-    dni: { type: String, unique: true },
+    dni: String,
     nombre: String,
 
     email: { type: String, unique: true },
@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TipoUsuario'
     },
-    cuentas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cuenta' }] 
+    cuentas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cuenta' }] ,
+    fotoDni: String
     
 });
 

@@ -308,14 +308,13 @@ The Bank-Arlos`
             const imgSrc2 = `data:image/png;base64,${imgBase642}`;
 
             const html = `
-                        <style>
+            <style>
                 body {
                     font-family: 'Roboto', sans-serif;
                     background-color: #ffffff;
                     margin: 0;
                     padding: 0;
                 }
-
                 .invoice-card {
                     border: 1px solid #cce7e8;
                     padding: 20px;
@@ -323,44 +322,23 @@ The Bank-Arlos`
                     margin: 20px auto;
                     position: relative;
                 }
-
                 .invoice-title {
                     display: flex;
                     justify-content: space-between;
-                    align-items: flex-start;
+                    align-items: center;
                     margin-bottom: 20px;
                 }
-
                 .invoice-title h4 {
                     margin: 0;
                 }
-
                 .invoice-title div {
                     flex: 1;
                 }
-
-                .invoice-details {
-                    border: 1px solid #cce7e8;
-                    padding: 10px;
-                }
-
-                .invoice-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 10px;
-                }
-
-                .invoice-table td {
-                    padding: 8px;
-                    border: 1px solid #cce7e8;
-                }
-
                 .invoice-section {
                     border: 1px solid #cce7e8;
                     padding: 10px;
                     margin-bottom: 10px;
                 }
-
                 .invoice-logo {
                     max-width: 80px;
                     height: auto;
@@ -369,35 +347,43 @@ The Bank-Arlos`
                     top: 10px;
                     right: 10px;
                 }
-
-               
+                .bizum-logo {
+                    max-width: 100px;
+                    height: auto;
+                    display: block;
+                }
+                .title-left, .title-right {
+                    display: flex;
+                    align-items: center;
+                }
+                .title-left img {
+                    margin-right: 10px;
+                }
             </style>
             <div class="invoice-card">
-                <img src="${imgSrc}" alt="The Bank Arlos Logo" class="invoice-logo">
-                
                 <div class="invoice-title">
-                    <div id="main-title">
-                        <h4>COMPROBANTE DE BIZUM</h4>
-                        <span>Nº recibo: ${operacionEmisor._id}</span>
-                        <br>
-                        <span>Fecha: ${new Date().toLocaleDateString()}</span>
+                    <div class="title-left">
+                        <img src="${imgSrc2}" alt="Bizum Logo" class="bizum-logo">
+                        <div id="main-title">
+                            <h4>COMPROBANTE DE BIZUM</h4>
+                            <span>Nº recibo: ${operacionEmisor._id}</span>
+                            <br>
+                            <span>Fecha: ${new Date().toLocaleDateString()}</span>
+                        </div>
                     </div>
+                    <img src="${imgSrc}" alt="The Bank Arlos Logo" class="invoice-logo">
                 </div>
                 <div class="invoice-section">
-                    <div>
-                        <strong>EMISOR</strong>
-                        <p>IBAN: ES ${ibanEmisor}</p>
-                        <p>Nombre: ${usuarioEmisor.nombre} ${usuarioEmisor.apellido1}</p>
-                        <p>Num. teléfono: ${usuarioEmisor.telefono}</p>
-                        <p>Dirección: ${usuarioEmisor.direccion}</p>
-                    </div>
+                    <strong>EMISOR</strong>
+                    <p>IBAN: ${ibanEmisor}</p>
+                    <p>Nombre: ${usuarioEmisor.nombre} ${usuarioEmisor.apellido1}</p>
+                    <p>Num. teléfono: ${usuarioEmisor.telefono}</p>
+                    <p>Dirección: ${usuarioEmisor.direccion}</p>
                 </div>
                 <div class="invoice-section">
-                    <div>
-                        <strong>RECEPTOR</strong>
-                        <p>Nombre: ${usuarioReceptor.nombre} ${usuarioReceptor.apellido1}</p>
-                        <p>Teléfono: ${telefonoReceptor}</p>
-                    </div>
+                    <strong>RECEPTOR</strong>
+                    <p>Nombre: ${usuarioReceptor.nombre} ${usuarioReceptor.apellido1}</p>
+                    <p>Teléfono: ${telefonoReceptor}</p>
                 </div>
                 <div class="invoice-section">
                     <p><strong>CONCEPTO:</strong> ${concepto}</p>

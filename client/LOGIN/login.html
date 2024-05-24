@@ -53,71 +53,52 @@
         </div>
 
         <div class="signup-container" id="signup-container">
-            <h1 class="text-center mb-5">Registro </h1>
+            <h1 class="text-center mb-5">Registro</h1>
             <p class="text-center mb-5">Registrate para empezar a usar una cuenta</p>
             <div class="input-container">
-                <form id="registroForm">
-                <input type="text" placeholder="Introduce tu DNI" id="registroDNI" maxlength="9" required>
+                <form id="registroForm" enctype="multipart/form-data">
+                    <input type="email" placeholder="Introduce tu email" id="registroEmail" maxlength="30" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Introduce tu DNI" id="registroDni" maxlength="9" required>
+                </div>
                 
+                <div class="input-container">
+                    
+                    <input type="file" id="fotoDni" placeholder="Foto del DNI" required>DNI
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Introduce tu telefono" id="registroTelefono" maxlength="9" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Introduce tu nombre" id="registroNombre" maxlength="9" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Primer apellido" id="registroApellido1" maxlength="9" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Segundo apellido" id="registroApellido2" maxlength="9" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" maxlength="16" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" maxlength="16" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Dirección" id="registroDireccion" maxlength="32" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="País" id="registroPais" maxlength="20" required>
+                </div>
+                <div class="account-controls">
+                    <button type="submit">Enviar<i class="fas fa-solid fa-angle-right"></i></button>
+                </div>
+                </form>
+                <span class="signup-text">Ya tienes una cuenta? <a id="login-form-toggler">Logeate aqui</a></span>
             </div>
-
-            <p style="font-size: 12px;" id="holamundo"></p>
-            <div class="input-container">
-                <input type="email" placeholder="Introduce tu email" id="registroEmail" maxlength="30" required>
-            </div>
-
-            
-            <p style="font-size: 8px;" id="holamundo"></p>
-            <div class="input-container">
-                <input type="text" placeholder="Introduce tu nombre" id="registroNombre" maxlength="9" required>
-            </div>
-
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="text" placeholder="Primer apellido" id="registroApellido1" maxlength="9" required>
-            </div>
-
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="text" placeholder="Segundo apellido" id="registroApellido2" maxlength="9" required>
-            </div>
-
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="password" placeholder="Introduce una contraseña" id="registroContraseña" maxlength="16" required>
-            </div>
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="password" placeholder="Confirma tu contraseña" id="confirmarContraseña" maxlength="16" required>
-            </div>
-            
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="text" placeholder="Dirección" id="registroDireccion" maxlength="32" required>
-            </div>
-            <p style="font-size: 8px;"></p>
-            <div class="input-container">
-                <input type="text" placeholder="País" id="registroPais" maxlength="20" required>
-            </div>
-
-            <p style="font-size: 8px;"></p>
-            
-                
-            
-
-            
-            <p style="font-size: 10px;"></p>
-            <div class="account-controls">
-                <button onclick="registroUsuario()">Enviar<i class="fas fa-solid fa-angle-right"></i></button>
-            </div>
-
-        </form>
-            
-            
-            
-            <span class="signup-text">Ya tienes una cuenta? <a id = "login-form-toggler">Logeate aqui</a></span>
         </div>
-    </div>
+        
 
 
     <div id="modal" class="modal" style="display: none;">

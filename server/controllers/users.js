@@ -1,6 +1,6 @@
-// usersController.js
 const { User } = require('../models/modelUser');
 const nodemailer = require('nodemailer');
+
 async function getUsers(req, res) {
     try {
         const users = await User.find({});
@@ -11,16 +11,9 @@ async function getUsers(req, res) {
     }
 }
 
-
-
 async function getUserById(req, res) {
-    //console.log(req.params.id);
-
-   // if(req.userId !=req.params.id ) return res.status(403).json({ message: 'Acceso denegado' });
-
     try {
         const users = await User.find({ id: req.params.id });
-        
         res.send(JSON.stringify(users));
     } catch (err) {
         console.error("Error al obtener los usuarios:", err);
@@ -36,13 +29,12 @@ async function createUser(req, res) {
             apellido1: req.body.apellido1,
             apellido2: req.body.apellido2,
             email: req.body.email,
-            telfono: req.body.telefono,
+            telefono: req.body.telefono,
             direccion: req.body.direccion,
             pais: req.body.pais,
             contra: req.body.contra,
-            usertype: req.body.usertype || '6632846b043b8bf3927f1af0', // Valor por defecto si no se proporciona usertype
-            
-            // Asegúrate de que req.body.id_tipousuario sea el _id del tipoUsuario
+            usertype: req.body.usertype || '6632846b043b8bf3927f1af0',
+            fotoDni: req.file ? req.file.path : undefined
         });
         await user.save();
         res.send(user);
@@ -52,21 +44,20 @@ async function createUser(req, res) {
     }
 }
 
-
-
 async function updateUser(req, res) {
     try {
         const userId = req.params.id;
-        const updatedUser = await User.findOneAndUpdate({ id: userId }, req.body, { new: true });
+        const updateData = req.body;
+        if (req.file) {
+            updateData.fotoDni = req.file.path;
+        }
+        const updatedUser = await User.findOneAndUpdate({ id: userId }, updateData, { new: true });
         res.send(updatedUser);
     } catch (err) {
         console.error("Error al actualizar el usuario:", err);
         res.status(500).send("Error interno del servidor");
     }
 }
-
-
-
 
 async function deleteUser(req, res) {
     try {
@@ -95,19 +86,16 @@ async function recuperarContrasena(req, res) {
     const dni = req.body.dni;
 
     try {
-        // Buscar el usuario por su correo electrónico
         const usuario = await User.findOne({ email: email });
 
         if (!usuario) {
             return res.status(404).send("Usuario no encontrado");
         }
 
-        // Verificar si el DNI proporcionado coincide con el del usuario
         if (usuario.dni !== dni) {
             return res.status(400).send("El DNI proporcionado no coincide con el del usuario");
         }
 
-        // Enviar la contraseña por correo electrónico
         const correoRecuperacion = {
             from: email,
             to: email,
@@ -130,13 +118,4 @@ async function recuperarContrasena(req, res) {
     }
 }
 
-
-
-
-
-
-// Exportar las funciones para su uso en app.js
-module.exports = { getUsers, getUserById, createUser,updateUser,deleteUser,recuperarContrasena};
-
-
-
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser, recuperarContrasena };
