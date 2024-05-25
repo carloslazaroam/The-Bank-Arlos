@@ -28,10 +28,10 @@ async function getCuentaByIban(req,res) {
 
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Puedes usar cualquier servicio de correo compatible con Nodemailer
+    service: 'gmail', 
     auth: {
-        user: 'polanskirichard513@gmail.com', // Tu correo electrónico
-        pass: 'nuxu xanb qtgm anod' // Tu contraseña de correo electrónico
+        user: 'polanskirichard513@gmail.com', 
+        pass: 'nuxu xanb qtgm anod' 
     }
 });
 
@@ -119,12 +119,12 @@ async function updateCuenta(req, res) {
         const updateData = req.body;
         const cuenta = await Cuenta.findOne({ id: cuentaId });
 
-        // Check if the 'validado' field is changing from false to true
+        
         if (!cuenta.validado && updateData.validado === true) {
-            // Update the cuenta
+           
             const updatedCuenta = await Cuenta.findOneAndUpdate({ id: cuentaId }, updateData, { new: true });
 
-            // Send email notification
+            // Enviar la notificación de email
             const usuario = await User.findById(updatedCuenta.id_usuario);
             const correoUsuario = usuario.email;
             const iban = updatedCuenta.iban;
@@ -136,7 +136,7 @@ async function updateCuenta(req, res) {
             }
             res.send(updatedCuenta);
         } else {
-            // No need to send email notification
+           
             const updatedCuenta = await Cuenta.findOneAndUpdate({ id: cuentaId }, updateData, { new: true });
             res.send(updatedCuenta);
         }
@@ -170,7 +170,7 @@ async function getEmpresas(req, res) {
 async function getCuentas2(req, res) {
     try {
         const cuentas = await Cuenta.find({}).populate('id_usuario', 'nombre apellido1 dni');
-        console.log(cuentas); // Agregar console.log para depurar
+        console.log(cuentas); 
         res.send(cuentas);
     } catch (err) {
         console.error("Error al obtener las cuentas:", err);
@@ -182,6 +182,6 @@ async function getCuentas2(req, res) {
 
 
 
-// Exportar las funciones para su uso en app.js
+
 module.exports = { getCuentas,getCuentaByIban, createCuenta,updateCuenta, deleteCuenta, getCuentasByUserId,getEmpresas,getCuentas2};
 

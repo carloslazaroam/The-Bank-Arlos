@@ -1,28 +1,24 @@
-window.addEventListener('DOMContentLoaded', () => {
-    const recurso = "http://127.0.0.1:3001";
+document.addEventListener('DOMContentLoaded', async () => {
+    const resource = "http://127.0.0.1:3001";
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     const id2 = localStorage.getItem('id2');
 
-    getUserData();
+    await getUserData();
 
     async function getUserData() {
         const user = await getUserDB();
         printUser(user);
-        const cuentas = await getUserAccounts();
-        printAccounts(cuentas);
-    
-        const cuentasActivas = cuentas.filter(cuenta => cuenta.activa);
-    
-        if (cuentas.length === 0 || cuentasActivas.length === 0) {
-            document.getElementById('botonPanel').style.display = 'none';
-        } else {
-            document.getElementById('botonPanel').style.display = 'block';
-        }
+        const accounts = await getUserAccounts();
+        printAccounts(accounts);
+
+        const activeAccounts = accounts.filter(account => account.activa);
+
+        document.getElementById('botonPanel').style.display = (accounts.length === 0 || activeAccounts.length === 0) ? 'none' : 'block';
     }
 
     async function getUserDB() {
-        const url = `${recurso}/users/${id}`;
+        const url = `${resource}/users/${id}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -34,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getUserAccounts() {
-        const url = `${recurso}/users/${id2}/accounts`;
+        const url = `${resource}/users/${id2}/accounts`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -67,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function printAccounts(accountsData) {
         const wrapper2 = document.getElementById('wrapper2');
         wrapper2.innerHTML = ""; 
-        
+
         accountsData.forEach(account => {
             const activaText = account.activa ? 'activada' : 'desactivada';
             const validado = account.validado;
@@ -80,21 +76,20 @@ window.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="botonessec">
                             ${validado ? `
-                            <button id="botonEditar" onclick="editarCuenta('${account.id}','${account.nombre}','${account.iban}','${account.activa}','${account.id_tipocuenta}','${account.empresa}')"> <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                            <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-        
-                        </button>
-                        <button id="botonOperaciones" onclick="getOperationsByAccountId('${account._id}')">
-                        <?xml version="1.0" encoding="UTF-8"?>
-                        <svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                            <path d="M22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3H20C21.1046 3 22 3.89543 22 5Z" stroke="#000000" stroke-width="1.5"></path>
-                            <path d="M2 12H6" stroke="#000000" stroke-width="1.5"></path>
-                            <path d="M6 3V21" stroke="#000000" stroke-width="1.5"></path>
-                            <path d="M15.5 11.5L12 14.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                            <path d="M17 10.01L17.01 9.99889" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
+                                <button id="botonEditar" onclick="editarCuenta('${account.id}','${account.nombre}','${account.iban}','${account.activa}','${account.id_tipocuenta}','${account.empresa}')">
+                                    <svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                        <path d="M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
+                                <button id="botonOperaciones" onclick="getOperationsByAccountId('${account._id}')">
+                                    <svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                        <path d="M22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3H20C21.1046 3 22 3.89543 22 5Z" stroke="#000000" stroke-width="1.5"></path>
+                                        <path d="M2 12H6" stroke="#000000" stroke-width="1.5"></path>
+                                        <path d="M6 3V21" stroke="#000000" stroke-width="1.5"></path>
+                                        <path d="M15.5 11.5L12 14.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M17 10.01L17.01 9.99889" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
                             ` : ''}
                             <button id="botonEliminar" onclick="confirmarEliminacion('${account.id}')">
                             <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -490,13 +485,4 @@ function mostrarOperacionesEnModal(operaciones) {
     modal.style.display = 'block';
 }
 
-
-// La función mostrarOperaciones se llama directamente desde el onclick del botón
-
-
-
-
-// Coloca otras declaraciones de funciones aquí...
-
-// Tu evento DOMContentLoaded y el resto del código...
 

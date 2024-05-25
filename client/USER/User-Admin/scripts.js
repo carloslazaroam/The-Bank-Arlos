@@ -91,7 +91,7 @@ function editarUser(id, dni, fotoDni, validado) {
 
     // Mostrar el modal de edición
     const modal = document.getElementById('modal');
-    modal.style.display = 'block'; // Asegúrate de que el modal se muestre
+    modal.style.display = 'block'; 
     console.log('Modal de edición abierto'); // Agrega un mensaje de consola para verificar si el modal se abre correctamente
 }
 

@@ -509,6 +509,39 @@ function mostrarFormulario3() {
 }
 
 
+function mostrarFormulario4() {
+    const crearModal = document.getElementById('crearModal4');
+    crearModal.style.display = 'block';
+
+    const url = `${recurso}/users/${id2}/accounts`;
+    fetch(url, {
+        method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+    })
+    .then(res => res.json())
+    .then(cuentas => {
+        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
+        const select = document.getElementById('createEmisor');
+        select.innerHTML = "";
+         // Limpiar las opciones existentes
+        cuentas.forEach(cuenta => {
+            if (cuenta.activa){
+            const option = document.createElement('option');
+            option.value = cuenta.iban;
+            option.textContent = cuenta.iban;
+            select.appendChild(option);
+            }
+        });
+        
+    })
+    .catch(err => console.error('Error al obtener cuentas:', err));
+
+}
+
+
 
 function sacarPorcentajes() {
     // Obtener los valores de los campos del formulario
@@ -611,40 +644,6 @@ function cancelarCreacion4() {
     crearModal.style.display = 'none';
 }
 
-
-
-
-function mostrarFormulario4() {
-    const crearModal = document.getElementById('crearModal4');
-    crearModal.style.display = 'block';
-
-    const url = `${recurso}/users/${id2}/accounts`;
-    fetch(url, {
-        method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': `Bearer ${token}`
-            }
-    })
-    .then(res => res.json())
-    .then(cuentas => {
-        console.log("Cuentas obtenidas:", cuentas); // Verificar los usuarios obtenidos
-        const select = document.getElementById('createEmisor');
-        select.innerHTML = "";
-         // Limpiar las opciones existentes
-        cuentas.forEach(cuenta => {
-            if (cuenta.activa){
-            const option = document.createElement('option');
-            option.value = cuenta.iban;
-            option.textContent = cuenta.iban;
-            select.appendChild(option);
-            }
-        });
-        
-    })
-    .catch(err => console.error('Error al obtener cuentas:', err));
-
-}
 
 // Función para cerrar todos los modales activos
 function cerrarModalesActivos() {

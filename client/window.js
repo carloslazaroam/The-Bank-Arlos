@@ -7,11 +7,14 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
-            
-        }
+        },
+        autoHideMenuBar: true // Oculta automáticamente la barra de menús
     });
 
     win.loadFile('./LOGIN/login.html');
+
+    // Oculta la barra de menús desde el inicio
+    win.setMenuBarVisibility(false);
 
     // Open the DevTools.
     // win.webContents.openDevTools();
@@ -28,4 +31,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit();
 });
-

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // Importar controladores
@@ -10,7 +9,7 @@ const { getUsers, getUserById, createUser, updateUser, deleteUser, recuperarCont
 const { getCuentas, getCuentaByIban, createCuenta, updateCuenta, deleteCuenta, getEmpresas, getCuentas2, getCuentasByUserId } = require('./controllers/cuentas.js');
 const { getTipoCuentas, getTipoCuentaName, createTipoCuenta, updateTipoCuenta, deleteTipoCuenta } = require('./controllers/tipocuenta.js');
 const { getTipoOperacion, createTipoOperacion, updateTipoOperacion, deleteTipoOperacion, getTipoOperacionById } = require('./controllers/tipoOperacion.js');
-const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, retirarDinero, transferirSaldo, vaciarCuenta, hacerBizum, enviarBizum, sacarPorcentajes } = require('./controllers/operacion.js');
+const { getOperacion, createOperacion, deleteOperacion, updateOperacion, getOperacionById, getOperacionesByCuentaId, retirarDinero, transferirSaldo, enviarBizum, sacarPorcentajes } = require('./controllers/operacion.js');
 const { getTipoUsers, createTipoUser } = require('./controllers/tipousuario.js');
 const { verifyToken, verifyId } = require('./helpers/auth.js');
 
@@ -46,18 +45,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/bank', { useNewUrlParser: true, useU
 // Rutas para usuarios
 app.get('/users', getUsers);
 app.get('/users/:id', verifyToken, verifyId, getUserById);
-app.post('/users/post', upload.single('fotoDni'), createUser); // Apply upload middleware
-app.put('/users/:id', upload.single('fotoDni'), updateUser); // Apply upload middleware
+app.post('/users/post', upload.single('fotoDni'), createUser);
+app.put('/users/:id', upload.single('fotoDni'), updateUser); 
 app.delete('/users/:nombre', deleteUser);
 app.get('/users/:id/accounts', verifyToken, getCuentasByUserId);
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'carloslazaroam@gmail.com',
-        pass: 'Rompeolas69'
-    }
-});
 
 app.post('/forgotpassword', recuperarContrasena);
 

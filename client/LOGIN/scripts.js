@@ -154,13 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Función para limpiar el mensaje de error
-    function limpiarError(container) {
-        const errorElement = container.querySelector('.error-message');
-        if (errorElement) {
-            container.removeChild(errorElement);
-        }
-    }
 
     const confirmarContraseñaInput = document.getElementById("confirmarContraseña");
 
